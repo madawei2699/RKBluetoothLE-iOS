@@ -14,6 +14,8 @@
 		18C93E4C1C8EDAD000BDD086 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4B1C8EDAD000BDD086 /* Assets.xcassets */; };
 		18C93E4F1C8EDAD000BDD086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4D1C8EDAD000BDD086 /* LaunchScreen.storyboard */; };
 		18C93E5A1C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E591C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m */; };
+		4D48CCBB2D3CC23E0FEEC4DB /* Pods_RokyinfoBLEDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */; };
+		D0653310128AAD48F860DE7C /* Pods_RokyinfoBLEDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,12 @@
 		18C93E551C8EDAD000BDD086 /* RokyinfoBLEDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RokyinfoBLEDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C93E591C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RokyinfoBLEDemoTests.m; sourceTree = "<group>"; };
 		18C93E5B1C8EDAD000BDD086 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		395F984CD11EABC71FE93967 /* Pods-RokyinfoBLEDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62A5A06ED4B8B8CDE4B45FF2 /* Pods-RokyinfoBLEDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		9CED58929475A5B4DB4710BD /* Pods-RokyinfoBLEDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E5146E0FF7EDD8D5ADD99063 /* Pods-RokyinfoBLEDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.release.xcconfig"; sourceTree = "<group>"; };
+		FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D48CCBB2D3CC23E0FEEC4DB /* Pods_RokyinfoBLEDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0653310128AAD48F860DE7C /* Pods_RokyinfoBLEDemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,9 +73,12 @@
 		18C93E331C8EDAD000BDD086 = {
 			isa = PBXGroup;
 			children = (
+				F51CB6901C8F0236002F69E1 /* Classes */,
 				18C93E3E1C8EDAD000BDD086 /* RokyinfoBLEDemo */,
 				18C93E581C8EDAD000BDD086 /* RokyinfoBLEDemoTests */,
 				18C93E3D1C8EDAD000BDD086 /* Products */,
+				6CA9DBF5E7FE6DED375B02CB /* Pods */,
+				EBF2083E05A9869DDAD65A1C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +124,34 @@
 			path = RokyinfoBLEDemoTests;
 			sourceTree = "<group>";
 		};
+		6CA9DBF5E7FE6DED375B02CB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				395F984CD11EABC71FE93967 /* Pods-RokyinfoBLEDemo.debug.xcconfig */,
+				E5146E0FF7EDD8D5ADD99063 /* Pods-RokyinfoBLEDemo.release.xcconfig */,
+				9CED58929475A5B4DB4710BD /* Pods-RokyinfoBLEDemoTests.debug.xcconfig */,
+				62A5A06ED4B8B8CDE4B45FF2 /* Pods-RokyinfoBLEDemoTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		EBF2083E05A9869DDAD65A1C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */,
+				516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F51CB6901C8F0236002F69E1 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Classes;
+			path = ../Classes;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -118,9 +159,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18C93E5E1C8EDAD000BDD086 /* Build configuration list for PBXNativeTarget "RokyinfoBLEDemo" */;
 			buildPhases = (
+				22CA8E68DCAD8E5CC2E6FAD6 /* Check Pods Manifest.lock */,
 				18C93E381C8EDAD000BDD086 /* Sources */,
 				18C93E391C8EDAD000BDD086 /* Frameworks */,
 				18C93E3A1C8EDAD000BDD086 /* Resources */,
+				807E07C85C09F64079E92AF3 /* Embed Pods Frameworks */,
+				52E19B6936B327C43758DBDF /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -135,9 +179,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18C93E611C8EDAD000BDD086 /* Build configuration list for PBXNativeTarget "RokyinfoBLEDemoTests" */;
 			buildPhases = (
+				03B444609A5E820731663D34 /* Check Pods Manifest.lock */,
 				18C93E511C8EDAD000BDD086 /* Sources */,
 				18C93E521C8EDAD000BDD086 /* Frameworks */,
 				18C93E531C8EDAD000BDD086 /* Resources */,
+				519E9DE374174513412448C8 /* Embed Pods Frameworks */,
+				99779309490CE5BBD139BC1E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -205,6 +252,99 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		03B444609A5E820731663D34 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		22CA8E68DCAD8E5CC2E6FAD6 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		519E9DE374174513412448C8 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		52E19B6936B327C43758DBDF /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		807E07C85C09F64079E92AF3 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		99779309490CE5BBD139BC1E /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		18C93E381C8EDAD000BDD086 /* Sources */ = {
@@ -339,6 +479,7 @@
 		};
 		18C93E5F1C8EDAD000BDD086 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 395F984CD11EABC71FE93967 /* Pods-RokyinfoBLEDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RokyinfoBLEDemo/Info.plist;
@@ -350,6 +491,7 @@
 		};
 		18C93E601C8EDAD000BDD086 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5146E0FF7EDD8D5ADD99063 /* Pods-RokyinfoBLEDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RokyinfoBLEDemo/Info.plist;
@@ -361,6 +503,7 @@
 		};
 		18C93E621C8EDAD000BDD086 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CED58929475A5B4DB4710BD /* Pods-RokyinfoBLEDemoTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = RokyinfoBLEDemoTests/Info.plist;
@@ -373,6 +516,7 @@
 		};
 		18C93E631C8EDAD000BDD086 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62A5A06ED4B8B8CDE4B45FF2 /* Pods-RokyinfoBLEDemoTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = RokyinfoBLEDemoTests/Info.plist;
@@ -402,6 +546,7 @@
 				18C93E601C8EDAD000BDD086 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		18C93E611C8EDAD000BDD086 /* Build configuration list for PBXNativeTarget "RokyinfoBLEDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -410,6 +555,7 @@
 				18C93E631C8EDAD000BDD086 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

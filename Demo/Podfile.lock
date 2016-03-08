@@ -1,0 +1,19 @@
+PODS:
+  - BabyBluetooth (0.5.0)
+  - RokyinfoBLE (0.1):
+    - BabyBluetooth (~> 0.5.0)
+
+DEPENDENCIES:
+  - RokyinfoBLE (from `../`)
+
+EXTERNAL SOURCES:
+  RokyinfoBLE:
+    :path: ../
+
+SPEC CHECKSUMS:
+  BabyBluetooth: dae3d3edc48d13939deebd457bb57d35f64dae19
+  RokyinfoBLE: e56784b76f84c92a41db05a011518a3b81d01232
+
+PODFILE CHECKSUM: ad9ab55490caa83885e2919ac030c1a7ea0e6568
+
+COCOAPODS: 1.0.0.beta.4

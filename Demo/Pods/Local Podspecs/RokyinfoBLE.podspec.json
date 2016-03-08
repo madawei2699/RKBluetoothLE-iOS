@@ -1,0 +1,25 @@
+{
+  "name": "RokyinfoBLE",
+  "version": "0.1",
+  "license": "MIT",
+  "summary": "ble library on ios",
+  "description": "\u001a\u001a\u001a\u001arunloop+queue \u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a\u001a",
+  "homepage": "https://github.com/yuanzj/RokyinfoBLE",
+  "authors": {
+    "jswxyzj": "jswxyzj@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/yuanzj/RokyinfoBLE.git",
+    "tag": "0.1"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "Classes/*.{h,m}",
+  "requires_arc": true,
+  "dependencies": {
+    "BabyBluetooth": [
+      "~> 0.5.0"
+    ]
+  }
+}

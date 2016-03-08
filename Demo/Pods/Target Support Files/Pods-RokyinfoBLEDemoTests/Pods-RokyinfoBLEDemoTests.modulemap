@@ -1,0 +1,6 @@
+framework module Pods_RokyinfoBLEDemoTests {
+  umbrella header "Pods-RokyinfoBLEDemoTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
