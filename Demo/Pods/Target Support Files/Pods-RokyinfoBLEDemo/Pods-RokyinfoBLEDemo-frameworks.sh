@@ -84,8 +84,14 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "$CONFIGURATION_BUILD_DIR/BabyBluetooth/BabyBluetooth.framework"
+  install_framework "Pods-RokyinfoBLEDemo/BabyBluetooth.framework"
+  install_framework "Pods-RokyinfoBLEDemo/ReactiveCocoa.framework"
+  install_framework "Pods-RokyinfoBLEDemo/Result.framework"
+  install_framework "Pods-RokyinfoBLEDemo/RokyinfoBLE.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "$CONFIGURATION_BUILD_DIR/BabyBluetooth/BabyBluetooth.framework"
+  install_framework "Pods-RokyinfoBLEDemo/BabyBluetooth.framework"
+  install_framework "Pods-RokyinfoBLEDemo/ReactiveCocoa.framework"
+  install_framework "Pods-RokyinfoBLEDemo/Result.framework"
+  install_framework "Pods-RokyinfoBLEDemo/RokyinfoBLE.framework"
 fi

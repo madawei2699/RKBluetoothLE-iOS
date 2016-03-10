@@ -17,6 +17,9 @@
 
 - (void)removeSource:(CCRunLoopContext *)sourceContext;
 
+// 其他线程注册事件
+- (void)addCommand:(NSInteger) command model:(id) data;
+
 - (void)fireAllCommands;
 
 @end

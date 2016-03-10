@@ -75,14 +75,12 @@ void runLoopSourceCancelRoutine (void *info, CFRunLoopRef runLoopRef, CFStringRe
     CFRunLoopRemoveSource(runLoop, _runLoopSource, kCFRunLoopDefaultMode);
 }
 
-- (void)addCommand:(NSInteger)command data:(NSData *)data
-{
-    
-}
-
 - (void)inputSourceFired
 {
     NSLog(@"Enter inputSourceFired");
+    
+    //取出数据进行处理
+    [[CommandManager sharedManager] fireAllCommands];
     
     NSLog(@"Exit inputSourceFired");
 }

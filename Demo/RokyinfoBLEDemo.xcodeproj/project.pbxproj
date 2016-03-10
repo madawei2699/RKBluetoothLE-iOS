@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18790DF71C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
+		18790DF81C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
+		18790DFB1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
+		18790DFC1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
 		18A372F51C90136300F3267A /* RKRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A372F41C90136300F3267A /* RKRunLoopThread.m */; };
 		18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A372F41C90136300F3267A /* RKRunLoopThread.m */; };
 		18A372F91C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A372F81C9013AD00F3267A /* RKRunLoopInputSource.m */; };
@@ -35,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18790DF51C91738500A619DC /* RKFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKFrame.h; sourceTree = "<group>"; };
+		18790DF61C91738500A619DC /* RKFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKFrame.m; sourceTree = "<group>"; };
+		18790DF91C91739800A619DC /* RKPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKPackage.h; sourceTree = "<group>"; };
+		18790DFA1C91739800A619DC /* RKPackage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKPackage.m; sourceTree = "<group>"; };
 		18A372F31C90136300F3267A /* RKRunLoopThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKRunLoopThread.h; sourceTree = "<group>"; };
 		18A372F41C90136300F3267A /* RKRunLoopThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKRunLoopThread.m; sourceTree = "<group>"; };
 		18A372F71C9013AD00F3267A /* RKRunLoopInputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKRunLoopInputSource.h; sourceTree = "<group>"; };
@@ -82,9 +90,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18790DF31C91727500A619DC /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				18790DF41C9172A700A619DC /* Upgrade */,
+			);
+			name = Protocol;
+			path = ../Protocol;
+			sourceTree = "<group>";
+		};
+		18790DF41C9172A700A619DC /* Upgrade */ = {
+			isa = PBXGroup;
+			children = (
+				18790DF51C91738500A619DC /* RKFrame.h */,
+				18790DF61C91738500A619DC /* RKFrame.m */,
+				18790DF91C91739800A619DC /* RKPackage.h */,
+				18790DFA1C91739800A619DC /* RKPackage.m */,
+			);
+			name = Upgrade;
+			sourceTree = "<group>";
+		};
 		18C93E331C8EDAD000BDD086 = {
 			isa = PBXGroup;
 			children = (
+				18790DF31C91727500A619DC /* Protocol */,
 				F51CB6901C8F0236002F69E1 /* Classes */,
 				18C93E3E1C8EDAD000BDD086 /* RokyinfoBLEDemo */,
 				18C93E581C8EDAD000BDD086 /* RokyinfoBLEDemoTests */,
@@ -370,11 +399,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				18A372F51C90136300F3267A /* RKRunLoopThread.m in Sources */,
+				18790DF71C91738500A619DC /* RKFrame.m in Sources */,
 				18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */,
 				18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */,
 				18A372F91C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */,
 				18C93E411C8EDAD000BDD086 /* main.m in Sources */,
 				18EDCA501C902BAB00A4C922 /* CommandManager.m in Sources */,
+				18790DFB1C91739800A619DC /* RKPackage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +413,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18790DF81C91738500A619DC /* RKFrame.m in Sources */,
+				18790DFC1C91739800A619DC /* RKPackage.m in Sources */,
 				18A372FA1C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */,
 				18EDCA511C902BAB00A4C922 /* CommandManager.m in Sources */,
 				18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */,

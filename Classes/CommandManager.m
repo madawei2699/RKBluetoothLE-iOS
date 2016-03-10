@@ -46,8 +46,18 @@
     }];
 }
 
-- (void)fireAllCommands{
+- (void)addCommand:(NSInteger)command model:(id)data{
     
+    CCRunLoopContext *runLoopContext = [self.sources objectAtIndex:0];
+    RKRunLoopInputSource *inputSource = runLoopContext.runLoopInputSource;
+    [inputSource fireAllCommandsOnRunLoop:runLoopContext.runLoop];
+}
+
+
+- (void)fireAllCommands{
+    CCRunLoopContext *runLoopContext = [self.sources objectAtIndex:0];
+    RKRunLoopInputSource *inputSource = runLoopContext.runLoopInputSource;
+    [inputSource fireAllCommandsOnRunLoop:runLoopContext.runLoop];
 }
 
 @end

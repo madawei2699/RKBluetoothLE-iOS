@@ -18,9 +18,6 @@
 // 处理事件
 - (void)inputSourceFired;
 
-// 其他线程注册事件
-- (void)addCommand:(NSInteger)command data:(NSData *)data;
-
 - (void)fireAllCommandsOnRunLoop:(CFRunLoopRef)runLoop;
 
 @end

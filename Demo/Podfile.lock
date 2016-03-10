@@ -1,9 +1,22 @@
 PODS:
   - BabyBluetooth (0.5.0)
+  - ReactiveCocoa (4.0.1):
+    - ReactiveCocoa/UI (= 4.0.1)
+    - Result (~> 1.0.2)
+  - ReactiveCocoa/Core (4.0.1):
+    - ReactiveCocoa/no-arc
+    - Result (~> 1.0.2)
+  - ReactiveCocoa/no-arc (4.0.1):
+    - Result (~> 1.0.2)
+  - ReactiveCocoa/UI (4.0.1):
+    - ReactiveCocoa/Core
+    - Result (~> 1.0.2)
+  - Result (1.0.2)
   - RokyinfoBLE (0.1):
     - BabyBluetooth (~> 0.5.0)
 
 DEPENDENCIES:
+  - ReactiveCocoa
   - RokyinfoBLE (from `../`)
 
 EXTERNAL SOURCES:
@@ -12,8 +25,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BabyBluetooth: dae3d3edc48d13939deebd457bb57d35f64dae19
+  ReactiveCocoa: f7011630aee4deeb16352fcb1b50d6bde9db4f90
+  Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
   RokyinfoBLE: e56784b76f84c92a41db05a011518a3b81d01232
 
-PODFILE CHECKSUM: ad9ab55490caa83885e2919ac030c1a7ea0e6568
+PODFILE CHECKSUM: d96e088d588459697b4cf859c9c41338590fe7cc
 
-COCOAPODS: 1.0.0.beta.4
+COCOAPODS: 1.0.0.beta.3
