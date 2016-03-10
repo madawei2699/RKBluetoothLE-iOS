@@ -7,7 +7,7 @@
 //
 
 #import "RKRunLoopInputSource.h"
-#import "CommandManager.h"
+#import "CCRunLoopContextManager.h"
 
 @interface RKRunLoopInputSource ()
 {
@@ -24,7 +24,7 @@ void runLoopSourceScheduleRoutine (void *info, CFRunLoopRef runLoopRef, CFString
 {
     RKRunLoopInputSource *runLoopInputSource = (__bridge RKRunLoopInputSource *)info;
     CCRunLoopContext *runLoopContext = [[CCRunLoopContext alloc] initWithSource:runLoopInputSource runLoop:runLoopRef];
-    [[CommandManager sharedManager] registerSource:runLoopContext];
+    [[CCRunLoopContextManager sharedManager] registerSource:runLoopContext];
     
 }
 
@@ -40,7 +40,7 @@ void runLoopSourceCancelRoutine (void *info, CFRunLoopRef runLoopRef, CFStringRe
 {
     RKRunLoopInputSource *runLoopInputSource = (__bridge RKRunLoopInputSource *)info;
     CCRunLoopContext *runLoopContext = [[CCRunLoopContext alloc] initWithSource:runLoopInputSource runLoop:runLoopRef];
-    [[CommandManager sharedManager] removeSource:runLoopContext];
+    [[CCRunLoopContextManager sharedManager] removeSource:runLoopContext];
 }
 
 @implementation RKRunLoopInputSource
@@ -80,7 +80,7 @@ void runLoopSourceCancelRoutine (void *info, CFRunLoopRef runLoopRef, CFStringRe
     NSLog(@"Enter inputSourceFired");
     
     //取出数据进行处理
-    [[CommandManager sharedManager] fireAllCommands];
+    
     
     NSLog(@"Exit inputSourceFired");
 }
@@ -94,3 +94,20 @@ void runLoopSourceCancelRoutine (void *info, CFRunLoopRef runLoopRef, CFStringRe
 }
 
 @end
+
+@implementation CCRunLoopContext
+
+
+- (instancetype)initWithSource:(RKRunLoopInputSource *)runLoopInputSource runLoop:(CFRunLoopRef)runLoop
+{
+    self = [super init];
+    if (self) {
+        _runLoopInputSource = runLoopInputSource;
+        _runLoop = runLoop;
+    }
+    return self;
+}
+
+@end
+
+

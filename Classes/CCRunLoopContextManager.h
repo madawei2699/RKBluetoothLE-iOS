@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "RKRunLoopInputSource.h"
 
-@interface CommandManager : NSObject
+@interface CCRunLoopContextManager : NSObject
 
-+ (CommandManager *)sharedManager;
++ (CCRunLoopContextManager *)sharedManager;
 
 - (void)registerSource:(CCRunLoopContext *)sourceContext;
 

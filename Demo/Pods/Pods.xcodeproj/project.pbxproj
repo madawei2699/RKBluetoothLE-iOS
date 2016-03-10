@@ -24,7 +24,7 @@
 		0B742FA12E6A493FA2C3A67974B75197 /* NSFileHandle+RACSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 1967D3598B9B3BD65E256069AF41C64C /* NSFileHandle+RACSupport.m */; };
 		0BAB131D4899F4905547BBD0C43B6DD9 /* RACEagerSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 38C6EE5C561E4AC322B6D2522BDD52CB /* RACEagerSequence.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0BB1A365EF0B80D25D201187A71DDB67 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B545040E4FC9A19AEB1B5A4F1620DE76 /* Foundation.framework */; };
-		0BC327A4FB754D0A0482A19E6DB9EFF5 /* CommandManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B2BB4B7DE5BCDACA743F7553D58ADA /* CommandManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0BC327A4FB754D0A0482A19E6DB9EFF5 /* CCRunLoopContextManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 15B2BB4B7DE5BCDACA743F7553D58ADA /* CCRunLoopContextManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0C687968A0F0E0E1300629947A34CEB6 /* RACTargetQueueScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C90EAE2E2A8ABAA65B56E296A2848C0 /* RACTargetQueueScheduler.m */; };
 		0D0BAAEBEC807816025AD037B85601E2 /* BabyCentralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A3A9143F103951831A1737A0CB1D7CB6 /* BabyCentralManager.m */; };
 		0D211E7535CD5FC19F24661D8ABCC3D3 /* RACImmediateScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1539217DFB06EFD50F231AAB376C36 /* RACImmediateScheduler.m */; };
@@ -47,7 +47,7 @@
 		2141029EC439934C20E32852662455D1 /* RACDynamicSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E3060804BAFE7C4DAFCC2652BAA961 /* RACDynamicSequence.m */; };
 		216336B5A20CC60E2DBFA4D6F994B18E /* RACReplaySubject.h in Headers */ = {isa = PBXBuildFile; fileRef = F00515921C607D43A412E5CEAF4442D8 /* RACReplaySubject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		247C974F9C399AE804767B6D569546D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B545040E4FC9A19AEB1B5A4F1620DE76 /* Foundation.framework */; };
-		257B51330FDA0DDC4345E697B266DCBB /* CommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 218EE1FF193C3C3881158D676C4CB5D0 /* CommandManager.m */; };
+		257B51330FDA0DDC4345E697B266DCBB /* CCRunLoopContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 218EE1FF193C3C3881158D676C4CB5D0 /* CCRunLoopContextManager.m */; };
 		25A888489580159E42923B1C47AB0CEF /* NSIndexSet+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A58B757A6D8D9C62C693C8A35D9EF4 /* NSIndexSet+RACSequenceAdditions.m */; };
 		27CD994F5669F5C5CA6BC7CAE3FC4186 /* NSObject+RACDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = C95BFC54E8B1A514BD9A7370D8C7AF51 /* NSObject+RACDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		29E0AA31A972611A7133032C7A631AE5 /* NSString+RACSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 2127C162093E6B6CAC207E3A3F2E036C /* NSString+RACSupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -360,7 +360,7 @@
 		144A16F8C9B85D03595EE57207621E9C /* NSString+RACKeyPathUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+RACKeyPathUtilities.m"; path = "ReactiveCocoa/Objective-C/NSString+RACKeyPathUtilities.m"; sourceTree = "<group>"; };
 		1468B75D12EFE4AF9AA585C95E0AB660 /* TupleExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TupleExtensions.swift; path = ReactiveCocoa/Swift/TupleExtensions.swift; sourceTree = "<group>"; };
 		1588BB70076B097E0C40B92848CFA163 /* EXTScope.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTScope.h; path = "ReactiveCocoa/Objective-C/extobjc/EXTScope.h"; sourceTree = "<group>"; };
-		15B2BB4B7DE5BCDACA743F7553D58ADA /* CommandManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CommandManager.h; sourceTree = "<group>"; };
+		15B2BB4B7DE5BCDACA743F7553D58ADA /* CCRunLoopContextManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CCRunLoopContextManager.h; sourceTree = "<group>"; };
 		15EF67A4D97AC21A0F72138D2B5E201B /* NSString+RACSequenceAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+RACSequenceAdditions.h"; path = "ReactiveCocoa/Objective-C/NSString+RACSequenceAdditions.h"; sourceTree = "<group>"; };
 		16C04997C7A2ADCFD62B3684771BD5DF /* RACDelegateProxy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RACDelegateProxy.m; path = "ReactiveCocoa/Objective-C/RACDelegateProxy.m"; sourceTree = "<group>"; };
 		16F5979F14D7167D7BF607F4F314B5B4 /* RACObjCRuntime.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACObjCRuntime.h; path = "ReactiveCocoa/Objective-C/RACObjCRuntime.h"; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 		1F57A74070933A82A38EC87070353494 /* NSArray+RACSequenceAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSArray+RACSequenceAdditions.m"; path = "ReactiveCocoa/Objective-C/NSArray+RACSequenceAdditions.m"; sourceTree = "<group>"; };
 		20BB6495796EE3F729023CEA5E818E4B /* NSEnumerator+RACSequenceAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSEnumerator+RACSequenceAdditions.m"; path = "ReactiveCocoa/Objective-C/NSEnumerator+RACSequenceAdditions.m"; sourceTree = "<group>"; };
 		2127C162093E6B6CAC207E3A3F2E036C /* NSString+RACSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+RACSupport.h"; path = "ReactiveCocoa/Objective-C/NSString+RACSupport.h"; sourceTree = "<group>"; };
-		218EE1FF193C3C3881158D676C4CB5D0 /* CommandManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CommandManager.m; sourceTree = "<group>"; };
+		218EE1FF193C3C3881158D676C4CB5D0 /* CCRunLoopContextManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CCRunLoopContextManager.m; sourceTree = "<group>"; };
 		22D984AD14C436F77BEF41DA72435C2E /* NSIndexSet+RACSequenceAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSIndexSet+RACSequenceAdditions.h"; path = "ReactiveCocoa/Objective-C/NSIndexSet+RACSequenceAdditions.h"; sourceTree = "<group>"; };
 		22F97301256AC959C9CEA4F5A8522D74 /* RACDelegateProxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACDelegateProxy.h; path = "ReactiveCocoa/Objective-C/RACDelegateProxy.h"; sourceTree = "<group>"; };
 		23AD450F9B0A5F657D97E9D77B772DB6 /* RACCommand.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RACCommand.h; path = "ReactiveCocoa/Objective-C/RACCommand.h"; sourceTree = "<group>"; };
@@ -708,8 +708,8 @@
 		1DCEC537A34AA0F7FAC10E7BFF8967C9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				15B2BB4B7DE5BCDACA743F7553D58ADA /* CommandManager.h */,
-				218EE1FF193C3C3881158D676C4CB5D0 /* CommandManager.m */,
+				15B2BB4B7DE5BCDACA743F7553D58ADA /* CCRunLoopContextManager.h */,
+				218EE1FF193C3C3881158D676C4CB5D0 /* CCRunLoopContextManager.m */,
 				B94D327B0597FE671B42CBC7716EAB76 /* RKRunLoopInputSource.h */,
 				4C4203E17264237ADBA231584B5C222B /* RKRunLoopInputSource.m */,
 				9A1C7C1B9AFBD8D7DA2FB0474FD45784 /* RKRunLoopThread.h */,
@@ -1147,7 +1147,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BC327A4FB754D0A0482A19E6DB9EFF5 /* CommandManager.h in Headers */,
+				0BC327A4FB754D0A0482A19E6DB9EFF5 /* CCRunLoopContextManager.h in Headers */,
 				771F8FC25700A621334B45CFFEB0A7F3 /* RKRunLoopInputSource.h in Headers */,
 				387A0185C6A124774353E1AFA8BC39AB /* RKRunLoopThread.h in Headers */,
 				5CC34C43DB2F9C142497CB0E3C7698EA /* RokyinfoBLE-umbrella.h in Headers */,
@@ -1472,7 +1472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				257B51330FDA0DDC4345E697B266DCBB /* CommandManager.m in Sources */,
+				257B51330FDA0DDC4345E697B266DCBB /* CCRunLoopContextManager.m in Sources */,
 				35D8FAD0154D1BF0F93EC610F43BE7E9 /* RKRunLoopInputSource.m in Sources */,
 				D31EC7F2A0DCCA5BF958741C333697A7 /* RKRunLoopThread.m in Sources */,
 				842816C380EA9600A4A4B9E716A1C844 /* RokyinfoBLE-dummy.m in Sources */,

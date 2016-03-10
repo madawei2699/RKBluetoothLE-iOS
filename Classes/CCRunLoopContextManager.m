@@ -6,20 +6,20 @@
 //  Copyright © 2016年 rokyinfo. All rights reserved.
 //
 
-#import "CommandManager.h"
+#import "CCRunLoopContextManager.h"
 
 
-@interface CommandManager ()
+@interface CCRunLoopContextManager ()
 
 @property (nonatomic, strong) NSMutableArray<CCRunLoopContext*> *sources;
 
 @end
 
-@implementation CommandManager
+@implementation CCRunLoopContextManager
 
-+ (CommandManager *)sharedManager
++ (CCRunLoopContextManager *)sharedManager
 {
-    static CommandManager *sharedManagerInstance = nil;
+    static CCRunLoopContextManager *sharedManagerInstance = nil;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
         sharedManagerInstance = [[self alloc] init];
@@ -51,13 +51,16 @@
     CCRunLoopContext *runLoopContext = [self.sources objectAtIndex:0];
     RKRunLoopInputSource *inputSource = runLoopContext.runLoopInputSource;
     [inputSource fireAllCommandsOnRunLoop:runLoopContext.runLoop];
+    
 }
 
 
 - (void)fireAllCommands{
+    
     CCRunLoopContext *runLoopContext = [self.sources objectAtIndex:0];
     RKRunLoopInputSource *inputSource = runLoopContext.runLoopInputSource;
     [inputSource fireAllCommandsOnRunLoop:runLoopContext.runLoop];
+    
 }
 
 @end

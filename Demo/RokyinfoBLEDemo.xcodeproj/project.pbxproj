@@ -22,10 +22,16 @@
 		18C93E4C1C8EDAD000BDD086 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4B1C8EDAD000BDD086 /* Assets.xcassets */; };
 		18C93E4F1C8EDAD000BDD086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4D1C8EDAD000BDD086 /* LaunchScreen.storyboard */; };
 		18C93E5A1C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E591C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m */; };
-		18EDCA501C902BAB00A4C922 /* CommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDCA4F1C902BAB00A4C922 /* CommandManager.m */; };
-		18EDCA511C902BAB00A4C922 /* CommandManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDCA4F1C902BAB00A4C922 /* CommandManager.m */; };
+		18EDCA501C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDCA4F1C902BAB00A4C922 /* CCRunLoopContextManager.m */; };
+		18EDCA511C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDCA4F1C902BAB00A4C922 /* CCRunLoopContextManager.m */; };
 		4D48CCBB2D3CC23E0FEEC4DB /* Pods_RokyinfoBLEDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */; };
 		D0653310128AAD48F860DE7C /* Pods_RokyinfoBLEDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */; };
+		F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */; };
+		F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */; };
+		F58AF2A41C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */; };
+		F58AF2A51C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */; };
+		F58AF2A81C91B35A00DAD829 /* RKBLEDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A71C91B35A00DAD829 /* RKBLEDataTask.m */; };
+		F58AF2A91C91B35A00DAD829 /* RKBLEDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A71C91B35A00DAD829 /* RKBLEDataTask.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,13 +66,19 @@
 		18C93E551C8EDAD000BDD086 /* RokyinfoBLEDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RokyinfoBLEDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C93E591C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RokyinfoBLEDemoTests.m; sourceTree = "<group>"; };
 		18C93E5B1C8EDAD000BDD086 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		18EDCA4E1C902BAB00A4C922 /* CommandManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandManager.h; sourceTree = "<group>"; };
-		18EDCA4F1C902BAB00A4C922 /* CommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandManager.m; sourceTree = "<group>"; };
+		18EDCA4E1C902BAB00A4C922 /* CCRunLoopContextManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCRunLoopContextManager.h; sourceTree = "<group>"; };
+		18EDCA4F1C902BAB00A4C922 /* CCRunLoopContextManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCRunLoopContextManager.m; sourceTree = "<group>"; };
 		395F984CD11EABC71FE93967 /* Pods-RokyinfoBLEDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62A5A06ED4B8B8CDE4B45FF2 /* Pods-RokyinfoBLEDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		9CED58929475A5B4DB4710BD /* Pods-RokyinfoBLEDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5146E0FF7EDD8D5ADD99063 /* Pods-RokyinfoBLEDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.release.xcconfig"; sourceTree = "<group>"; };
+		F58AF29E1C91B0F200DAD829 /* RKBLEClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEClient.h; sourceTree = "<group>"; };
+		F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEClient.m; sourceTree = "<group>"; };
+		F58AF2A21C91B21900DAD829 /* RKBLEProtocolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEProtocolManager.h; sourceTree = "<group>"; };
+		F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEProtocolManager.m; sourceTree = "<group>"; };
+		F58AF2A61C91B35A00DAD829 /* RKBLEDataTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEDataTask.h; sourceTree = "<group>"; };
+		F58AF2A71C91B35A00DAD829 /* RKBLEDataTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEDataTask.m; sourceTree = "<group>"; };
 		FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -113,6 +125,7 @@
 		18C93E331C8EDAD000BDD086 = {
 			isa = PBXGroup;
 			children = (
+				F58AF29D1C91B05400DAD829 /* BLE Extensions */,
 				18790DF31C91727500A619DC /* Protocol */,
 				F51CB6901C8F0236002F69E1 /* Classes */,
 				18C93E3E1C8EDAD000BDD086 /* RokyinfoBLEDemo */,
@@ -192,11 +205,25 @@
 				18A372F41C90136300F3267A /* RKRunLoopThread.m */,
 				18A372F71C9013AD00F3267A /* RKRunLoopInputSource.h */,
 				18A372F81C9013AD00F3267A /* RKRunLoopInputSource.m */,
-				18EDCA4E1C902BAB00A4C922 /* CommandManager.h */,
-				18EDCA4F1C902BAB00A4C922 /* CommandManager.m */,
+				18EDCA4E1C902BAB00A4C922 /* CCRunLoopContextManager.h */,
+				18EDCA4F1C902BAB00A4C922 /* CCRunLoopContextManager.m */,
+				F58AF2A21C91B21900DAD829 /* RKBLEProtocolManager.h */,
+				F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */,
+				F58AF2A61C91B35A00DAD829 /* RKBLEDataTask.h */,
+				F58AF2A71C91B35A00DAD829 /* RKBLEDataTask.m */,
 			);
 			name = Classes;
 			path = ../Classes;
+			sourceTree = "<group>";
+		};
+		F58AF29D1C91B05400DAD829 /* BLE Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F58AF29E1C91B0F200DAD829 /* RKBLEClient.h */,
+				F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */,
+			);
+			name = "BLE Extensions";
+			path = ../Protocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,13 +425,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F58AF2A81C91B35A00DAD829 /* RKBLEDataTask.m in Sources */,
 				18A372F51C90136300F3267A /* RKRunLoopThread.m in Sources */,
+				F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */,
+				F58AF2A41C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */,
 				18790DF71C91738500A619DC /* RKFrame.m in Sources */,
 				18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */,
 				18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */,
 				18A372F91C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */,
 				18C93E411C8EDAD000BDD086 /* main.m in Sources */,
-				18EDCA501C902BAB00A4C922 /* CommandManager.m in Sources */,
+				18EDCA501C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */,
 				18790DFB1C91739800A619DC /* RKPackage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,8 +446,11 @@
 				18790DF81C91738500A619DC /* RKFrame.m in Sources */,
 				18790DFC1C91739800A619DC /* RKPackage.m in Sources */,
 				18A372FA1C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */,
-				18EDCA511C902BAB00A4C922 /* CommandManager.m in Sources */,
+				F58AF2A91C91B35A00DAD829 /* RKBLEDataTask.m in Sources */,
+				F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */,
+				18EDCA511C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */,
 				18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */,
+				F58AF2A51C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */,
 				18C93E5A1C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
