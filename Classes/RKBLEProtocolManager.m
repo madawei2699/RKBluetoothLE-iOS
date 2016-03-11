@@ -7,17 +7,45 @@
 //
 
 #import "RKBLEProtocolManager.h"
+#import "RKRunLoopThread.h"
+#import "RKBLEUtil.h"
+
+@interface RKBLEProtocolManager(){
+
+    RKRunLoopThread *mRKRunLoopThread;
+
+}
+
+
+
+@end
 
 @implementation RKBLEProtocolManager
 
 
-- (nullable RKBLEDataTask *)command:(NSInteger)command
-                         parameters:(nullable id)parameters
-                            success:(nullable void (^)(RKBLEDataTask *task, id _Nullable responseObject))success
-                            failure:(nullable void (^)(RKBLEDataTask * _Nullable task, NSError *error))failure{
-    RKBLEDataTask *mRKBLEDataTask = [[RKBLEDataTask alloc] init];
-    [mRKBLEDataTask resume];
-    return mRKBLEDataTask;
+- (void)initRunLoopThread{
+    if (mRKRunLoopThread == nil) {
+        mRKRunLoopThread = [[RKRunLoopThread alloc] init];
+        [mRKRunLoopThread start];
+    }
 }
+
+//- (nullable RKBLEDataTask *)target:(NSDictionary*)target
+//                            method:(RKBLEMethod)method
+//                        parameters:(nullable NSData*)parameters
+//                   connectProgress:(nullable void (^)(RKBLEProgress * connectProgress)) connectProgress
+//                           success:(nullable void (^)(RKBLEDataTask * task, id _Nullable responseObject))success
+//                           failure:(nullable void (^)(RKBLEDataTask * _Nullable task, NSError * error))failure{
+//
+//    [self initRunLoopThread];
+//
+//    BLEClient *mRKBLEDataTask = [[BLEClient alloc] initWithPeripheralName:target[@"peripheralName"]];
+//    
+//
+//
+//
+//    return mRKBLEDataTask;
+//}
+
 
 @end
