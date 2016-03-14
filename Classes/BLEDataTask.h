@@ -26,16 +26,18 @@ typedef NS_ENUM(NSInteger, RKBLEDataTaskState) {
 
 @interface BLEDataTask : NSObject
 
-@property (nonatomic,copy  ) NSString           *taskIdentifier;
+@property (nonatomic,copy    ) NSString           *taskIdentifier;
 
-@property (nonatomic,assign) RKBLEMethod        method;
+@property (nonatomic,assign  ) RKBLEMethod        method;
 
-@property (nonatomic,assign) RKBLEDataTaskState state;
+@property (nonatomic,assign  ) RKBLEDataTaskState state;
 
-@property (nonatomic,copy  ) NSString           *service;
+@property (nonatomic,copy    ) NSString           *service;
 
-@property (nonatomic,copy  ) NSString           *characteristics;
+@property (nonatomic,copy    ) NSString           *characteristics;
 
-@property (nonatomic,copy  ) NSString           *peripheralName;
+@property (nonatomic,copy    ) NSString           *peripheralName;
+
+@property (nonatomic,strong  ) NSData             *data;
 
 @end
