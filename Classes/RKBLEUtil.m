@@ -10,9 +10,9 @@
 
 @implementation RKBLEUtil
 
-+(NSDictionary*)createTarget:(NSString*)peripheralName service:(NSString*)service characteristics:(NSString*)characteristics{
++(NSDictionary*)createTarget:(NSString*)peripheralName service:(NSString*)service characteristic:(NSString*)characteristic{
 
-    return  @{@"peripheralName":peripheralName ,@"service":service ,@"characteristics":characteristics };
+    return  @{@"peripheralName":peripheralName ,@"service":service ,@"characteristic":characteristic };
     
 }
 

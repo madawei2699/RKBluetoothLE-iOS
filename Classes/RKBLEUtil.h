@@ -11,7 +11,7 @@
 
 @interface RKBLEUtil : NSObject
 
-+ (NSDictionary*) createTarget:(NSString*)peripheralName service:(NSString*)service characteristics:(NSString*)characteristics;
++ (NSDictionary*) createTarget:(NSString*)peripheralName service:(NSString*)service characteristic:(NSString*)characteristics;
 
 +(CBService *) findServiceFromUUID:(CBUUID *)UUID p:(CBPeripheral *)p;
 

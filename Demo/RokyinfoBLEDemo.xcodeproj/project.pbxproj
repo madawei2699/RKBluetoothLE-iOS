@@ -32,8 +32,8 @@
 		D0653310128AAD48F860DE7C /* Pods_RokyinfoBLEDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */; };
 		F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */; };
 		F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */; };
-		F58AF2A41C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */; };
-		F58AF2A51C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */; };
+		F58AF2A41C91B21900DAD829 /* BLEDataTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* BLEDataTaskManager.m */; };
+		F58AF2A51C91B21900DAD829 /* BLEDataTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* BLEDataTaskManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,8 +81,8 @@
 		E5146E0FF7EDD8D5ADD99063 /* Pods-RokyinfoBLEDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.release.xcconfig"; sourceTree = "<group>"; };
 		F58AF29E1C91B0F200DAD829 /* RKBLEClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEClient.h; sourceTree = "<group>"; };
 		F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEClient.m; sourceTree = "<group>"; };
-		F58AF2A21C91B21900DAD829 /* RKBLEProtocolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEProtocolManager.h; sourceTree = "<group>"; };
-		F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEProtocolManager.m; sourceTree = "<group>"; };
+		F58AF2A21C91B21900DAD829 /* BLEDataTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataTaskManager.h; sourceTree = "<group>"; };
+		F58AF2A31C91B21900DAD829 /* BLEDataTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEDataTaskManager.m; sourceTree = "<group>"; };
 		FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -211,8 +211,8 @@
 				18A372F81C9013AD00F3267A /* RKRunLoopInputSource.m */,
 				18EDCA4E1C902BAB00A4C922 /* CCRunLoopContextManager.h */,
 				18EDCA4F1C902BAB00A4C922 /* CCRunLoopContextManager.m */,
-				F58AF2A21C91B21900DAD829 /* RKBLEProtocolManager.h */,
-				F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */,
+				F58AF2A21C91B21900DAD829 /* BLEDataTaskManager.h */,
+				F58AF2A31C91B21900DAD829 /* BLEDataTaskManager.m */,
 				182F78DC1C929E3600AD3652 /* RKBLEUtil.h */,
 				182F78DD1C929E3600AD3652 /* RKBLEUtil.m */,
 				182F78E01C92B08300AD3652 /* BLEDataTask.h */,
@@ -435,7 +435,7 @@
 				182F78DE1C929E3600AD3652 /* RKBLEUtil.m in Sources */,
 				F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */,
 				182F78E21C92B08300AD3652 /* BLEDataTask.m in Sources */,
-				F58AF2A41C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */,
+				F58AF2A41C91B21900DAD829 /* BLEDataTaskManager.m in Sources */,
 				18790DF71C91738500A619DC /* RKFrame.m in Sources */,
 				18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */,
 				18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */,
@@ -458,7 +458,7 @@
 				F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */,
 				18EDCA511C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */,
 				18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */,
-				F58AF2A51C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */,
+				F58AF2A51C91B21900DAD829 /* BLEDataTaskManager.m in Sources */,
 				18C93E5A1C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

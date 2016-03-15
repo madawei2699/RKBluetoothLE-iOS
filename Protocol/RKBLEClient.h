@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RKBLEProtocolManager.h"
+#import "BLEDataTaskManager.h"
 
-@interface RKBLEClient : RKBLEProtocolManager
+@interface RKBLEClient : BLEDataTaskManager
 
 + (instancetype)sharedClient;
 

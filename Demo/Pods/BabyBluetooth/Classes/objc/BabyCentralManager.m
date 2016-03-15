@@ -35,14 +35,16 @@
                                  [NSNumber numberWithBool:YES],CBCentralManagerOptionShowPowerAlertKey,
                                  nil];
 #endif
+        //创建串行队列
+        dispatch_queue_t  queue = dispatch_queue_create("BabyCentralManager", NULL);
         
         NSArray *backgroundModes = [[[NSBundle mainBundle] infoDictionary]objectForKey:@"UIBackgroundModes"];
         if ([backgroundModes containsObject:@"bluetooth-central"]) {
            //后台模式
-           centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:nil options:options];
+           centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:queue options:options];
         }else{
            //非后台模式
-           centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:nil];
+           centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:queue];
         }
         
         //pocket

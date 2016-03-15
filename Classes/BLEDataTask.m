@@ -9,8 +9,6 @@
 #import "BLEDataTask.h"
 #import "RKBLEUtil.h"
 
-#define SCAN_TIME 5
-
 #define TIME_OUT  15
 
 @interface BLEDataTask(){
@@ -41,12 +39,38 @@
         _characteristic = characteristic;
         _method         = method;
         _writeValue     = writeValue;
-
+        
         _BLEState       = RKBLEStateDefault;
         _TaskState      = DataTaskStateSuspended;
     }
     
     return self;
+}
+
+- (void)setBLEState:(RKBLEState)mRKBLEState
+{
+    __weak BLEDataTask *weekSelf = self;
+    _BLEState = mRKBLEState;
+    if (weekSelf.connectProgressBlock) {
+        
+        weekSelf.connectProgressBlock(weekSelf,nil);
+        
+    }
+    
+    if (weekSelf.failureBlock) {
+        if ((_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)
+            &&
+            weekSelf.TaskState != DataTaskStateCompleted) {
+            
+            self.TaskState = DataTaskStateCompleted;
+            
+            weekSelf.failureBlock(weekSelf,nil,[NSError errorWithDomain:BLEDataTaskErrorDomain
+                                                                   code:BLEDataTaskErrorDisconnect
+                                                               userInfo:@{ NSLocalizedDescriptionKey: @"蓝牙连接断开" }]);
+            
+        }
+    }
+    
 }
 
 -(void)execute{
@@ -69,11 +93,19 @@
 
 - (void)checkTimeOut:(NSTimer *)timer
 {
+    [mNSTimer invalidate];
     if (self.TaskState != DataTaskStateCompleted && self.TaskState != DataTaskStateCanceling) {
+        
         self.TaskState = DataTaskStateCompleted;
+        
         if (self.failureBlock) {
-            self.failureBlock(self,nil,[NSError errorWithDomain:BLEDataTaskErrorDomain code:BLEDataTaskErrorTimeOut userInfo:@{ NSLocalizedDescriptionKey: @"" }]);
+            
+            self.failureBlock(self,nil,[NSError errorWithDomain:BLEDataTaskErrorDomain
+                                                           code:BLEDataTaskErrorTimeOut
+                                                       userInfo:@{ NSLocalizedDescriptionKey: @"当前业务处理超时" }]);
+            
         }
+        
     }
     
 }
@@ -99,7 +131,8 @@
             
             [baby cancelScan];
             [baby cancelAllPeripheralsConnection];
-            baby.scanForPeripherals().connectToPeripherals().discoverServices().discoverCharacteristics().begin().stop(SCAN_TIME);
+            baby.scanForPeripherals().connectToPeripherals().discoverServices().discoverCharacteristics().begin();
+            
             self.BLEState = RKBLEStateScanning;
             
         }
@@ -111,11 +144,15 @@
             [baby cancelScan];
             baby.having(peripheral).connectToPeripherals().discoverServices().discoverCharacteristics().begin();
             
+            self.BLEState = RKBLEStateConnecting;
+            
         } else {
             
             [baby cancelScan];
             [baby cancelAllPeripheralsConnection];
-            baby.scanForPeripherals().connectToPeripherals().discoverServices().discoverCharacteristics().begin().stop(SCAN_TIME);
+            baby.scanForPeripherals().connectToPeripherals().discoverServices().discoverCharacteristics().begin();
+            
+            self.BLEState = RKBLEStateScanning;
             
         }
         
@@ -129,19 +166,25 @@
     
     __weak BLEDataTask *weekSelf = self;
     
+    __weak BabyBluetooth *weekBaby = baby;
     //设置扫描到设备的委托
     [baby setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
+        
         NSLog(@"搜索到了设备:%@",peripheral.name);
+        if([peripheral.name isEqualToString:weekSelf.peripheralName]){
+            [weekBaby cancelScan];
+        }
+        
     }];
     
-    //过滤器
-    //设置查找设备的过滤器
-    [baby setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName) {
+    //设置连接设备的过滤器
+    [baby setFilterOnConnetToPeripherals:^BOOL(NSString *peripheralName) {
         //设置查找规则是名称大于1 ， the search rule is peripheral.name length > 1
-        if (self.peripheralName.length > 0) {
-            if (peripheralName.length >= 1 && [peripheralName isEqualToString:self.peripheralName]) {
-                return YES;
-            }
+        if (peripheralName.length >= 1 && [peripheralName isEqualToString:self.peripheralName]) {
+            
+            weekSelf.BLEState = RKBLEStateConnecting;
+            
+            return YES;
         }
         return NO;
     }];
@@ -151,6 +194,12 @@
         
         if (central.state == CBCentralManagerStatePoweredOn) {
             NSLog(@"设备打开成功，开始扫描设备");
+            weekSelf.BLEState = RKBLEStateScanning;
+            
+        } else {
+            
+            weekSelf.BLEState = RKBLEStateFailure;
+            
         }
         
     }];
@@ -159,17 +208,20 @@
     [baby setBlockOnConnected:^(CBCentralManager *central, CBPeripheral *peripheral) {
         
         NSLog(@"设备：%@--连接成功",peripheral.name);
+        weekSelf.BLEState = RKBLEStateConnected;
         
     }];
     
     //设置设备连接失败的委托
     [baby setBlockOnFailToConnect:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
         NSLog(@"设备：%@--连接失败",peripheral.name);
+        weekSelf.BLEState = RKBLEStateFailure;
     }];
     
     //设置设备断开连接的委托
     [baby setBlockOnDisconnect:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
         NSLog(@"设备：%@--断开连接",peripheral.name);
+        weekSelf.BLEState = RKBLEStateDisconnect;
     }];
     
     //设置写数据成功的block
@@ -183,7 +235,7 @@
     [baby setBlockOnReadValueForCharacteristic:^(CBPeripheral *peripheral,CBCharacteristic *characteristic,NSError *error){
         
         //读取值回调
-        [weekSelf parseResponseDataWithCharacteristic:characteristic andPeripheral:peripheral];
+        [weekSelf parseResponseDataWithCharacteristic:characteristic];
         
     }];
     
@@ -205,8 +257,6 @@
         
     }];
     
-    
-    
 }
 
 -(void)setNotify:(CBPeripheral *)peripheral characteristic:(CBCharacteristic*)characteristic {
@@ -217,9 +267,7 @@
            block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
                //接收到值会进入这个方法
                NSLog(@"new value %@",characteristics.value);
-               
-               [weekSelf parseResponseDataWithCharacteristic:characteristics andPeripheral:peripheral];
-               
+               [weekSelf parseResponseDataWithCharacteristic:characteristics];
                
            }];
     
@@ -229,41 +277,54 @@
 
 -(void)executeWithPeripheral:(CBPeripheral*) peripheral{
     
-    if (peripheral.state == CBPeripheralStateConnected) {
+    __weak BLEDataTask *weekSelf = self;
+    
+    if (weekSelf.TaskState != DataTaskStateCompleted && peripheral.state == CBPeripheralStateConnected) {
         
-        CBUUID *uuid_service = [CBUUID UUIDWithString:self.service];
-        CBUUID *uuid_char = [CBUUID UUIDWithString:self.characteristic];
+        CBUUID *uuid_service = [CBUUID UUIDWithString:weekSelf.service];
+        CBUUID *uuid_char = [CBUUID UUIDWithString:weekSelf.characteristic];
         
         CBCharacteristic *mCBCharacteristic = [RKBLEUtil findCharacteristicFromUUID:uuid_char service:[RKBLEUtil findServiceFromUUID:uuid_service p:peripheral]];
         
-        if (self.method == RKBLEMethodRead) {
+        if (weekSelf.method == RKBLEMethodRead) {
             
             [peripheral readValueForCharacteristic:mCBCharacteristic];
             
-        } else if (self.method == RKBLEMethodWrite){
+        } else if (weekSelf.method == RKBLEMethodWrite){
             
-            NSAssert(self.writeValue == nil, @"写方法下，写入数据不能为空");
-            [peripheral writeValue:self.writeValue forCharacteristic:mCBCharacteristic type:CBCharacteristicWriteWithResponse];
+            NSAssert(weekSelf.writeValue == nil, @"写方法下，写入数据不能为空");
+            [peripheral writeValue:weekSelf.writeValue forCharacteristic:mCBCharacteristic type:CBCharacteristicWriteWithResponse];
             
         }
         
     }
 }
 
--(void)parseResponseDataWithCharacteristic:(CBCharacteristic *)characteristic andPeripheral:(CBPeripheral*) peripheral{
+
+-(void)parseResponseDataWithCharacteristic:(CBCharacteristic *)characteristic{
+    
+    __weak BLEDataTask *weekSelf = self;
     
     //注入了数据协议处理类则使用注入的协议类进行判断处理
-    if (self.dataParseProtocol && [self.dataParseProtocol effectiveResponse:self characteristic: characteristic.UUID.UUIDString]) {
-        //任务处理成功结束回调
-        if (self.successBlock) {
-            self.TaskState = DataTaskStateCompleted;
-            self.successBlock(self,characteristic.value,nil);
+    if (weekSelf.dataParseProtocol) {
+        
+        if ([weekSelf.dataParseProtocol effectiveResponse:weekSelf characteristic: characteristic.UUID.UUIDString]) {
+            
+            weekSelf.TaskState = DataTaskStateCompleted;
+            //任务处理成功结束回调
+            if (weekSelf.successBlock) {
+                weekSelf.successBlock(weekSelf,characteristic.value,nil);
+            }
+            
         }
+        
     } else {
+        
+        weekSelf.TaskState = DataTaskStateCompleted;
+        
         //任务处理成功结束回调
-        if (self.successBlock) {
-            self.TaskState = DataTaskStateCompleted;
-            self.successBlock(self,characteristic.value,nil);
+        if (weekSelf.successBlock) {
+            weekSelf.successBlock(weekSelf,characteristic.value,nil);
         }
     }
     

@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <BabyBluetooth/BabyBluetooth.h>
 
-NSString * const BLEDataTaskErrorDomain = @"BLEDataTaskErrorDomain";
-const NSInteger BLEDataTaskErrorTimeOut = 1;
+NSString * const BLEDataTaskErrorDomain     = @"BLEDataTaskErrorDomain";
+const NSInteger BLEDataTaskErrorTimeOut     = 1;
+const NSInteger BLEDataTaskErrorDisconnect  = 2;
 
 typedef NS_ENUM(NSInteger, RKBLEMethod) {
 
@@ -35,6 +36,7 @@ typedef NS_ENUM(NSInteger, RKBLEState) {
     RKBLEStateConnecting                    = 2,
     RKBLEStateConnected                     = 3,
     RKBLEStateDisconnect                    = 4,
+    RKBLEStateFailure                       = 5,
 
 };
 
@@ -50,6 +52,8 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
 @protocol BLEDataParseProtocol <NSObject>
 
 -(BOOL)effectiveResponse:(BLEDataTask*)dataTask characteristic:(NSString*)characteristic;
+
+-(BOOL)callBackRunOnMainThread;
 
 @end
 
