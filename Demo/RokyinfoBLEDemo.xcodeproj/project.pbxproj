@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		182F78DA1C92745900AD3652 /* RKBLEProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78D91C92745900AD3652 /* RKBLEProgress.m */; };
-		182F78DB1C92745900AD3652 /* RKBLEProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78D91C92745900AD3652 /* RKBLEProgress.m */; };
 		182F78DE1C929E3600AD3652 /* RKBLEUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78DD1C929E3600AD3652 /* RKBLEUtil.m */; };
 		182F78DF1C929E3600AD3652 /* RKBLEUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78DD1C929E3600AD3652 /* RKBLEUtil.m */; };
 		182F78E21C92B08300AD3652 /* BLEDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEDataTask.m */; };
@@ -36,8 +34,6 @@
 		F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */; };
 		F58AF2A41C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */; };
 		F58AF2A51C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */; };
-		F58AF2A81C91B35A00DAD829 /* BLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A71C91B35A00DAD829 /* BLEClient.m */; };
-		F58AF2A91C91B35A00DAD829 /* BLEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F58AF2A71C91B35A00DAD829 /* BLEClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +47,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		182F78D81C92745900AD3652 /* RKBLEProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEProgress.h; sourceTree = "<group>"; };
-		182F78D91C92745900AD3652 /* RKBLEProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEProgress.m; sourceTree = "<group>"; };
 		182F78DC1C929E3600AD3652 /* RKBLEUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEUtil.h; sourceTree = "<group>"; };
 		182F78DD1C929E3600AD3652 /* RKBLEUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEUtil.m; sourceTree = "<group>"; };
 		182F78E01C92B08300AD3652 /* BLEDataTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataTask.h; sourceTree = "<group>"; };
@@ -89,8 +83,6 @@
 		F58AF29F1C91B0F200DAD829 /* RKBLEClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEClient.m; sourceTree = "<group>"; };
 		F58AF2A21C91B21900DAD829 /* RKBLEProtocolManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEProtocolManager.h; sourceTree = "<group>"; };
 		F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEProtocolManager.m; sourceTree = "<group>"; };
-		F58AF2A61C91B35A00DAD829 /* BLEClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEClient.h; sourceTree = "<group>"; };
-		F58AF2A71C91B35A00DAD829 /* BLEClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEClient.m; sourceTree = "<group>"; };
 		FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -221,10 +213,6 @@
 				18EDCA4F1C902BAB00A4C922 /* CCRunLoopContextManager.m */,
 				F58AF2A21C91B21900DAD829 /* RKBLEProtocolManager.h */,
 				F58AF2A31C91B21900DAD829 /* RKBLEProtocolManager.m */,
-				F58AF2A61C91B35A00DAD829 /* BLEClient.h */,
-				F58AF2A71C91B35A00DAD829 /* BLEClient.m */,
-				182F78D81C92745900AD3652 /* RKBLEProgress.h */,
-				182F78D91C92745900AD3652 /* RKBLEProgress.m */,
 				182F78DC1C929E3600AD3652 /* RKBLEUtil.h */,
 				182F78DD1C929E3600AD3652 /* RKBLEUtil.m */,
 				182F78E01C92B08300AD3652 /* BLEDataTask.h */,
@@ -443,7 +431,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F58AF2A81C91B35A00DAD829 /* BLEClient.m in Sources */,
 				18A372F51C90136300F3267A /* RKRunLoopThread.m in Sources */,
 				182F78DE1C929E3600AD3652 /* RKBLEUtil.m in Sources */,
 				F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */,
@@ -456,7 +443,6 @@
 				18C93E411C8EDAD000BDD086 /* main.m in Sources */,
 				18EDCA501C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */,
 				18790DFB1C91739800A619DC /* RKPackage.m in Sources */,
-				182F78DA1C92745900AD3652 /* RKBLEProgress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,11 +455,9 @@
 				18790DFC1C91739800A619DC /* RKPackage.m in Sources */,
 				18A372FA1C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */,
 				182F78E31C92B08300AD3652 /* BLEDataTask.m in Sources */,
-				F58AF2A91C91B35A00DAD829 /* BLEClient.m in Sources */,
 				F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */,
 				18EDCA511C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */,
 				18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */,
-				182F78DB1C92745900AD3652 /* RKBLEProgress.m in Sources */,
 				F58AF2A51C91B21900DAD829 /* RKBLEProtocolManager.m in Sources */,
 				18C93E5A1C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m in Sources */,
 			);

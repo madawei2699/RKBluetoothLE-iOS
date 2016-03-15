@@ -7,9 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 @interface RKBLEUtil : NSObject
 
 + (NSDictionary*) createTarget:(NSString*)peripheralName service:(NSString*)service characteristics:(NSString*)characteristics;
+
++(CBService *) findServiceFromUUID:(CBUUID *)UUID p:(CBPeripheral *)p;
+
++(CBCharacteristic *) findCharacteristicFromUUID:(CBUUID *)UUID service:(CBService*)service;
 
 @end

@@ -16,4 +16,28 @@
     
 }
 
++(CBService *) findServiceFromUUID:(CBUUID *)UUID p:(CBPeripheral *)p
+{
+    for(int i = 0; i < p.services.count; i++)
+    {
+        CBService *s = [p.services objectAtIndex:i];
+        if ([UUID.UUIDString isEqualToString:s.UUID.UUIDString])
+            return s;
+    }
+    //Service not found on this peripheral
+    return nil;
+}
+
++(CBCharacteristic *) findCharacteristicFromUUID:(CBUUID *)UUID service:(CBService*)service
+{
+    for(int i=0; i < service.characteristics.count; i++)
+    {
+        CBCharacteristic *c = [service.characteristics objectAtIndex:i];
+        if ([UUID.UUIDString isEqualToString:c.UUID.UUIDString])
+            return c;
+    }
+    //Characteristic not found on this service
+    return nil;
+}
+
 @end
