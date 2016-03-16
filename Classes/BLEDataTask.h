@@ -9,34 +9,38 @@
 #import <Foundation/Foundation.h>
 #import <BabyBluetooth/BabyBluetooth.h>
 
-NSString * const BLEDataTaskErrorDomain     = @"BLEDataTaskErrorDomain";
-const NSInteger BLEDataTaskErrorTimeOut     = 1;
-const NSInteger BLEDataTaskErrorDisconnect  = 2;
+NS_ENUM(NSInteger)
+{
+    BLEDataTaskErrorTimeOut    = 1,
+    BLEDataTaskErrorDisconnect = 2,
+};
 
 typedef NS_ENUM(NSInteger, RKBLEMethod) {
 
-    RKBLEMethodRead                         = 0,
-    RKBLEMethodWrite                        = 1,
+    RKBLEMethodRead        = 0,
+    RKBLEMethodWrite       = 1,
 
 };
 
 typedef NS_ENUM(NSInteger, RKBLEDataTaskState) {
 
-    DataTaskStateRunning                    = 0,
-    DataTaskStateSuspended                  = 1,
-    DataTaskStateCanceling                  = 2,
-    DataTaskStateCompleted                  = 3,
+    DataTaskStateRunning   = 0,
+    DataTaskStateSuspended = 1,
+    DataTaskStateCanceling = 2,
+    DataTaskStateCompleted = 3,
+    DataTaskStateFailure   = 4,
 
 };
 
 typedef NS_ENUM(NSInteger, RKBLEState) {
 
-    RKBLEStateDefault                       = 0,
-    RKBLEStateScanning                      = 1,
-    RKBLEStateConnecting                    = 2,
-    RKBLEStateConnected                     = 3,
-    RKBLEStateDisconnect                    = 4,
-    RKBLEStateFailure                       = 5,
+    RKBLEStateDefault      = 0,
+    RKBLEStateStart        = 1,
+    RKBLEStateScanning     = 2,
+    RKBLEStateConnecting   = 3,
+    RKBLEStateConnected    = 4,
+    RKBLEStateDisconnect   = 5,
+    RKBLEStateFailure      = 6,
 
 };
 
@@ -51,7 +55,25 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
 
 @protocol BLEDataParseProtocol <NSObject>
 
+/**
+ *  判断收到的蓝牙数据是否符合当前报文协议
+ *
+ *  @param dataTask       当前任务
+ *  @param characteristic 特征UUID String
+ *
+ *  @return yes: 符合 no:不符合
+ */
 -(BOOL)effectiveResponse:(BLEDataTask*)dataTask characteristic:(NSString*)characteristic;
+
+/**
+ *  判读是否需要注册通知
+ *
+ *  @param service        服务
+ *  @param characteristic 特征
+ *
+ *  @return yes: 需要 no:不需要
+ */
+-(BOOL)needSubscribeNotifyWithService:(NSString*)service characteristic:(NSString*)characteristic;
 
 -(BOOL)callBackRunOnMainThread;
 
@@ -60,29 +82,29 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
 
 @interface BLEDataTask : NSObject
 
-@property (nonatomic,copy, readonly      ) NSString               *taskIdentifier;
+@property (nonatomic,copy, readonly  ) NSString               *taskIdentifier;
 
-@property (nonatomic,copy, readonly      ) NSString               *peripheralName;
+@property (nonatomic,copy, readonly  ) NSString               *peripheralName;
 
-@property (nonatomic,copy, readonly      ) NSString               *service;
+@property (nonatomic,copy, readonly  ) NSString               *service;
 
-@property (nonatomic,copy, readonly      ) NSString               *characteristic;
+@property (nonatomic,copy, readonly  ) NSString               *characteristic;
 
-@property (nonatomic,assign ,readonly    ) RKBLEMethod            method;
+@property (nonatomic,assign ,readonly) RKBLEMethod            method;
 
-@property (nonatomic,strong              ) NSData                 *writeValue;
+@property (nonatomic,strong          ) NSData                 *writeValue;
 
-@property (nonatomic,assign              ) RKBLEDataTaskState     TaskState;
+@property (nonatomic,assign          ) RKBLEDataTaskState     TaskState;
 
-@property (nonatomic,assign              ) RKBLEState             BLEState;
+@property (nonatomic,assign          ) RKBLEState             BLEState;
 
-@property (nonatomic,copy                ) RKConnectProgressBlock connectProgressBlock;
+@property (nonatomic,copy            ) RKConnectProgressBlock connectProgressBlock;
 
-@property (nonatomic,copy                ) RKSuccessBlock         successBlock;
+@property (nonatomic,copy            ) RKSuccessBlock         successBlock;
 
-@property (nonatomic,copy                ) RKSuccessBlock         failureBlock;
+@property (nonatomic,copy            ) RKSuccessBlock         failureBlock;
 
-@property (nonatomic,weak                ) id<BLEDataParseProtocol  > dataParseProtocol;
+@property (nonatomic,weak            ) id<BLEDataParseProtocol> dataParseProtocol;
 
 /**
  *  初始化BLEDataTask

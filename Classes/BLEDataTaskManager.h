@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "BLEDataTask.h"
-
+#import "RKBLEUtil.h"
 
 @interface BLEDataTaskManager : NSObject
 
@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy)RKConnectProgressBlock bleConnectStateBlock;
 
 + (instancetype)sharedManager;
+
+- (id)init;
 
 - (void)resume;
 

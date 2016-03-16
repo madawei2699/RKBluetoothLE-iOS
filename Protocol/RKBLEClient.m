@@ -10,14 +10,14 @@
 
 @implementation RKBLEClient
 
-+ (instancetype)sharedClient {
-    static RKBLEClient *_sharedClient = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedClient = [[RKBLEClient alloc] init];
-    });
-    
-    return _sharedClient;
-}
+//+ (instancetype)sharedClient {
+//    static RKBLEClient *_sharedClient = nil;
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        _sharedClient = [[RKBLEClient alloc] init];
+//    });
+//    
+//    return _sharedClient;
+//}
 
 @end

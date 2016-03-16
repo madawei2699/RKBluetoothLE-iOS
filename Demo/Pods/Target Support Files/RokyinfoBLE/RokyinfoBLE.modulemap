@@ -1,6 +1,0 @@
-framework module RokyinfoBLE {
-  umbrella header "RokyinfoBLE-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -13,6 +13,8 @@
     
     NSMutableArray<BLEDataTask*> *taskArray;
     
+    int i,j;
+    
 }
 
 @end
@@ -63,16 +65,21 @@
                                                                      method:method
                                                                  writeValue:parameters];
     mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
-    
     mBLEDataTask.successBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
-        [taskArray removeObject:task];
+        
+         [taskArray removeObject:task];
+        
+        NSLog(@"successBlock :removeObject:%d",i++);
+        
         if (success) {
             success(task,responseObject,error);
         }
         [self resume];
     };
     mBLEDataTask.failureBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
+        
         [taskArray removeObject:task];
+        NSLog(@"failureBlock :removeObject:%d",i++);
         if(failure){
             failure(task,responseObject,error);
         }
@@ -84,16 +91,17 @@
     [self resume];
     
     return mBLEDataTask;
-
+    
 }
 
 -(void)resume{
-    
     BLEDataTask *mBLEDataTask = [taskArray firstObject];
     if (mBLEDataTask) {
-        [mBLEDataTask execute];
+        if(mBLEDataTask.TaskState == DataTaskStateSuspended){
+            NSLog(@"resume :%d -------count:%d",j++,taskArray.count);
+            [mBLEDataTask execute];
+        }
     }
-    
 }
 
 
