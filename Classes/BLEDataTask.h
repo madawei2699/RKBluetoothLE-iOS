@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <BabyBluetooth/BabyBluetooth.h>
+#import "RKBLEDataResponseSerializer.h"
 
 NS_ENUM(NSInteger)
 {
@@ -17,31 +18,39 @@ NS_ENUM(NSInteger)
 
 typedef NS_ENUM(NSInteger, RKBLEMethod) {
 
-    RKBLEMethodRead        = 0,
-    RKBLEMethodWrite       = 1,
+    RKBLEMethodRead            = 0,
+    RKBLEMethodWrite           = 1,
 
 };
 
 typedef NS_ENUM(NSInteger, RKBLEDataTaskState) {
 
-    DataTaskStateRunning   = 0,
-    DataTaskStateSuspended = 1,
-    DataTaskStateCanceling = 2,
-    DataTaskStateCompleted = 3,
-    DataTaskStateFailure   = 4,
+    DataTaskStateRunning       = 0,
+    DataTaskStateSuspended     = 1,
+    DataTaskStateCanceling     = 2,
+    DataTaskStateCompleted     = 3,
+    DataTaskStateFailure       = 4,
 
 };
 
 typedef NS_ENUM(NSInteger, RKBLEState) {
 
-    RKBLEStateDefault      = 0,
-    RKBLEStateStart        = 1,
-    RKBLEStateScanning     = 2,
-    RKBLEStateConnecting   = 3,
-    RKBLEStateConnected    = 4,
-    RKBLEStateDisconnect   = 5,
-    RKBLEStateFailure      = 6,
+    RKBLEStateDefault          = 0,
+    RKBLEStateStart            = 1,
+    RKBLEStateScanning         = 2,
+    RKBLEStateConnecting       = 3,
+    RKBLEStateConnected        = 4,
+    RKBLEStateDisconnect       = 5,
+    RKBLEStateFailure          = 6,
 
+};
+
+typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
+
+    RKBLEResponseWriteResult   = 0,
+    RKBLEResponseReadResult    = 1,
+    RKBLEResponseNotify        = 2,
+    
 };
 
 @class BLEDataTask;
@@ -53,17 +62,16 @@ typedef void (^RKSuccessBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
 //处理失败
 typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject, NSError * error);
 
-@protocol BLEDataParseProtocol <NSObject>
+@protocol BLEDataParseProtocol<NSObject>
+
+@required
 
 /**
- *  判断收到的蓝牙数据是否符合当前报文协议
+ *  当前蓝牙交互协议连接成功后是否需要鉴权
  *
- *  @param dataTask       当前任务
- *  @param characteristic 特征UUID String
- *
- *  @return yes: 符合 no:不符合
+ *  @return yes: 需要 no:不需要
  */
--(BOOL)effectiveResponse:(BLEDataTask*)dataTask characteristic:(NSString*)characteristic;
+-(BOOL)needAuthentication;
 
 /**
  *  判读是否需要注册通知
@@ -75,7 +83,42 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
  */
 -(BOOL)needSubscribeNotifyWithService:(NSString*)service characteristic:(NSString*)characteristic;
 
--(BOOL)callBackRunOnMainThread;
+/**
+ *  判断收到的蓝牙数据是否符合当前报文协议
+ *
+ *  @param dataTask       当前任务
+ *  @param characteristic 特征UUID String
+ *
+ *  @return yes: 符合 no:不符合
+ */
+-(BOOL)effectiveResponse:(BLEDataTask*)dataTask characteristic:(NSString*)characteristic sourceChannel:(RKBLEResponseChannel)channel;
+
+
+/**
+ *  获取鉴权处理任务
+ *
+ *  @param callBack
+ */
+- (void)createAhthProcessTask:(void (^)(BLEDataTask* authTask,NSError* error))callBack;
+
+
+/**
+ *  是否为鉴权任务
+ *
+ *  @param dataTask
+ *
+ *  @return
+ */
+- (BOOL)isAuthenticationTask:(BLEDataTask*)dataTask;
+
+/**
+ *  解析鉴权返回值判断是否鉴权成功
+ *
+ *  @param value 鉴权返回值
+ *
+ *  @return
+ */
+- (BOOL)authSuccess:(NSData*)value;
 
 @end
 
@@ -97,6 +140,8 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
 @property (nonatomic,assign          ) RKBLEDataTaskState     TaskState;
 
 @property (nonatomic,assign          ) RKBLEState             BLEState;
+
+@property (nonatomic,assign          ) CBCentralManagerState  CMState;
 
 @property (nonatomic,copy            ) RKConnectProgressBlock connectProgressBlock;
 

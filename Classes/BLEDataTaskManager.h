@@ -10,9 +10,14 @@
 #import "BLEDataTask.h"
 #import "RKBLEUtil.h"
 
-@interface BLEDataTaskManager : NSObject
-
 NS_ASSUME_NONNULL_BEGIN
+
+@interface BLEDataTaskManager : NSObject{
+
+    
+
+}
+
 
 @property (nonatomic,copy)RKConnectProgressBlock bleConnectStateBlock;
 
@@ -40,7 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
                         failure:(nullable void (^)(BLEDataTask* task, id _Nullable responseObject,NSError* error))failure;
 
 
-NS_ASSUME_NONNULL_END
+
 
 
 @end
+
+NS_ASSUME_NONNULL_END

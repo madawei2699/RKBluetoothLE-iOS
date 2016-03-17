@@ -61,6 +61,7 @@
 		18A372F41C90136300F3267A /* RKRunLoopThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKRunLoopThread.m; sourceTree = "<group>"; };
 		18A372F71C9013AD00F3267A /* RKRunLoopInputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKRunLoopInputSource.h; sourceTree = "<group>"; };
 		18A372F81C9013AD00F3267A /* RKRunLoopInputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKRunLoopInputSource.m; sourceTree = "<group>"; };
+		18AC16881C9A7CF700724537 /* RKBLEDataResponseSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEDataResponseSerializer.h; sourceTree = "<group>"; };
 		18B4404B1C992DEB00B15823 /* BLEDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataProtocol.h; sourceTree = "<group>"; };
 		18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEDataProtocol.m; sourceTree = "<group>"; };
 		18C93E3C1C8EDAD000BDD086 /* RokyinfoBLEDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RokyinfoBLEDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,6 +224,7 @@
 				182F78DD1C929E3600AD3652 /* RKBLEUtil.m */,
 				182F78E01C92B08300AD3652 /* BLEDataTask.h */,
 				182F78E11C92B08300AD3652 /* BLEDataTask.m */,
+				18AC16881C9A7CF700724537 /* RKBLEDataResponseSerializer.h */,
 			);
 			name = Classes;
 			path = ../Classes;

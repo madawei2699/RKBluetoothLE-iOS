@@ -19,20 +19,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//
+
     CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
-    NSData *authCode = [mCocoaSecurityDecoder base64:@"M8Cjz3SFrA3ylNHkE734Vg=="];
-    // Do any additional setup after loading the view, typically from a nib.
-    [[BLEDataTaskManager sharedManager] target:[RKBLEUtil createTarget:@"B00GDV5DZ3" service:@"9900" characteristic:@"9901"]
+    NSData *authCode = [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
+    [[BLEDataTaskManager sharedManager] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9901"]
                                         method:RKBLEMethodWrite
                                     parameters:authCode
                                        success:nil
                                        failure:nil];
-    NSLog(@"currentThread:%@",[NSThread currentThread]);
     
-        [NSThread sleepForTimeInterval:5];
     
-    for (int i = 0; i < 1000 ;i++) {
+    [NSThread sleepForTimeInterval:5];
+    
+    for (int i = 0; i < 5000 ;i++) {
         
         BLEDataProtocol *mBLEDataProtocol = [[BLEDataProtocol alloc] init];
         mBLEDataProtocol.type = PARAM_WRITE;
@@ -43,15 +42,15 @@
         
         mBLEDataProtocol.org = org;
     
-//        [NSThread sleepForTimeInterval:0.050];
-        
-        [[BLEDataTaskManager sharedManager] target:[RKBLEUtil createTarget:@"B00GDV5DZ3" service:@"9900" characteristic:@"9904"]
+        [[BLEDataTaskManager sharedManager] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"]
                                             method:RKBLEMethodWrite
                                         parameters:[mBLEDataProtocol encodeRK410]
                                            success:nil
                                            failure:nil];
         
     }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

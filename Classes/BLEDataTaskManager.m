@@ -8,12 +8,11 @@
 
 #import "BLEDataTaskManager.h"
 #import "RKBLEUtil.h"
+#import "RKRunLoopThread.h"
 
 @interface BLEDataTaskManager(){
     
     NSMutableArray<BLEDataTask*> *taskArray;
-    
-    int i,j;
     
 }
 
@@ -65,44 +64,47 @@
                                                                      method:method
                                                                  writeValue:parameters];
     mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
+    
+    __weak NSMutableArray *weekTaskArray = taskArray;
+    __weak BLEDataTaskManager *weekSelf = self;
     mBLEDataTask.successBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
-        
-         [taskArray removeObject:task];
-        
-        NSLog(@"successBlock :removeObject:%d",i++);
         
         if (success) {
             success(task,responseObject,error);
         }
-        [self resume];
+        
+        [weekTaskArray removeObject:task];
+        [weekSelf resume];
+        
     };
     mBLEDataTask.failureBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
         
-        [taskArray removeObject:task];
-        NSLog(@"failureBlock :removeObject:%d",i++);
-        if(failure){
+        if (failure) {
             failure(task,responseObject,error);
         }
-        [self resume];
+
+        [weekTaskArray removeObject:task];
+        [weekSelf resume];
+        
     };
     
     [taskArray addObject:mBLEDataTask];
     
     [self resume];
     
+    
     return mBLEDataTask;
     
 }
 
--(void)resume{
-    BLEDataTask *mBLEDataTask = [taskArray firstObject];
-    if (mBLEDataTask) {
-        if(mBLEDataTask.TaskState == DataTaskStateSuspended){
-            NSLog(@"resume :%d -------count:%d",j++,taskArray.count);
-            [mBLEDataTask execute];
-        }
-    }
-}
 
+-(void)resume{
+    
+    BLEDataTask *mBLEDataTask = [taskArray firstObject];
+    if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
+        [mBLEDataTask execute];
+    }
+    
+}
 
 @end
