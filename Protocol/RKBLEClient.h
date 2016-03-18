@@ -11,6 +11,6 @@
 
 @interface RKBLEClient : BLEDataTaskManager
 
-//+ (instancetype)sharedClient;
++ (instancetype)sharedClient;
 
 @end

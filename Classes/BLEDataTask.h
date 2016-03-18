@@ -99,7 +99,7 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
  *
  *  @param callBack
  */
-- (void)createAhthProcessTask:(void (^)(BLEDataTask* authTask,NSError* error))callBack;
+- (void)createAhthProcessTask:(void (^)(BLEDataTask* authTask,NSError* error))callBack peripheralName:(NSString*)_peripheralName;
 
 
 /**
@@ -149,7 +149,7 @@ typedef void (^RKFailureBlock)(BLEDataTask *mBLEDataTask, NSData* responseObject
 
 @property (nonatomic,copy            ) RKSuccessBlock         failureBlock;
 
-@property (nonatomic,weak            ) id<BLEDataParseProtocol> dataParseProtocol;
+@property (nonatomic,weak            ) id<BLEDataParseProtocol  > dataParseProtocol;
 
 /**
  *  初始化BLEDataTask

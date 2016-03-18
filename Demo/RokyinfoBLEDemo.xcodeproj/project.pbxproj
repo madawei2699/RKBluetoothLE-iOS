@@ -15,6 +15,8 @@
 		18790DF81C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
 		18790DFB1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
 		18790DFC1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
+		18863BDE1C9BCD7000F824F6 /* RK410BluetoothProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18863BDD1C9BCD7000F824F6 /* RK410BluetoothProtocol.m */; };
+		18863BDF1C9BCD7000F824F6 /* RK410BluetoothProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18863BDD1C9BCD7000F824F6 /* RK410BluetoothProtocol.m */; };
 		18A372F51C90136300F3267A /* RKRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A372F41C90136300F3267A /* RKRunLoopThread.m */; };
 		18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A372F41C90136300F3267A /* RKRunLoopThread.m */; };
 		18A372F91C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A372F81C9013AD00F3267A /* RKRunLoopInputSource.m */; };
@@ -57,6 +59,8 @@
 		18790DF61C91738500A619DC /* RKFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKFrame.m; sourceTree = "<group>"; };
 		18790DF91C91739800A619DC /* RKPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKPackage.h; sourceTree = "<group>"; };
 		18790DFA1C91739800A619DC /* RKPackage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKPackage.m; sourceTree = "<group>"; };
+		18863BDC1C9BCD7000F824F6 /* RK410BluetoothProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RK410BluetoothProtocol.h; sourceTree = "<group>"; };
+		18863BDD1C9BCD7000F824F6 /* RK410BluetoothProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RK410BluetoothProtocol.m; sourceTree = "<group>"; };
 		18A372F31C90136300F3267A /* RKRunLoopThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKRunLoopThread.h; sourceTree = "<group>"; };
 		18A372F41C90136300F3267A /* RKRunLoopThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKRunLoopThread.m; sourceTree = "<group>"; };
 		18A372F71C9013AD00F3267A /* RKRunLoopInputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKRunLoopInputSource.h; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 			isa = PBXGroup;
 			children = (
 				18790DF41C9172A700A619DC /* Upgrade */,
+				18863BDC1C9BCD7000F824F6 /* RK410BluetoothProtocol.h */,
+				18863BDD1C9BCD7000F824F6 /* RK410BluetoothProtocol.m */,
 			);
 			name = Protocol;
 			path = ../Protocol;
@@ -442,6 +448,7 @@
 				18A372F51C90136300F3267A /* RKRunLoopThread.m in Sources */,
 				182F78DE1C929E3600AD3652 /* RKBLEUtil.m in Sources */,
 				F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */,
+				18863BDE1C9BCD7000F824F6 /* RK410BluetoothProtocol.m in Sources */,
 				182F78E21C92B08300AD3652 /* BLEDataTask.m in Sources */,
 				F58AF2A41C91B21900DAD829 /* BLEDataTaskManager.m in Sources */,
 				18790DF71C91738500A619DC /* RKFrame.m in Sources */,
@@ -464,6 +471,7 @@
 				18790DFC1C91739800A619DC /* RKPackage.m in Sources */,
 				18A372FA1C9013AD00F3267A /* RKRunLoopInputSource.m in Sources */,
 				182F78E31C92B08300AD3652 /* BLEDataTask.m in Sources */,
+				18863BDF1C9BCD7000F824F6 /* RK410BluetoothProtocol.m in Sources */,
 				F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */,
 				18EDCA511C902BAB00A4C922 /* CCRunLoopContextManager.m in Sources */,
 				18A372F61C90136300F3267A /* RKRunLoopThread.m in Sources */,

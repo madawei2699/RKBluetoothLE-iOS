@@ -15,11 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BLEDataTaskManager : NSObject{
 
     
-
+    
 }
 
+@property (nonatomic,strong) id<BLEDataParseProtocol  > dataParseProtocol;
 
-@property (nonatomic,copy)RKConnectProgressBlock bleConnectStateBlock;
+@property (nonatomic,copy  ) RKConnectProgressBlock bleConnectStateBlock;
 
 + (instancetype)sharedManager;
 

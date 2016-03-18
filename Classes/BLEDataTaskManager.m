@@ -14,6 +14,8 @@
     
     NSMutableArray<BLEDataTask*> *taskArray;
     
+    BLEDataTask *currentTask;
+    
 }
 
 @end
@@ -64,6 +66,7 @@
                                                                      method:method
                                                                  writeValue:parameters];
     mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
+    mBLEDataTask.dataParseProtocol = self.dataParseProtocol;
     
     __weak NSMutableArray *weekTaskArray = taskArray;
     __weak BLEDataTaskManager *weekSelf = self;
@@ -102,7 +105,10 @@
     
     BLEDataTask *mBLEDataTask = [taskArray firstObject];
     if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
+        
+        currentTask = mBLEDataTask;
         [mBLEDataTask execute];
+        
     }
     
 }
