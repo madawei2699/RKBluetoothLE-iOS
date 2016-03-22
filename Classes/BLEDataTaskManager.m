@@ -16,6 +16,8 @@
     
     BLEDataTask *currentTask;
     
+    dispatch_queue_t taskQueue;
+    
 }
 
 @end
@@ -38,6 +40,7 @@
     
     if(self != nil){
         taskArray = [[NSMutableArray alloc] init];
+        taskQueue = dispatch_queue_create("BLEDataTaskManager", NULL);
     }
     
     return self;
@@ -65,19 +68,17 @@
                                                              characteristic:target[@"characteristic"]
                                                                      method:method
                                                                  writeValue:parameters];
-    mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
     mBLEDataTask.dataParseProtocol = self.dataParseProtocol;
     
-    __weak NSMutableArray *weekTaskArray = taskArray;
-    __weak BLEDataTaskManager *weekSelf = self;
+    mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
+    
     mBLEDataTask.successBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
         
         if (success) {
             success(task,responseObject,error);
         }
         
-        [weekTaskArray removeObject:task];
-        [weekSelf resume];
+        [self removeTask:task];
         
     };
     mBLEDataTask.failureBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
@@ -86,30 +87,39 @@
             failure(task,responseObject,error);
         }
 
-        [weekTaskArray removeObject:task];
-        [weekSelf resume];
+        [self removeTask:task];
         
     };
     
-    [taskArray addObject:mBLEDataTask];
-    
-    [self resume];
-    
+    [self addTask:mBLEDataTask];
     
     return mBLEDataTask;
     
 }
 
+-(void)addTask:(BLEDataTask* )task{
+    [taskArray addObject:task];
+    [self resume];
+}
+
+-(void)removeTask:(BLEDataTask* )task{
+    [taskArray removeObject:task];
+    [self resume];
+}
 
 -(void)resume{
     
-    BLEDataTask *mBLEDataTask = [taskArray firstObject];
-    if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
-        
-        currentTask = mBLEDataTask;
-        [mBLEDataTask execute];
-        
-    }
+    dispatch_async(taskQueue, ^{
+        BLEDataTask *mBLEDataTask = [taskArray firstObject];
+        if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
+            
+            currentTask = mBLEDataTask;
+            [mBLEDataTask execute];
+            
+        }
+    });
+    
+    
     
 }
 

@@ -117,7 +117,7 @@ static BOOL bAuthOK = NO;
         case DataTaskStateRunning:
             NSLog(@"\n");
             NSLog(@"\n");
-            NSLog(@"---------------------BLEDataTask Start--------------------------");
+            NSLog(@"------------Start BLEDataTask[%@]------------",self.taskIdentifier);
             NSLog(@"任务：运行中...");
             break;
         case DataTaskStateSuspended:
@@ -128,11 +128,11 @@ static BOOL bAuthOK = NO;
             break;
         case DataTaskStateCompleted:
             NSLog(@"任务：执行完毕");
-            NSLog(@"---------------------BLEDataTask End-----------------------------");
+            NSLog(@"------------End   BLEDataTask[%@]------------",self.taskIdentifier);
             break;
         case DataTaskStateFailure:
             NSLog(@"任务：执行失败");
-            NSLog(@"---------------------BLEDataTask End-----------------------------");
+            NSLog(@"------------End   BLEDataTask[%@]------------",self.taskIdentifier);
             break;
             
         default:
@@ -179,7 +179,10 @@ static BOOL bAuthOK = NO;
         timeoutValue = DISCONNECT_STATE_TIME_OUT;
         
     }
-    
+    if (mNSTimer) {
+        [mNSTimer invalidate];
+        mNSTimer = nil;
+    }
     mNSTimer = [NSTimer timerWithTimeInterval:timeoutValue target:self selector:@selector(checkTimeOut:) userInfo:nil repeats:NO];
     [mNSTimer setFireDate: [[NSDate date]dateByAddingTimeInterval:timeoutValue]];
     [[NSRunLoop currentRunLoop] addTimer:mNSTimer forMode:NSRunLoopCommonModes];
@@ -550,7 +553,7 @@ static BOOL bAuthOK = NO;
 
 -(void)dealloc{
     
-    NSLog(@"BLEDataTask:dealloc");
+    NSLog(@"^^^BLEDataTask[%@] dealloc",self.taskIdentifier);
     
 }
 
