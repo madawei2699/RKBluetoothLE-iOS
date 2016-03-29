@@ -5,6 +5,7 @@ use_frameworks!
 target 'RokyinfoBLEDemo' do
 #    pod "RokyinfoBLE", :path => "../"
 #    pod 'BabyBluetooth','~> 0.5.0'
+    pod 'CocoaLumberjack'
     pod 'ReactiveCocoa'
     pod 'CocoaSecurity'
 end
@@ -12,6 +13,7 @@ end
 target 'RokyinfoBLEDemoTests' do
 #    pod "RokyinfoBLE", :path => "../"
 #    pod 'BabyBluetooth','~> 0.5.0'
+    pod 'CocoaLumberjack'
     pod 'ReactiveCocoa'
     pod 'CocoaSecurity'
     
