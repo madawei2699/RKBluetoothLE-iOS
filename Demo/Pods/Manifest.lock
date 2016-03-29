@@ -1,5 +1,4 @@
 PODS:
-  - BabyBluetooth (0.5.0)
   - CocoaSecurity (1.2.4)
   - ReactiveCocoa (4.0.1):
     - ReactiveCocoa/UI (= 4.0.1)
@@ -15,16 +14,14 @@ PODS:
   - Result (1.0.2)
 
 DEPENDENCIES:
-  - BabyBluetooth (~> 0.5.0)
   - CocoaSecurity
   - ReactiveCocoa
 
 SPEC CHECKSUMS:
-  BabyBluetooth: dae3d3edc48d13939deebd457bb57d35f64dae19
   CocoaSecurity: d288a6f87e0f363823d2cb83e753814a6944f71a
   ReactiveCocoa: f7011630aee4deeb16352fcb1b50d6bde9db4f90
   Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
 
-PODFILE CHECKSUM: dbec6edf726b942281ebfca42f15e3073bfe3d2c
+PODFILE CHECKSUM: d7634ee694fe39a72883f9473bdcf9411726b4f3
 
 COCOAPODS: 1.0.0.beta.3

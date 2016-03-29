@@ -18,15 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
     
 }
 
-@property (nonatomic,strong) id<BLEDataParseProtocol  > dataParseProtocol;
-
+@property (nonatomic,strong) id<BLEDataParseProtocol> dataParseProtocol;
 @property (nonatomic,copy  ) RKConnectProgressBlock bleConnectStateBlock;
 
 + (instancetype)sharedManager;
 
 - (id)init;
-
-- (void)resume;
 
 /**
  *  请求外围设备数据

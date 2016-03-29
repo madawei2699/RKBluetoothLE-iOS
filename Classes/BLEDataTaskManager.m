@@ -8,13 +8,14 @@
 
 #import "BLEDataTaskManager.h"
 #import "RKBLEUtil.h"
-#import "RKRunLoopThread.h"
 
 @interface BLEDataTaskManager(){
     
     NSMutableArray<BLEDataTask*> *taskArray;
     
     BLEDataTask *currentTask;
+    
+    dispatch_semaphore_t sem;
     
     dispatch_queue_t taskQueue;
     
@@ -25,6 +26,7 @@
 @implementation BLEDataTaskManager
 
 + (instancetype)sharedManager {
+    
     static BLEDataTaskManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -32,6 +34,7 @@
     });
     
     return _sharedClient;
+    
 }
 
 - (id)init{
@@ -41,6 +44,43 @@
     if(self != nil){
         taskArray = [[NSMutableArray alloc] init];
         taskQueue = dispatch_queue_create("BLEDataTaskManager", NULL);
+        //创建信号量，可以设置信号量的资源数。0表示没有资源，调用dispatch_semaphore_wait会立即等待。
+        sem = dispatch_semaphore_create(0);
+        bool condition = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            //消费者队列
+            while (condition) {
+                
+                if ([taskArray firstObject] == nil) {
+                    NSLog(@"dispatch_semaphore_wait");
+                    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+                }
+                
+                BLEDataTask *mBLEDataTask = [taskArray firstObject];
+                if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
+                    
+                    currentTask = mBLEDataTask;
+                    [mBLEDataTask execute];
+                
+                    
+                } else {
+                    NSLog(@"dispatch_semaphore_wait:60 * NSEC_PER_SEC");
+                    //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
+                    if (dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW,  60 * NSEC_PER_SEC )) != 0){
+                        //删除处理超时的任务
+                        NSLog(@"dispatch_semaphore_wait:timeout");
+                        BLEDataTask* firstObject = [taskArray firstObject];
+                        if (firstObject) {
+                            [taskArray removeObject:firstObject];
+                            //通知UI更新
+                        }
+                    }
+                }
+                
+            }
+            
+        });
+        
     }
     
     return self;
@@ -86,7 +126,7 @@
         if (failure) {
             failure(task,responseObject,error);
         }
-
+        
         [self removeTask:task];
         
     };
@@ -99,27 +139,39 @@
 
 -(void)addTask:(BLEDataTask* )task{
     [taskArray addObject:task];
-    [self resume];
+    //当前放入的对象为第一个对象则立即执行任务
+    if ([taskArray firstObject] == task) {
+        [self notify];
+    }
 }
 
 -(void)removeTask:(BLEDataTask* )task{
     [taskArray removeObject:task];
-    [self resume];
+    [self notify];
 }
 
--(void)resume{
+-(void)notify{
     
-    dispatch_async(taskQueue, ^{
-        BLEDataTask *mBLEDataTask = [taskArray firstObject];
-        if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
-            
-            currentTask = mBLEDataTask;
-            [mBLEDataTask execute];
-            
+    bool running = YES;
+    bool notifyOK = NO;
+    
+    int retryCount = 0;
+    while (running) {
+        //通知信号，如果等待线程被唤醒则返回非0，否则返回0
+        if (!dispatch_semaphore_signal(sem))
+        {
+            sleep(1); //wait for a while
+            retryCount++;
+            if (retryCount >= 3) {
+                running = NO;
+            }
+            continue;
         }
-    });
-    
-    
+        //通知成功
+        notifyOK = YES;
+        running = NO;
+    }
+    NSLog(@"dispatch_semaphore_signal:%@",notifyOK ? @"success":@"failure");
     
 }
 

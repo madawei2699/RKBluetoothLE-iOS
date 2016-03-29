@@ -4,14 +4,14 @@ use_frameworks!
 
 target 'RokyinfoBLEDemo' do
 #    pod "RokyinfoBLE", :path => "../"
-    pod 'BabyBluetooth','~> 0.5.0'
+#    pod 'BabyBluetooth','~> 0.5.0'
     pod 'ReactiveCocoa'
     pod 'CocoaSecurity'
 end
 
 target 'RokyinfoBLEDemoTests' do
 #    pod "RokyinfoBLE", :path => "../"
-    pod 'BabyBluetooth','~> 0.5.0'
+#    pod 'BabyBluetooth','~> 0.5.0'
     pod 'ReactiveCocoa'
     pod 'CocoaSecurity'
     
