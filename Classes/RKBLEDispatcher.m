@@ -10,6 +10,8 @@
 #import "Request.h"
 #import "Bluetooth.h"
 #import "ResponseDelivery.h"
+#import "RKBlockingQueue.h"
+#import "BLEResponse.h"
 
 @interface RKBLEDispatcher(){
     
@@ -18,7 +20,7 @@
     dispatch_semaphore_t sem;
 }
 
-@property(nonatomic,weak) NSMutableArray<Request*> *mQueue;
+@property(nonatomic,weak) RKBlockingQueue<Request*> *mQueue;
 
 @property(nonatomic,weak) id<Bluetooth> bluetooth;
 
@@ -28,57 +30,94 @@
 
 @implementation RKBLEDispatcher
 
-- (id)initWithQueue:(NSMutableArray<Request*>*)mQueue bluetooth:(id<Bluetooth>) bluetooth andDelivery:(id<ResponseDelivery>)mDelivery {
+- (id)initWithQueue:(RKBlockingQueue<Request*>*)mQueue bluetooth:(id<Bluetooth>) bluetooth andDelivery:(id<ResponseDelivery>)mDelivery {
     //调用父类的初始化方法
     self = [super init];
     
     if(self != nil){
         mQuit = NO;
+        sem = dispatch_semaphore_create(0);
         self.mQueue = mQueue;
         self.bluetooth = bluetooth;
         self.mDelivery = mDelivery;
+        
+        self.mQueue.sem = sem;
     }
     return self;
 }
 
 -(void)start{
 
-    sem = dispatch_semaphore_create(0);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //消费者队列
+        
         while (!mQuit) {
-            NSTimeInterval startTimeMs = [[NSDate date] timeIntervalSince1970];
             
-//            if ([taskArray firstObject] == nil) {
-//                NSLog(@"dispatch_semaphore_wait");
-//                dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-//            }
-//            
-//            BLEDataTask *mBLEDataTask = [taskArray firstObject];
-//            if(mBLEDataTask && mBLEDataTask.TaskState == DataTaskStateSuspended){
-//                
-//                currentTask = mBLEDataTask;
-//                [mBLEDataTask execute];
-//                
-//                
-//            } else {
-//                NSLog(@"dispatch_semaphore_wait:60 * NSEC_PER_SEC");
-//                //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
-//                if (dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW,  60 * NSEC_PER_SEC )) != 0){
-//                    //删除处理超时的任务
-//                    NSLog(@"dispatch_semaphore_wait:timeout");
-//                    BLEDataTask* firstObject = [taskArray firstObject];
-//                    if (firstObject) {
-//                        [taskArray removeObject:firstObject];
-//                        //通知UI更新
-//                    }
-//                }
-//            }
+            Request *request = [self.mQueue take];
             
+            if (mQuit) {
+                return;
+            }
+            
+            if (request == nil) {
+                continue;
+            }
+            
+            [request addMarker:@"ble-queue-take"];
+            if ([request isCanceled]) {
+                [request finish:@"ble-discard-cancelled"];
+                continue;
+            }
+            
+            __block BLEResponse *mBLEResponse = nil;
+            __block NSError *bleError = nil;
+            // Parse the response here on the worker thread.
+            RACSignal* responseRACSignal = [self.bluetooth performRequest:request];
+            [[responseRACSignal
+             subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
+             subscribeNext:^(id x) {
+                 mBLEResponse = x;
+                 //唤醒线程
+                 dispatch_semaphore_signal(sem);
+             }
+             error:^(NSError *error) {
+                 bleError = error;
+                 //唤醒线程
+                 dispatch_semaphore_signal(sem);
+             }];
+            
+            //等待BLE处理结束如果不结束则一直等待
+            while (!mQuit && mBLEResponse == nil && bleError == nil) {
+                dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+            }
+            
+            if (mQuit) {
+                return;
+            }
+            
+            [request addMarker:@"ble-complete"];
+            
+            if (bleError) {
+                
+                [self.mDelivery postError:request error:bleError];
+                
+            } else {
+                
+                Response *response = [request parseNetworkResponse:mBLEResponse];
+                [request addMarker:@"ble-parse—complete"];
+                [request markDelivered];
+                
+                [self.mDelivery postResponse:request response:response];
+                
+            }
         }
         
     });
 
+}
+
+-(void)quit{
+    mQuit = YES;
+    dispatch_semaphore_signal(sem);
 }
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BLEDataTask.h"
+#import "Request.h"
 
 //---------------------------服务------------------------------------------
 // 车精灵服务

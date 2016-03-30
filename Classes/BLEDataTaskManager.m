@@ -97,45 +97,45 @@
  *
  *  @return 蓝牙数据交换任务处理类
  */
-- (nullable BLEDataTask*)target:(NSDictionary*)target
-                         method:(RKBLEMethod)method
-                     parameters:(nullable NSData*)parameters
-                        success:(nullable void (^)(BLEDataTask* task, id responseObject,NSError* _Nullable error))success
-                        failure:(nullable void (^)(BLEDataTask* task, id _Nullable responseObject,NSError* error))failure{
-    
-    BLEDataTask *mBLEDataTask = [[BLEDataTask alloc] initWithPeripheralName:target[@"peripheralName"]
-                                                                    service:target[@"service"]
-                                                             characteristic:target[@"characteristic"]
-                                                                     method:method
-                                                                 writeValue:parameters];
-    mBLEDataTask.dataParseProtocol = self.dataParseProtocol;
-    
-    mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
-    
-    mBLEDataTask.successBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
-        
-        if (success) {
-            success(task,responseObject,error);
-        }
-        
-        [self removeTask:task];
-        
-    };
-    mBLEDataTask.failureBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
-        
-        if (failure) {
-            failure(task,responseObject,error);
-        }
-        
-        [self removeTask:task];
-        
-    };
-    
-    [self addTask:mBLEDataTask];
-    
-    return mBLEDataTask;
-    
-}
+//- (nullable BLEDataTask*)target:(NSDictionary*)target
+//                         method:(RKBLEMethod)method
+//                     parameters:(nullable NSData*)parameters
+//                        success:(nullable void (^)(BLEDataTask* task, id responseObject,NSError* _Nullable error))success
+//                        failure:(nullable void (^)(BLEDataTask* task, id _Nullable responseObject,NSError* error))failure{
+//    
+//    BLEDataTask *mBLEDataTask = [[BLEDataTask alloc] initWithPeripheralName:target[@"peripheralName"]
+//                                                                    service:target[@"service"]
+//                                                             characteristic:target[@"characteristic"]
+//                                                                     method:method
+//                                                                 writeValue:parameters];
+//    mBLEDataTask.dataParseProtocol = self.dataParseProtocol;
+//    
+//    mBLEDataTask.connectProgressBlock = self.bleConnectStateBlock;
+//    
+//    mBLEDataTask.successBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
+//        
+//        if (success) {
+//            success(task,responseObject,error);
+//        }
+//        
+//        [self removeTask:task];
+//        
+//    };
+//    mBLEDataTask.failureBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
+//        
+//        if (failure) {
+//            failure(task,responseObject,error);
+//        }
+//        
+//        [self removeTask:task];
+//        
+//    };
+//    
+//    [self addTask:mBLEDataTask];
+//    
+//    return mBLEDataTask;
+//    
+//}
 
 -(void)addTask:(BLEDataTask* )task{
     [taskArray addObject:task];

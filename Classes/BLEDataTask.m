@@ -28,29 +28,18 @@ static BOOL bAuthOK = NO;
     
 }
 
-@property (nonatomic,strong) BLEDataTask * authenticationTask;
+@property (nonatomic,strong) Request         *request;
 
 @end
 
 @implementation BLEDataTask
 
-- (id)initWithPeripheralName:(NSString*)peripheralName
-                     service:(NSString*)service
-              characteristic:(NSString*)characteristic
-                      method:(RKBLEMethod)method
-                  writeValue:(NSData*)writeValue{
+- (id)init{
     //调用父类的初始化方法
     self = [super init];
     
     if(self != nil){
-        _taskIdentifier = [[NSUUID UUID] UUIDString];
-        _peripheralName = peripheralName;
-        _service        = service;
-        _characteristic = characteristic;
-        _method         = method;
-        _writeValue     = writeValue;
         _BLEState       = RKBLEStateDefault;
-        _TaskState      = DataTaskStateSuspended;
         timeoutValue    = DISCONNECT_STATE_TIME_OUT;
     }
     
@@ -91,14 +80,12 @@ static BOOL bAuthOK = NO;
     }
     
     if (weekSelf.connectProgressBlock) {
-        weekSelf.connectProgressBlock(weekSelf,nil);
+        weekSelf.connectProgressBlock(_BLEState,nil);
     }
     
     if (weekSelf.failureBlock) {
         //任务开始运行后，发现蓝牙连接断开或者蓝牙连接失败则发出通知任务执行失败
-        if (weekSelf.TaskState == DataTaskStateRunning
-            &&
-            (_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)) {
+        if ((_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)) {
             
             [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEDataTaskErrorDomain"
                                                                          code:BLEDataTaskErrorDisconnect
@@ -109,35 +96,17 @@ static BOOL bAuthOK = NO;
     
 }
 
-- (void)setTaskState:(RKBLEDataTaskState)mRKBLEDataTaskState{
+-(void)performRequest:(Request*)request{
+    self.request = request;
     
-    _TaskState      = mRKBLEDataTaskState;
+    _requestSequence= [self.request getSequence];
+    _peripheralName = self.request.peripheralName;
+    _service        = self.request.service;
+    _characteristic = self.request.characteristic;
+    _method         = self.request.method;
+    _writeValue     = self.request.writeValue;
     
-    switch (_TaskState) {
-        case DataTaskStateRunning:
-            NSLog(@"\n");
-            NSLog(@"\n");
-            NSLog(@"------------Start BLEDataTask[%@]------------",self.taskIdentifier);
-            NSLog(@"任务：运行中...");
-            break;
-        case DataTaskStateSuspended:
-            NSLog(@"任务：挂起任务，初始化缺省状态");
-            break;
-        case DataTaskStateCanceling:
-            NSLog(@"任务：取消中...");
-            break;
-        case DataTaskStateCompleted:
-            NSLog(@"任务：执行完毕");
-            NSLog(@"------------End   BLEDataTask[%@]------------",self.taskIdentifier);
-            break;
-        case DataTaskStateFailure:
-            NSLog(@"任务：执行失败");
-            NSLog(@"------------End   BLEDataTask[%@]------------",self.taskIdentifier);
-            break;
-            
-        default:
-            break;
-    }
+    [self execute];
 }
 
 -(void)execute{
@@ -153,7 +122,7 @@ static BOOL bAuthOK = NO;
 
 -(void)startTask{
     
-    self.TaskState = DataTaskStateRunning;
+    
     
 }
 
@@ -162,9 +131,9 @@ static BOOL bAuthOK = NO;
  */
 -(void)addTimeOutLogic{
 
-    if (self.dataParseProtocol
+    if (self.request.dataParseProtocol
         &&
-        [self.dataParseProtocol needAuthentication] && ![self.dataParseProtocol isAuthenticationTask:self]
+        [self.request.dataParseProtocol needAuthentication] && ![self.request.dataParseProtocol isAuthenticationRequest:self.request]
         &&
         bAuthOK == NO) {
         
@@ -192,12 +161,12 @@ static BOOL bAuthOK = NO;
 - (void)checkTimeOut:(NSTimer *)timer
 {
     [mNSTimer invalidate];
-    if (self.TaskState != DataTaskStateCompleted && self.TaskState != DataTaskStateCanceling) {
-        
+//    if (self.TaskState != DataTaskStateCompleted && self.TaskState != DataTaskStateCanceling) {
+    
         [self failureTask:self withError:[NSError errorWithDomain:@"BLEDataTaskErrorDomain"
                                                              code:BLEDataTaskErrorTimeOut
                                                          userInfo:@{ NSLocalizedDescriptionKey: @"当前业务处理超时" }]];
-    }
+//    }
 }
 
 /**
@@ -328,8 +297,8 @@ static BOOL bAuthOK = NO;
                 NSLog(@"==========service name:%@ ,characteristic name:%@",service.UUID,characteristic.UUID);
                 if (characteristic.properties & CBCharacteristicPropertyNotify) {
                     
-                    if (weekSelf.dataParseProtocol) {
-                        if ([weekSelf.dataParseProtocol needSubscribeNotifyWithService:[service.UUID UUIDString] characteristic:[characteristic.UUID UUIDString]]) {
+                    if (weekSelf.request.dataParseProtocol) {
+                        if ([weekSelf.request.dataParseProtocol needSubscribeNotifyWithService:[service.UUID UUIDString] characteristic:[characteristic.UUID UUIDString]]) {
                             [weekSelf setNotify:peripheral characteristic:characteristic];
                         }
                     } else {
@@ -363,19 +332,15 @@ static BOOL bAuthOK = NO;
 -(void)setNotify:(CBPeripheral *)peripheral characteristic:(CBCharacteristic*)characteristic {
     
     __weak BLEDataTask *weekSelf = self;
-    [baby notify:peripheral
-  characteristic:characteristic
-           block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-               
-               NSLog(@">>>在特征%@接收到蓝牙上报数据：%@ ",characteristics.UUID,characteristics.value);
-               if (weekSelf.authenticationTask) {
-                   [weekSelf.authenticationTask parseResponse:characteristics channel:RKBLEResponseNotify];
-               } else {
-                   [weekSelf parseResponse:characteristics channel:RKBLEResponseNotify];
-               }
-               
-               
-           }];
+    [baby
+     notify:peripheral
+     characteristic:characteristic
+     block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
+        
+         NSLog(@">>>在特征%@接收到蓝牙上报数据：%@ ",characteristics.UUID,characteristics.value);
+        [weekSelf parseResponse:characteristics channel:RKBLEResponseNotify];
+         
+    }];
     
 }
 
@@ -389,51 +354,20 @@ static BOOL bAuthOK = NO;
     
     __weak BLEDataTask *weekSelf = self;
     
-    if (weekSelf.TaskState != DataTaskStateCompleted && peripheral.state == CBPeripheralStateConnected) {
+    if (peripheral.state == CBPeripheralStateConnected) {
         
         //数据交换协议需要鉴权
-        if (weekSelf.dataParseProtocol
+        if (weekSelf.request.dataParseProtocol
             &&
-            [weekSelf.dataParseProtocol needAuthentication] && ![weekSelf.dataParseProtocol isAuthenticationTask:weekSelf]
+            [weekSelf.request.dataParseProtocol needAuthentication] && ![weekSelf.request.dataParseProtocol isAuthenticationRequest:weekSelf.request]
             &&
             bAuthOK == NO
             ) {
             
-            [weekSelf.dataParseProtocol createAhthProcessTask:^(BLEDataTask* authTask,NSError* error) {
+            [weekSelf.request.dataParseProtocol createAuthProcessRequest:^(Request* authRequest,NSError* error) {
                 
-                weekSelf.authenticationTask = authTask;
-        
-                if (authTask) {
-                    
-                    authTask.connectProgressBlock = weekSelf.connectProgressBlock;
-                    authTask.successBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
-                        
-                        if ([task.dataParseProtocol authSuccess:responseObject]) {
-                            //鉴权成功
-                            bAuthOK = YES;
-                            [weekSelf execute];
-                            
-                        } else {
-                            
-                            [weekSelf failureTask:weekSelf withError:error];
-                            
-                        }
-                        
-                    };
-                    authTask.failureBlock = ^(BLEDataTask* task, id responseObject,NSError* _Nullable error){
-                        
-                        [weekSelf failureTask:weekSelf withError:error];
-                        
-                    };
-                    
-                    [authTask execute];
-                    
-                } else {
-                    
-                    [weekSelf failureTask:weekSelf withError:error];
-                    
-                }
-                
+                [weekSelf performRequest:authRequest];
+
             } peripheralName:weekSelf.peripheralName];
             
         } else {
@@ -473,11 +407,11 @@ static BOOL bAuthOK = NO;
     
     __weak BLEDataTask *weekSelf = self;
     
-    if (weekSelf.TaskState != DataTaskStateCompleted) {
+//    if (weekSelf.TaskState != DataTaskStateCompleted) {
         //注入了数据协议处理类则使用注入的协议类进行判断处理
-        if (weekSelf.dataParseProtocol) {
+        if (weekSelf.request.dataParseProtocol) {
             
-            if ([weekSelf.dataParseProtocol effectiveResponse: weekSelf characteristic: characteristic.UUID.UUIDString sourceChannel:channel]) {
+            if ([weekSelf.request.dataParseProtocol effectiveResponse: weekSelf.request characteristic: characteristic.UUID.UUIDString sourceChannel:channel]) {
                 
                 [weekSelf completeTask:weekSelf withCharacteristic:characteristic channel:channel];
                 
@@ -488,7 +422,7 @@ static BOOL bAuthOK = NO;
             [weekSelf completeTask:weekSelf withCharacteristic:characteristic channel:channel];
             
         }
-    }
+//    }
     
 }
 
@@ -520,10 +454,27 @@ static BOOL bAuthOK = NO;
         default:
             break;
     }
+    if (weekSelf.request.dataParseProtocol
+        &&
+        [weekSelf.request.dataParseProtocol needAuthentication] && ![weekSelf.request.dataParseProtocol isAuthenticationRequest:weekSelf.request]
+        ){
+        if ([weekSelf.request.dataParseProtocol authSuccess:mCBCharacteristic.value]) {
+            
+            bAuthOK = YES;
+            //鉴权成功，开始执行原始任务
+            
+        } else {
+            
+            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEDataTaskErrorDomain"
+                                                                         code:BLEDataTaskAuthError
+                                                                     userInfo:@{ NSLocalizedDescriptionKey: @"鉴权失败" }]];
+            
+        }
+        return;
+    }
     
-    weekSelf.TaskState = DataTaskStateCompleted;
     if (weekSelf.successBlock) {
-        weekSelf.successBlock(weekSelf,mCBCharacteristic.value,nil);
+        weekSelf.successBlock(weekSelf.request,mCBCharacteristic.value,nil);
     }
     
     [weekSelf cleanUp:weekSelf];
@@ -533,9 +484,8 @@ static BOOL bAuthOK = NO;
 -(void)failureTask:(BLEDataTask*) weekSelf withError:(NSError*) error{
     NSLog(@"任务：执行失败%@",[error localizedDescription]);
     
-    weekSelf.TaskState = DataTaskStateFailure;
     if (weekSelf.failureBlock) {
-        weekSelf.failureBlock(weekSelf,nil,error);
+        weekSelf.failureBlock(weekSelf.request,nil,error);
     }
     
     [weekSelf cleanUp:weekSelf];
@@ -546,14 +496,11 @@ static BOOL bAuthOK = NO;
     //此处必须关闭定时器不然会有内存泄露
     [weekSelf->mNSTimer invalidate];
     weekSelf->mNSTimer = nil;
-    
-    weekSelf.authenticationTask = nil;
-    
 }
 
 -(void)dealloc{
     
-    NSLog(@"^^^BLEDataTask[%@] dealloc",self.taskIdentifier);
+    NSLog(@"BLEDataTask:dealloc");
     
 }
 

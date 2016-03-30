@@ -8,6 +8,23 @@
 
 #import "Request.h"
 
+@interface Request(){
+    
+    NSInteger mSequence;
+    
+}
+
+@end
+
 @implementation Request
+
+-(Request*)setSequence:(NSInteger)sequence{
+    mSequence = sequence;
+    return self;
+}
+
+-(NSInteger)getSequence{
+    return mSequence;
+}
 
 @end

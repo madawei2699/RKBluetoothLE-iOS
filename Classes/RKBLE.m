@@ -16,7 +16,7 @@
     //创建蓝牙处理模块类
     BasicBluetooth *mBasicBluetooth = [[BasicBluetooth alloc] init];
     RequestQueue *mRequestQueue =  [[RequestQueue alloc] initWithBluetooth:mBasicBluetooth];
-    
+    [mRequestQueue start];
     return mRequestQueue;
 }
 

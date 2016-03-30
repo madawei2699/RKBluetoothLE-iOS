@@ -10,6 +10,7 @@
 #import "RKBLEDispatcher.h"
 #import "ExecutorDelivery.h"
 #import "Request.h"
+#import "RKBlockingQueue.h"
 
 @interface RequestQueue(){
     
@@ -19,8 +20,9 @@
     
     RKBLEDispatcher *mDispatcher;
     
-    NSMutableArray<Request*> *mBluetoothQueue;
+    RKBlockingQueue<Request*> *mBluetoothQueue;
     
+    int sequence;
 }
 
 
@@ -33,7 +35,7 @@
     self = [super init];
     
     if(self != nil){
-        mBluetoothQueue = [[NSMutableArray alloc] init];
+        mBluetoothQueue = [[RKBlockingQueue alloc] init];
         bluetooth = _Bluetooth;
         mDelivery = [[ExecutorDelivery alloc] init];
     }
@@ -55,10 +57,18 @@
 
 -(Request*)add:(Request*)request{
     request.mRequestQueue = self;
-    [request setSequence:1];
+    [request setSequence:[self getSequenceNumber]];
     [request addMarker:@"add-to-queue"];
-    [mBluetoothQueue addObject:request];
+    [mBluetoothQueue add:request];
     return request;
+}
+
+-(NSInteger)getSequenceNumber{
+    sequence++;
+    if (sequence >= INT32_MAX) {
+        sequence = 0;
+    }
+    return sequence;
 }
 
 @end

@@ -8,7 +8,6 @@
 
 #import "RK410BluetoothProtocol.h"
 #import "CocoaSecurity.h"
-#import "RK410BluetoothProtocol.h"
 
 @implementation RK410BluetoothProtocol
 
@@ -54,7 +53,7 @@
  *
  *  @return yes: 符合 no:不符合
  */
--(BOOL)effectiveResponse:(BLEDataTask*)dataTask characteristic:(NSString*)characteristic sourceChannel:(RKBLEResponseChannel)channel{
+-(BOOL)effectiveResponse:(Request*)dataTask characteristic:(NSString*)characteristic sourceChannel:(RKBLEResponseChannel)channel{
     
     if (dataTask.method == RKBLEMethodWrite) {
         
@@ -84,20 +83,22 @@
  *
  *  @param callBack
  */
-- (void)createAhthProcessTask:(void (^)(BLEDataTask* authTask,NSError* error))callBack peripheralName:(NSString*)_peripheralName{
+- (void)createAuthProcessRequest:(void (^)(Request* request,NSError* error))callBack peripheralName:(NSString*)_peripheralName{
     
     CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
     NSData *authCode = [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
     
-    BLEDataTask *mBLEDataTask = [[BLEDataTask alloc] initWithPeripheralName:_peripheralName
-                                                                    service:SERVICE_SPIRIT_SYNC_DATA
-                                                             characteristic:SPIRIT_AUTH_CODE
-                                                                     method:RKBLEMethodWrite
-                                                                 writeValue:authCode];
-    mBLEDataTask.dataParseProtocol = self;
+//    BLEDataTask *mBLEDataTask = [[BLEDataTask alloc] initWithPeripheralName:_peripheralName
+//                                                                    service:SERVICE_SPIRIT_SYNC_DATA
+//                                                             characteristic:SPIRIT_AUTH_CODE
+//                                                                     method:RKBLEMethodWrite
+//                                                                 writeValue:authCode];
+//    mBLEDataTask.dataParseProtocol = self;
+    
+    Request *request = [[Request alloc] init];
     
     if (callBack) {
-        callBack(mBLEDataTask,nil);
+        callBack(request,nil);
     }
 }
 
@@ -109,9 +110,9 @@
  *
  *  @return
  */
-- (BOOL)isAuthenticationTask:(BLEDataTask*)dataTask{
+- (BOOL)isAuthenticationRequest:(Request*)request{
     
-    if ([dataTask.service isEqualToString:SERVICE_SPIRIT_SYNC_DATA] && [dataTask.characteristic isEqualToString:SPIRIT_AUTH_CODE]) {
+    if ([request.service isEqualToString:SERVICE_SPIRIT_SYNC_DATA] && [request.characteristic isEqualToString:SPIRIT_AUTH_CODE]) {
         return YES;
     }
     

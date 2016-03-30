@@ -19,11 +19,11 @@
 
 - (RACSignal*) performRequest:(Request*) request{
     
-//    @weakify(self)
-//    return [RACSignal createSignal:^RACDisposable *(id subscriber) {
-//    
-//        @strongify(self)
-//        [self.accountStore requestAccessToAccountsWithType:self.twitterAccountType
+    @weakify(self)
+    return [RACSignal createSignal:^RACDisposable *(id subscriber) {
+    
+        @strongify(self)
+//        [self requestAccessToAccountsWithType:self.twitterAccountType
 //                                                   options:nil
 //                                                completion:^(BOOL granted, NSError *error) {
 //                                                    // 4 - handle the response
@@ -34,8 +34,8 @@
 //                                                        [subscriber sendCompleted]; 
 //                                                    } 
 //                                                }]; 
-//        return nil; 
-//    }];
+        return nil;
+    }];
     
     return nil;
 }
