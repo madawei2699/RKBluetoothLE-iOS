@@ -1,12 +1,12 @@
 //
-//  BLEDataTask.m
+//  BLEStack.m
 //  RokyinfoBLEDemo
 //
 //  Created by apple on 16/3/11.
 //  Copyright © 2016年 rokyinfo. All rights reserved.
 //
 
-#import "BLEDataTask.h"
+#import "BLEStack.h"
 #import "RKBLEUtil.h"
 
 #define DISCONNECT_STATE_TIME_OUT     8
@@ -15,9 +15,7 @@
 
 static BOOL bAuthOK = NO;
 
-
-
-@interface BLEDataTask(){
+@interface BLEStack(){
     
     //定义变量
     BabyBluetooth   *baby;
@@ -28,11 +26,25 @@ static BOOL bAuthOK = NO;
     
 }
 
-@property (nonatomic,strong) Request         *request;
+@property (nonatomic,strong) Request *request;
+
+@property (nonatomic,strong) Request *targetRequest;
 
 @end
 
-@implementation BLEDataTask
+@implementation BLEStack
+
++ (instancetype)sharedInstance {
+    
+    static BLEStack *_sharedClient = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedClient = [[BLEStack alloc] init];
+    });
+    
+    return _sharedClient;
+    
+}
 
 - (id)init{
     //调用父类的初始化方法
@@ -46,9 +58,9 @@ static BOOL bAuthOK = NO;
     return self;
 }
 
-- (void)setBLEState:(RKBLEState)mRKBLEState
+- (void)setBLEState:(RKBLEConnectState)mRKBLEState
 {
-    __weak BLEDataTask *weekSelf = self;
+    __weak BLEStack *weekSelf = self;
     _BLEState = mRKBLEState;
     
     switch (_BLEState) {
@@ -85,10 +97,10 @@ static BOOL bAuthOK = NO;
     
     if (weekSelf.failureBlock) {
         //任务开始运行后，发现蓝牙连接断开或者蓝牙连接失败则发出通知任务执行失败
-        if ((_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)) {
+        if (![weekSelf.request hasHadResponseDelivered] && (_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)) {
             
-            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEDataTaskErrorDomain"
-                                                                         code:BLEDataTaskErrorDisconnect
+            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
+                                                                         code:BLEStackErrorDisconnect
                                                                      userInfo:@{ NSLocalizedDescriptionKey: @"蓝牙连接断开" }]];
             
         }
@@ -97,14 +109,21 @@ static BOOL bAuthOK = NO;
 }
 
 -(void)performRequest:(Request*)request{
-    self.request = request;
     
-    _requestSequence= [self.request getSequence];
-    _peripheralName = self.request.peripheralName;
-    _service        = self.request.service;
-    _characteristic = self.request.characteristic;
-    _method         = self.request.method;
-    _writeValue     = self.request.writeValue;
+    if([self isAuthRequest:request]){
+        self.targetRequest = self.request;
+    } else {
+        self.targetRequest = nil;
+    }
+    
+    self.request     = request;
+
+    _requestSequence = [self.request getSequence];
+    _peripheralName  = self.request.peripheralName;
+    _service         = self.request.service;
+    _characteristic  = self.request.characteristic;
+    _method          = self.request.method;
+    _writeValue      = self.request.writeValue;
     
     [self execute];
 }
@@ -120,9 +139,10 @@ static BOOL bAuthOK = NO;
     [self executeWithPeripheral:[baby findConnectedPeripheral:self.peripheralName]];
 }
 
+/**
+ *  开始任务
+ */
 -(void)startTask{
-    
-    
     
 }
 
@@ -131,22 +151,18 @@ static BOOL bAuthOK = NO;
  */
 -(void)addTimeOutLogic{
 
-    if (self.request.dataParseProtocol
-        &&
-        [self.request.dataParseProtocol needAuthentication] && ![self.request.dataParseProtocol isAuthenticationRequest:self.request]
-        &&
-        bAuthOK == NO) {
-        
+    if ([self isNeedAuth:self.request]) {
+
         timeoutValue = AUTHENTICATION_STATE_TIME_OUT;
-        
+
     } else if(self.BLEState == RKBLEStateConnected){
-        
+
         timeoutValue = CONNECTED_STATE_TIME_OUT;
-        
+
     } else {
-        
+
         timeoutValue = DISCONNECT_STATE_TIME_OUT;
-        
+
     }
     if (mNSTimer) {
         [mNSTimer invalidate];
@@ -158,15 +174,20 @@ static BOOL bAuthOK = NO;
 
 }
 
+/**
+ *  超时处理
+ *
+ *  @param timer
+ */
 - (void)checkTimeOut:(NSTimer *)timer
 {
     [mNSTimer invalidate];
-//    if (self.TaskState != DataTaskStateCompleted && self.TaskState != DataTaskStateCanceling) {
+    if (![self.request hasHadResponseDelivered]) {
     
-        [self failureTask:self withError:[NSError errorWithDomain:@"BLEDataTaskErrorDomain"
-                                                             code:BLEDataTaskErrorTimeOut
+        [self failureTask:self withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
+                                                             code:BLEStackErrorTimeOut
                                                          userInfo:@{ NSLocalizedDescriptionKey: @"当前业务处理超时" }]];
-//    }
+    }
 }
 
 /**
@@ -215,7 +236,7 @@ static BOOL bAuthOK = NO;
  */
 -(void)babyDelegate{
     
-    __weak BLEDataTask *weekSelf = self;
+    __weak BLEStack *weekSelf = self;
     __weak BabyBluetooth *weekBaby = baby;
     //设置扫描到设备的委托
     [baby setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
@@ -331,7 +352,7 @@ static BOOL bAuthOK = NO;
  */
 -(void)setNotify:(CBPeripheral *)peripheral characteristic:(CBCharacteristic*)characteristic {
     
-    __weak BLEDataTask *weekSelf = self;
+    __weak BLEStack *weekSelf = self;
     [baby
      notify:peripheral
      characteristic:characteristic
@@ -352,17 +373,12 @@ static BOOL bAuthOK = NO;
  */
 -(void)executeWithPeripheral:(CBPeripheral*) peripheral{
     
-    __weak BLEDataTask *weekSelf = self;
+    __weak BLEStack *weekSelf = self;
     
-    if (peripheral.state == CBPeripheralStateConnected) {
+    if ( peripheral.state == CBPeripheralStateConnected && ![weekSelf.request hasHadResponseDelivered] ) {
         
         //数据交换协议需要鉴权
-        if (weekSelf.request.dataParseProtocol
-            &&
-            [weekSelf.request.dataParseProtocol needAuthentication] && ![weekSelf.request.dataParseProtocol isAuthenticationRequest:weekSelf.request]
-            &&
-            bAuthOK == NO
-            ) {
+        if ([weekSelf isNeedAuth:weekSelf.request]) {
             
             [weekSelf.request.dataParseProtocol createAuthProcessRequest:^(Request* authRequest,NSError* error) {
                 
@@ -405,9 +421,9 @@ static BOOL bAuthOK = NO;
  */
 -(void)parseResponse:(CBCharacteristic *)characteristic channel:(RKBLEResponseChannel)channel{
     
-    __weak BLEDataTask *weekSelf = self;
+    __weak BLEStack *weekSelf = self;
     
-//    if (weekSelf.TaskState != DataTaskStateCompleted) {
+    if (![weekSelf.request hasHadResponseDelivered]) {
         //注入了数据协议处理类则使用注入的协议类进行判断处理
         if (weekSelf.request.dataParseProtocol) {
             
@@ -422,10 +438,15 @@ static BOOL bAuthOK = NO;
             [weekSelf completeTask:weekSelf withCharacteristic:characteristic channel:channel];
             
         }
-//    }
+    }
     
 }
 
+/**
+ *  连接一个已经连接过的peripheral
+ *
+ *  @param peripheral
+ */
 -(void)connectWithHaving:(CBPeripheral *)peripheral{
     
     self.BLEState = RKBLEStateStart;
@@ -439,7 +460,14 @@ static BOOL bAuthOK = NO;
     
 }
 
--(void)completeTask:(BLEDataTask*) weekSelf withCharacteristic:(CBCharacteristic*) mCBCharacteristic channel:(RKBLEResponseChannel)channel{
+/**
+ *  请求成功
+ *
+ *  @param weekSelf
+ *  @param mCBCharacteristic
+ *  @param channel
+ */
+-(void)completeTask:(BLEStack*) weekSelf withCharacteristic:(CBCharacteristic*) mCBCharacteristic channel:(RKBLEResponseChannel)channel{
     
     switch (channel) {
         case RKBLEResponseWriteResult:
@@ -454,19 +482,17 @@ static BOOL bAuthOK = NO;
         default:
             break;
     }
-    if (weekSelf.request.dataParseProtocol
-        &&
-        [weekSelf.request.dataParseProtocol needAuthentication] && ![weekSelf.request.dataParseProtocol isAuthenticationRequest:weekSelf.request]
-        ){
+    if ([weekSelf isAuthRequest:weekSelf.request]){
         if ([weekSelf.request.dataParseProtocol authSuccess:mCBCharacteristic.value]) {
             
             bAuthOK = YES;
-            //鉴权成功，开始执行原始任务
+            //鉴权成功，开始执行目标任务
+            [weekSelf performRequest:weekSelf.targetRequest];
             
         } else {
             
-            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEDataTaskErrorDomain"
-                                                                         code:BLEDataTaskAuthError
+            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
+                                                                         code:BLEStackAuthError
                                                                      userInfo:@{ NSLocalizedDescriptionKey: @"鉴权失败" }]];
             
         }
@@ -481,26 +507,90 @@ static BOOL bAuthOK = NO;
     
 }
 
--(void)failureTask:(BLEDataTask*) weekSelf withError:(NSError*) error{
+/**
+ *  请求失败
+ *
+ *  @param weekSelf
+ *  @param error
+ */
+-(void)failureTask:(BLEStack*) weekSelf withError:(NSError*) error{
     NSLog(@"任务：执行失败%@",[error localizedDescription]);
+    if(weekSelf.targetRequest){
+        weekSelf.request = weekSelf.targetRequest;
+    }
     
     if (weekSelf.failureBlock) {
         weekSelf.failureBlock(weekSelf.request,nil,error);
     }
     
     [weekSelf cleanUp:weekSelf];
+}
+
+/**
+ *  判断请求是否为鉴权请求
+ *
+ *  @param weekSelf
+ *
+ *  @return
+ */
+-(BOOL)isAuthRequest:(Request*)request{
+
+    if (request.dataParseProtocol
+        &&
+       [request.dataParseProtocol isAuthenticationRequest:request]
+        ){
+        
+        return YES;
+        
+    } else {
+        
+        return NO;
+        
+    }
+}
+
+/**
+ *  判断是否需要鉴权
+ *
+ *  @param weekSelf
+ *
+ *  @return
+ */
+-(BOOL)isNeedAuth:(Request*)request{
+
+    if (request.dataParseProtocol
+        &&
+        [request.dataParseProtocol needAuthentication] && ![request.dataParseProtocol isAuthenticationRequest:request]
+        &&
+        bAuthOK == NO){
+        
+        return YES;
+        
+    } else {
+        
+        return NO;
+        
+    }
     
 }
 
--(void)cleanUp:(BLEDataTask*) weekSelf{
+/**
+ *  清除为当前超时定时器
+ *
+ *  @param weekSelf
+ */
+-(void)cleanUp:(BLEStack*) weekSelf{
     //此处必须关闭定时器不然会有内存泄露
     [weekSelf->mNSTimer invalidate];
     weekSelf->mNSTimer = nil;
+    
+    weekSelf.request = nil;
+    weekSelf.targetRequest = nil;
 }
 
 -(void)dealloc{
     
-    NSLog(@"BLEDataTask:dealloc");
+    NSLog(@"BLEStack:dealloc");
     
 }
 

@@ -8,8 +8,11 @@
 
 #import "BasicBluetooth.h"
 
-@interface BasicBluetooth(){
 
+@interface BasicBluetooth(){
+    
+    BLEStack *mBLEStack;
+    
 }
 
 @end
@@ -17,27 +20,44 @@
 @implementation BasicBluetooth
 
 
+- (id)init{
+    //调用父类的初始化方法
+    self = [super init];
+    
+    if(self != nil){
+        mBLEStack = [BLEStack sharedInstance];
+    }
+    
+    return self;
+}
+
 - (RACSignal*) performRequest:(Request*) request{
     
     @weakify(self)
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
     
         @strongify(self)
-//        [self requestAccessToAccountsWithType:self.twitterAccountType
-//                                                   options:nil
-//                                                completion:^(BOOL granted, NSError *error) {
-//                                                    // 4 - handle the response
-//                                                    if (!granted) {
-//                                                        [subscriber sendError:accessError];
-//                                                    } else { 
-//                                                        [subscriber sendNext:nil]; 
-//                                                        [subscriber sendCompleted]; 
-//                                                    } 
-//                                                }]; 
+        [self performRequest:request success:^(Request* task, id responseObject,NSError* error){
+            [subscriber sendNext:responseObject];
+            [subscriber sendCompleted];
+        } failure:^(Request* task, id responseObject,NSError* error){
+            [subscriber sendError:error];
+        }];
+        
         return nil;
     }];
     
     return nil;
+}
+
+-(void)performRequest:(Request*) request
+              success:(void (^)(Request* task, id responseObject,NSError* error))success
+              failure:(void (^)(Request* task, id responseObject,NSError* error))failure{
+    
+    mBLEStack.successBlock = success;
+    mBLEStack.failureBlock = failure;
+    [mBLEStack performRequest:request];
+    
 }
 
 @end

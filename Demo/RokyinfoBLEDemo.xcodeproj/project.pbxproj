@@ -29,8 +29,8 @@
 		1821961B1CAA2D7B00F70227 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 182196071CAA2D7B00F70227 /* README.md */; };
 		182F78DE1C929E3600AD3652 /* RKBLEUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78DD1C929E3600AD3652 /* RKBLEUtil.m */; };
 		182F78DF1C929E3600AD3652 /* RKBLEUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78DD1C929E3600AD3652 /* RKBLEUtil.m */; };
-		182F78E21C92B08300AD3652 /* BLEDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEDataTask.m */; };
-		182F78E31C92B08300AD3652 /* BLEDataTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEDataTask.m */; };
+		182F78E21C92B08300AD3652 /* BLEStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEStack.m */; };
+		182F78E31C92B08300AD3652 /* BLEStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEStack.m */; };
 		184F847A1CAA76AB009016A0 /* RKBLEDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 184F84791CAA76AB009016A0 /* RKBLEDispatcher.m */; };
 		18790DF71C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
 		18790DF81C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
@@ -94,8 +94,8 @@
 		182196071CAA2D7B00F70227 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		182F78DC1C929E3600AD3652 /* RKBLEUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEUtil.h; sourceTree = "<group>"; };
 		182F78DD1C929E3600AD3652 /* RKBLEUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEUtil.m; sourceTree = "<group>"; };
-		182F78E01C92B08300AD3652 /* BLEDataTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataTask.h; sourceTree = "<group>"; };
-		182F78E11C92B08300AD3652 /* BLEDataTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEDataTask.m; sourceTree = "<group>"; };
+		182F78E01C92B08300AD3652 /* BLEStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEStack.h; sourceTree = "<group>"; };
+		182F78E11C92B08300AD3652 /* BLEStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEStack.m; sourceTree = "<group>"; };
 		184F84781CAA76AB009016A0 /* RKBLEDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEDispatcher.h; sourceTree = "<group>"; };
 		184F84791CAA76AB009016A0 /* RKBLEDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEDispatcher.m; sourceTree = "<group>"; };
 		18790DF51C91738500A619DC /* RKFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKFrame.h; sourceTree = "<group>"; };
@@ -305,8 +305,6 @@
 				F58AF2A31C91B21900DAD829 /* BLEDataTaskManager.m */,
 				182F78DC1C929E3600AD3652 /* RKBLEUtil.h */,
 				182F78DD1C929E3600AD3652 /* RKBLEUtil.m */,
-				182F78E01C92B08300AD3652 /* BLEDataTask.h */,
-				182F78E11C92B08300AD3652 /* BLEDataTask.m */,
 				18AC16881C9A7CF700724537 /* RKBLEDataResponseSerializer.h */,
 				184F84781CAA76AB009016A0 /* RKBLEDispatcher.h */,
 				184F84791CAA76AB009016A0 /* RKBLEDispatcher.m */,
@@ -333,6 +331,8 @@
 		F53B69CB1CAABA9400A6B2CB /* ToolBox */ = {
 			isa = PBXGroup;
 			children = (
+				182F78E01C92B08300AD3652 /* BLEStack.h */,
+				182F78E11C92B08300AD3652 /* BLEStack.m */,
 				F53B69CC1CAABABF00A6B2CB /* BasicBluetooth.h */,
 				F53B69CD1CAABABF00A6B2CB /* BasicBluetooth.m */,
 				F53B69C11CAAB39B00A6B2CB /* RKBLE.h */,
@@ -564,7 +564,7 @@
 				F58AF2A01C91B0F200DAD829 /* RKBLEClient.m in Sources */,
 				18863BDE1C9BCD7000F824F6 /* RK410BluetoothProtocol.m in Sources */,
 				F53B69C31CAAB39B00A6B2CB /* RKBLE.m in Sources */,
-				182F78E21C92B08300AD3652 /* BLEDataTask.m in Sources */,
+				182F78E21C92B08300AD3652 /* BLEStack.m in Sources */,
 				184F847A1CAA76AB009016A0 /* RKBLEDispatcher.m in Sources */,
 				1821960C1CAA2D7B00F70227 /* BabyCentralManager.m in Sources */,
 				F53B69C61CAAB4B500A6B2CB /* RequestQueue.m in Sources */,
@@ -593,7 +593,7 @@
 				182196131CAA2D7B00F70227 /* BabyRhythm.m in Sources */,
 				182F78DF1C929E3600AD3652 /* RKBLEUtil.m in Sources */,
 				18790DFC1C91739800A619DC /* RKPackage.m in Sources */,
-				182F78E31C92B08300AD3652 /* BLEDataTask.m in Sources */,
+				182F78E31C92B08300AD3652 /* BLEStack.m in Sources */,
 				1821961B1CAA2D7B00F70227 /* README.md in Sources */,
 				18863BDF1C9BCD7000F824F6 /* RK410BluetoothProtocol.m in Sources */,
 				F58AF2A11C91B0F200DAD829 /* RKBLEClient.m in Sources */,

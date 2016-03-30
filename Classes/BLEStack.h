@@ -1,5 +1,5 @@
 //
-//  BLEDataTask.h
+//  BLEStack.h
 //  RokyinfoBLEDemo
 //
 //  Created by apple on 16/3/11.
@@ -13,12 +13,12 @@
 
 NS_ENUM(NSInteger)
 {
-    BLEDataTaskErrorTimeOut    = 1,
-    BLEDataTaskErrorDisconnect = 2,
-    BLEDataTaskAuthError       = 3,
+    BLEStackErrorTimeOut    = 1,
+    BLEStackErrorDisconnect = 2,
+    BLEStackAuthError       = 3,
 };
 
-typedef NS_ENUM(NSInteger, RKBLEState) {
+typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 
     RKBLEStateDefault          = 0,
     RKBLEStateStart            = 1,
@@ -30,32 +30,30 @@ typedef NS_ENUM(NSInteger, RKBLEState) {
 
 };
 
-@class BLEDataTask;
+@class BLEStack;
 
 //连接状态回调
-typedef void (^RKConnectProgressBlock)(RKBLEState mRKBLEState, NSError * error);
+typedef void (^RKConnectProgressBlock)(RKBLEConnectState mRKBLEState, NSError * error);
 //处理成功
 typedef void (^RKSuccessBlock)(Request *request, NSData* responseObject, NSError * error);
 //处理失败
 typedef void (^RKFailureBlock)(Request *request, NSData* responseObject, NSError * error);
 
-@interface BLEDataTask : NSObject
+@interface BLEStack : NSObject
 
-@property (nonatomic,assign) NSInteger             requestSequence;
+@property (nonatomic,assign          ) NSInteger              requestSequence;
 
-@property (nonatomic,copy) NSString               *peripheralName;
+@property (nonatomic,copy            ) NSString               *peripheralName;
 
-@property (nonatomic,copy) NSString               *service;
+@property (nonatomic,copy            ) NSString               *service;
 
-@property (nonatomic,copy) NSString               *characteristic;
+@property (nonatomic,copy            ) NSString               *characteristic;
 
-@property (nonatomic,assign) RKBLEMethod            method;
+@property (nonatomic,assign          ) RKBLEMethod            method;
 
 @property (nonatomic,strong          ) NSData                 *writeValue;
 
-//@property (nonatomic,assign          ) RKBLEDataTaskState     TaskState;
-
-@property (nonatomic,assign          ) RKBLEState             BLEState;
+@property (nonatomic,assign          ) RKBLEConnectState      BLEState;
 
 @property (nonatomic,assign          ) CBCentralManagerState  CMState;
 
@@ -65,26 +63,15 @@ typedef void (^RKFailureBlock)(Request *request, NSData* responseObject, NSError
 
 @property (nonatomic,copy            ) RKSuccessBlock         failureBlock;
 
++ (instancetype)sharedInstance;
 
-
-/**
- *  初始化BLEDataTask
- *
- *  @param peripheralName 连接的蓝牙名称
- *  @param service        服务
- *  @param characteristic 特征
- *  @param method         方法
- *  @param writeValue     写入的值
- *
- *  @return 当前对象
- */
 - (id)init;
 
 /**
  *  执行请求
+ *
+ *  @param request
  */
--(void)execute;
-
 -(void)performRequest:(Request*)request;
 
 @end

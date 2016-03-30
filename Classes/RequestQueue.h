@@ -8,14 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "Bluetooth.h"
+#import "Request.h"
+
+
 
 @interface RequestQueue : NSObject
 
 
-- (id)initWithBluetooth:(id<Bluetooth>)_Bluetooth;
+-(id)initWithBluetooth:(id<Bluetooth>)_Bluetooth;
 
-- (void) start;
+-(void) start;
 
-- (void) stop;
+-(void) stop;
+
+-(void)finish:(Request*)Request;
 
 @end

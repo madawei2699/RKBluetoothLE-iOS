@@ -86,23 +86,33 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
 
 @end
 
+typedef void (^RequestSuccessBlock)(id response);
+
+typedef void (^RequestErrorBlock)(NSError * error);
+
+
 @class RequestQueue;
 @interface Request<ObjectType> : NSObject
 
-@property (nonatomic,copy, readonly  ) NSString               *peripheralName;
+@property (nonatomic,copy, readonly  ) NSString             *peripheralName;
 
-@property (nonatomic,copy, readonly  ) NSString               *service;
+@property (nonatomic,copy, readonly  ) NSString             *service;
 
-@property (nonatomic,copy, readonly  ) NSString               *characteristic;
+@property (nonatomic,copy, readonly  ) NSString             *characteristic;
 
-@property (nonatomic,assign ,readonly) RKBLEMethod            method;
+@property (nonatomic,assign ,readonly) RKBLEMethod          method;
 
-@property (nonatomic,strong          ) NSData                 *writeValue;
+@property (nonatomic,strong          ) NSData               *writeValue;
 
-@property (nonatomic,strong          ) id<BLEDataParseProtocol  > dataParseProtocol;
+@property (nonatomic,strong          ) id<BLEDataParseProtocol> dataParseProtocol;
 
-@property (nonatomic,weak)             RequestQueue           *mRequestQueue;
+@property (nonatomic,copy            ) RequestSuccessBlock  mRequestSuccessBlock;
 
+@property (nonatomic,copy            ) RequestErrorBlock    mRequestErrorBlock;
+
+@property (nonatomic,weak            ) RequestQueue         *mRequestQueue;
+
++(void)setLogEnable:(BOOL)enable;
 
 -(Request*)setSequence:(NSInteger)sequence;
 
@@ -114,7 +124,13 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
 
 -(void)markDelivered;
 
+-(BOOL)hasHadResponseDelivered;
+
+-(void)deliverResponse:(ObjectType)response;
+
 -(void)finish:(NSString*)tag;
+
+-(void)onFinish;
 
 -(Response<ObjectType>*)parseNetworkResponse:(BLEResponse*)response;
 
