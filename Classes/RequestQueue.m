@@ -92,20 +92,28 @@
 
 -(void)cancelAll{
     @synchronized (mCurrentRequests) {
-        for (Request *item in mCurrentRequests) {
+        
+        [mCurrentRequests.rac_sequence.signal subscribeNext:^(Request *item) {
+            
             [item cancel];
-        }
+            
+        }];
+        
     }
 }
 
 -(void)cancelAllWithFilter:(id<RequestFilter>) filter{
     
     @synchronized (mCurrentRequests) {
-        for (Request *item in mCurrentRequests) {
+        
+        [mCurrentRequests.rac_sequence.signal subscribeNext:^(Request *item) {
+            
             if (filter && [filter apply:item]) {
                 [item cancel];
             }
-        }
+            
+        }];
+        
     }
 }
 
