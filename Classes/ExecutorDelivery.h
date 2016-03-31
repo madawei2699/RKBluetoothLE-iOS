@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ResponseDelivery.h"
+#import "Runnable.h"
 
 @interface ExecutorDelivery : NSObject<ResponseDelivery>
 

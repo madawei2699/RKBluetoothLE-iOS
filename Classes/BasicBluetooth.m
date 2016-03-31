@@ -25,7 +25,7 @@
     self = [super init];
     
     if(self != nil){
-        mBLEStack = [BLEStack sharedInstance];
+        mBLEStack = [[BLEStack alloc] init];
     }
     
     return self;
@@ -35,7 +35,7 @@
     
     @weakify(self)
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
-    
+        [[NSThread currentThread] setName:@"BasicBluetooth"];
         @strongify(self)
         [self performRequest:request success:^(Request* task, id responseObject,NSError* error){
             [subscriber sendNext:responseObject];
@@ -56,6 +56,7 @@
     
     mBLEStack.successBlock = success;
     mBLEStack.failureBlock = failure;
+    [request addMarker:@"perform-Request"];
     [mBLEStack performRequest:request];
     
 }

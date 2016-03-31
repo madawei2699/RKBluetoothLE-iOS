@@ -17,7 +17,7 @@
     dispatch_once(&onceToken, ^{
         
         _sharedClient = [[RKBLEClient alloc] init];
-        _sharedClient.dataParseProtocol = [[RK410BluetoothProtocol alloc] init];
+//        _sharedClient.dataParseProtocol = [[RK410BluetoothProtocol alloc] init];
         
     });
     

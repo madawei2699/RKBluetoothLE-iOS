@@ -7,11 +7,7 @@
 //
 
 #import "RKBLEDispatcher.h"
-#import "Request.h"
-#import "Bluetooth.h"
-#import "ResponseDelivery.h"
-#import "RKBlockingQueue.h"
-#import "BLEResponse.h"
+
 
 @interface RKBLEDispatcher(){
     
@@ -50,6 +46,8 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
+        [[NSThread currentThread] setName:@"RKBLEDispatcher"];
+        
         while (!mQuit) {
             
             Request *request = [self.mQueue take];
@@ -87,7 +85,13 @@
             
             //等待BLE处理结束如果不结束则一直等待
             while (!mQuit && mBLEResponse == nil && bleError == nil) {
-                dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+                //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
+                if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 15 * NSEC_PER_SEC )) != 0)
+                {
+                    bleError = [NSError errorWithDomain:@"BLEStackErrorDomain"
+                                                    code:1
+                                                userInfo:@{ NSLocalizedDescriptionKey: @"当前业务处理超时" }];
+                }
             }
             
             if (mQuit) {

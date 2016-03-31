@@ -17,13 +17,12 @@ static BOOL bAuthOK = NO;
 
 @interface BLEStack(){
     
-    //定义变量
     BabyBluetooth   *baby;
-    
+
     NSTimer         *mNSTimer;
-    
+
     NSInteger       timeoutValue;
-    
+
 }
 
 @property (nonatomic,strong) Request *request;
@@ -34,25 +33,16 @@ static BOOL bAuthOK = NO;
 
 @implementation BLEStack
 
-+ (instancetype)sharedInstance {
-    
-    static BLEStack *_sharedClient = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedClient = [[BLEStack alloc] init];
-    });
-    
-    return _sharedClient;
-    
-}
-
 - (id)init{
-    //调用父类的初始化方法
+    
     self = [super init];
     
     if(self != nil){
         _BLEState       = RKBLEStateDefault;
         timeoutValue    = DISCONNECT_STATE_TIME_OUT;
+        baby = [BabyBluetooth shareBabyBluetooth];
+        //设置蓝牙委托
+        [self babyDelegate];
     }
     
     return self;
@@ -168,9 +158,10 @@ static BOOL bAuthOK = NO;
         [mNSTimer invalidate];
         mNSTimer = nil;
     }
-    mNSTimer = [NSTimer timerWithTimeInterval:timeoutValue target:self selector:@selector(checkTimeOut:) userInfo:nil repeats:NO];
-    [mNSTimer setFireDate: [[NSDate date]dateByAddingTimeInterval:timeoutValue]];
-    [[NSRunLoop currentRunLoop] addTimer:mNSTimer forMode:NSRunLoopCommonModes];
+    
+    mNSTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:timeoutValue] interval:timeoutValue target:self selector:@selector(checkTimeOut:) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:mNSTimer forMode:NSDefaultRunLoopMode];
+    [[NSRunLoop currentRunLoop] run];
 
 }
 
@@ -182,6 +173,7 @@ static BOOL bAuthOK = NO;
 - (void)checkTimeOut:(NSTimer *)timer
 {
     [mNSTimer invalidate];
+    mNSTimer = nil;
     if (![self.request hasHadResponseDelivered]) {
     
         [self failureTask:self withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
@@ -194,10 +186,6 @@ static BOOL bAuthOK = NO;
  *  连接蓝牙
  */
 - (void)connectToPeripheral{
-    
-    baby = [BabyBluetooth shareBabyBluetooth];
-    //设置蓝牙委托
-    [self babyDelegate];
     
     CBPeripheral *peripheral = [baby findConnectedPeripheral:self.peripheralName];
     
@@ -500,7 +488,7 @@ static BOOL bAuthOK = NO;
     }
     
     if (weekSelf.successBlock) {
-        weekSelf.successBlock(weekSelf.request,mCBCharacteristic.value,nil);
+        weekSelf.successBlock(weekSelf.request,mCBCharacteristic.value ? mCBCharacteristic.value :[[NSData alloc] init],nil);
     }
     
     [weekSelf cleanUp:weekSelf];

@@ -8,6 +8,7 @@
 
 #import "RK410BluetoothProtocol.h"
 #import "CocoaSecurity.h"
+#import "RKBLEUtil.h"
 
 @implementation RK410BluetoothProtocol
 
@@ -88,18 +89,12 @@
     CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
     NSData *authCode = [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
     
-//    BLEDataTask *mBLEDataTask = [[BLEDataTask alloc] initWithPeripheralName:_peripheralName
-//                                                                    service:SERVICE_SPIRIT_SYNC_DATA
-//                                                             characteristic:SPIRIT_AUTH_CODE
-//                                                                     method:RKBLEMethodWrite
-//                                                                 writeValue:authCode];
-//    mBLEDataTask.dataParseProtocol = self;
-    
-    Request *request = [[Request alloc] init];
-    
+    Request *authRequest = [[Request alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:_peripheralName service:SERVICE_SPIRIT_SYNC_DATA characteristic:SPIRIT_AUTH_CODE] method:RKBLEMethodWrite writeValue:authCode];
+    authRequest.dataParseProtocol = self;
     if (callBack) {
-        callBack(request,nil);
+        callBack(authRequest,nil);
     }
+    
 }
 
 

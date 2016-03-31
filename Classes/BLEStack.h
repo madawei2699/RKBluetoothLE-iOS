@@ -20,13 +20,13 @@ NS_ENUM(NSInteger)
 
 typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 
-    RKBLEStateDefault          = 0,
-    RKBLEStateStart            = 1,
-    RKBLEStateScanning         = 2,
-    RKBLEStateConnecting       = 3,
-    RKBLEStateConnected        = 4,
-    RKBLEStateDisconnect       = 5,
-    RKBLEStateFailure          = 6,
+    RKBLEStateDefault       = 0,
+    RKBLEStateStart         = 1,
+    RKBLEStateScanning      = 2,
+    RKBLEStateConnecting    = 3,
+    RKBLEStateConnected     = 4,
+    RKBLEStateDisconnect    = 5,
+    RKBLEStateFailure       = 6,
 
 };
 
@@ -62,8 +62,6 @@ typedef void (^RKFailureBlock)(Request *request, NSData* responseObject, NSError
 @property (nonatomic,copy            ) RKSuccessBlock         successBlock;
 
 @property (nonatomic,copy            ) RKSuccessBlock         failureBlock;
-
-+ (instancetype)sharedInstance;
 
 - (id)init;
 

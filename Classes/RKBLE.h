@@ -11,4 +11,7 @@
 
 @interface RKBLE : NSObject
 
++(RequestQueue*)newRequestQueue;
+
+
 @end

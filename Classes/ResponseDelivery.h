@@ -13,15 +13,15 @@
 @protocol ResponseDelivery <NSObject>
 
 /**
- * Parses a response from the network or cache and delivers it.
+ * Parses a response from the ble and delivers it.
  */
--(void)postResponse:(Request*) request response:(id) response;
+-(void)postResponse:(Request*) request response:(Response*) response;
 
 /**
- * Parses a response from the network or cache and delivers it. The provided
+ * Parses a response from the ble and delivers it. The provided
  * Runnable will be executed after delivery.
  */
--(void)postResponse:(Request*) request response:(id) response runnable:(id<Runnable>) runnable;
+-(void)postResponse:(Request*) request response:(Response*) response runnable:(id<Runnable>) runnable;
 
 /**
  * Posts an error for the given request.

@@ -10,4 +10,14 @@
 
 @interface Response<ObjectType> : NSObject
 
+@property (nonatomic,copy,readonly) NSError    *error;
+
+@property (nonatomic,copy,readonly) ObjectType result;
+
++(Response*)success:(ObjectType)value;
+
++(Response*)error:(NSError*)error;
+
+-(BOOL)isSuccess;
+
 @end

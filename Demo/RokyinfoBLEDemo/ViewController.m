@@ -7,12 +7,16 @@
 //
 
 #import "ViewController.h"
-#import "BLEDataTaskManager.h"
 #import "CocoaSecurity.h"
 #import "BLEDataProtocol.h"
-#import "RKBLEClient.h"
+#import "RKBLEUtil.h"
+#import "RKBLE.h"
+#import "RK410BluetoothProtocol.h"
+@interface ViewController (){
 
-@interface ViewController ()
+    RequestQueue *mRequestQueue;
+
+}
 
 @end
 
@@ -21,56 +25,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-//    CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
-//    NSData *authCode = [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
-//    [[RKBLEClient sharedClient] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9901"]
-//                                        method:RKBLEMethodWrite
-//                                    parameters:authCode
-//                                       success:nil
-//                                       failure:nil];
-//
-//    
-//    [NSThread sleepForTimeInterval:5];
-//    
-//    for (int i = 0; i < 100 ;i++) {
-//        
-//        BLEDataProtocol *mBLEDataProtocol = [[BLEDataProtocol alloc] init];
-//        mBLEDataProtocol.type = PARAM_WRITE;
-//        mBLEDataProtocol.index = 0x30;
-//        
-//        Byte byte[] = {0x00,i,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-//        NSData *org = [NSData dataWithBytes:byte length:17];
-//        
-//        mBLEDataProtocol.org = org;
-//    
-//        [[BLEDataTaskManager sharedManager] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"]
-//                                            method:RKBLEMethodWrite
-//                                        parameters:[mBLEDataProtocol encodeRK410]
-//                                           success:nil
-//                                           failure:nil];
-//        
-//    }
-//    
+    BLEDataProtocol *mBLEDataProtocol = [[BLEDataProtocol alloc] init];
+    mBLEDataProtocol.type = PARAM_WRITE;
+    mBLEDataProtocol.index = 0x30;
     
-            BLEDataProtocol *mBLEDataProtocol = [[BLEDataProtocol alloc] init];
-            mBLEDataProtocol.type = PARAM_WRITE;
-            mBLEDataProtocol.index = 0x30;
+    Byte byte[] = {0x00,0,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+    NSData *org = [NSData dataWithBytes:byte length:17];
     
-            Byte byte[] = {0x00,0,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-            NSData *org = [NSData dataWithBytes:byte length:17];
+    mBLEDataProtocol.org = org;
+
+    Request *mRequest = [[Request alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"] method:RKBLEMethodWrite writeValue:[mBLEDataProtocol encodeRK410]];
+    mRequest.dataParseProtocol = [[RK410BluetoothProtocol alloc] init];
     
-            mBLEDataProtocol.org = org;
-    [[RKBLEClient sharedClient] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"]
-                                                 method:RKBLEMethodWrite
-                                             parameters:[mBLEDataProtocol encodeRK410]
-                                                success:nil
-                                                failure:nil];
+    mRequest.mRequestSuccessBlock = ^(id response){
+        NSLog(@"%@",@"mRequestSuccessBlock");
+    };
     
-    [[RKBLEClient sharedClient] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"]
-                                method:RKBLEMethodWrite
-                            parameters:[mBLEDataProtocol encodeRK410]
-                               success:nil
-                               failure:nil];
+    mRequest.mRequestErrorBlock = ^(NSError * error){
+        NSLog(@"mRequestErrorBlock:%@",error);
+    };
+    mRequestQueue = [RKBLE newRequestQueue];
+    [mRequestQueue add:mRequest];
+    
+    mRequest = [[Request alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"] method:RKBLEMethodWrite writeValue:[mBLEDataProtocol encodeRK410]];
+    mRequest.dataParseProtocol = [[RK410BluetoothProtocol alloc] init];
+    
+    [mRequestQueue add:mRequest];
+    
+    mRequest = [[Request alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"] method:RKBLEMethodWrite writeValue:[mBLEDataProtocol encodeRK410]];
+    mRequest.dataParseProtocol = [[RK410BluetoothProtocol alloc] init];
+    
+    [mRequestQueue add:mRequest];
+    
+    mRequest = [[Request alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"] method:RKBLEMethodWrite writeValue:[mBLEDataProtocol encodeRK410]];
+    mRequest.dataParseProtocol = [[RK410BluetoothProtocol alloc] init];
+    
+    [mRequestQueue add:mRequest];
+    
 }
 
 - (void)didReceiveMemoryWarning {

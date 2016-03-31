@@ -11,4 +11,9 @@
 
 @interface BLEResponse : NSObject
 
+@property (nonatomic,strong) NSData         *data;
+
+@property (nonatomic,assign) NSTimeInterval bleTimeMs;
+
+
 @end

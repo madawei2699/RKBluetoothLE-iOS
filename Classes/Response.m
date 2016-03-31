@@ -10,4 +10,25 @@
 
 @implementation Response
 
+-(instancetype)initWithResult:(id)result error:(NSError*)error{
+    self = [super init];
+    if (self) {
+        _result = result;
+        _error = error;
+    }
+    return self;
+}
+
++(Response*)success:(id)value{
+    return [[Response alloc] initWithResult:value error:nil];
+}
+
++(Response*)error:(NSError*)error{
+    return [[Response alloc] initWithResult:nil error:error];
+}
+
+-(BOOL)isSuccess{
+    return _error == nil;
+}
+
 @end

@@ -25,6 +25,16 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
     
 };
 
+
+@protocol BLEDataEntityProtocol<NSObject>
+
+-(NSData*)entityToByte;
+
+-(id)byteToEntity:(NSData*)data;
+
+@end
+
+
 @class Request;
 @protocol BLEDataParseProtocol<NSObject>
 
@@ -94,13 +104,15 @@ typedef void (^RequestErrorBlock)(NSError * error);
 @class RequestQueue;
 @interface Request<ObjectType> : NSObject
 
-@property (nonatomic,copy, readonly  ) NSString             *peripheralName;
+@property (nonatomic,copy,readonly   ) NSString             *identifier;
 
-@property (nonatomic,copy, readonly  ) NSString             *service;
+@property (nonatomic,copy,readonly   ) NSString             *peripheralName;
 
-@property (nonatomic,copy, readonly  ) NSString             *characteristic;
+@property (nonatomic,copy,readonly   ) NSString             *service;
 
-@property (nonatomic,assign ,readonly) RKBLEMethod          method;
+@property (nonatomic,copy,readonly   ) NSString             *characteristic;
+
+@property (nonatomic,assign,readonly ) RKBLEMethod          method;
 
 @property (nonatomic,strong          ) NSData               *writeValue;
 
@@ -112,7 +124,14 @@ typedef void (^RequestErrorBlock)(NSError * error);
 
 @property (nonatomic,weak            ) RequestQueue         *mRequestQueue;
 
+@property (nonatomic,strong          ) id                   tag;
+
 +(void)setLogEnable:(BOOL)enable;
+
+-(instancetype)initWithReponseClass:(Class)reponseClass
+target:(NSDictionary*)target
+method:(RKBLEMethod) method
+writeValue:(NSData*)writeValue;
 
 -(Request*)setSequence:(NSInteger)sequence;
 
@@ -120,18 +139,22 @@ typedef void (^RequestErrorBlock)(NSError * error);
 
 -(void)addMarker:(NSString*)mark;
 
+-(void)cancel;
+
 -(BOOL)isCanceled;
+
+-(Response<ObjectType>*)parseNetworkResponse:(BLEResponse*)response;
+
+-(void)deliverResponse:(ObjectType)response;
+
+-(void)deliverError:(NSError*)error;
 
 -(void)markDelivered;
 
 -(BOOL)hasHadResponseDelivered;
 
--(void)deliverResponse:(ObjectType)response;
-
 -(void)finish:(NSString*)tag;
 
 -(void)onFinish;
-
--(Response<ObjectType>*)parseNetworkResponse:(BLEResponse*)response;
 
 @end
