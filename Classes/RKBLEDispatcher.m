@@ -86,7 +86,7 @@
             //等待BLE处理结束如果不结束则一直等待
             while (!mQuit && mBLEResponse == nil && bleError == nil) {
                 //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
-                if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 15 * NSEC_PER_SEC )) != 0)
+                if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 60 * NSEC_PER_SEC )) != 0)
                 {
                     bleError = [NSError errorWithDomain:@"BLEStackErrorDomain"
                                                     code:1

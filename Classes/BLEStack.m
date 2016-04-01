@@ -124,7 +124,7 @@ static BOOL bAuthOK = NO;
     //连接蓝牙
     [self connectToPeripheral];
     //添加超时判断逻辑
-    [self addTimeOutLogic];
+//    [self addTimeOutLogic];
     //执行任务
     [self executeWithPeripheral:[baby findConnectedPeripheral:self.peripheralName]];
 }

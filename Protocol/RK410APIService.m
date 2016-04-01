@@ -6,11 +6,12 @@
 //  Copyright © 2016年 rokyinfo. All rights reserved.
 //
 
-#import "RK410BluetoothProtocol.h"
+#import "RK410APIService.h"
 #import "CocoaSecurity.h"
 #import "RKBLEUtil.h"
+#import "RKBLEClient.h"
 
-@implementation RK410BluetoothProtocol
+@implementation RK410APIService
 
 /**
  *  当前蓝牙交互协议连接成功后是否需要鉴权
@@ -39,6 +40,8 @@
         } else if ([characteristic isEqualToString:SPIRIT_FAULTDATA]) {
             return YES;
         } else if ([characteristic isEqualToString:SPIRIT_PARAM_RST]){
+            return YES;
+        } else if ([characteristic isEqualToString:SPIRIT_KEYFUNC]){
             return YES;
         }
         
@@ -72,6 +75,14 @@
             }
             
             
+        } else if([dataTask.characteristic isEqualToString:SPIRIT_KEYFUNC]){
+            
+            
+            if ([characteristic isEqualToString:SPIRIT_KEYFUNC] && channel == RKBLEResponseNotify) {
+                return YES;
+            }
+            
+
         }
         
     }
@@ -124,6 +135,18 @@
 - (BOOL)authSuccess:(NSData*)value{
     
     return YES;
+    
+}
+
+
+//---------------------------------------------------------------------------------------------------
++(RACSignal*)lock:(NSString*)target{
+    
+    Byte values[1] = {0x00};
+    Request *request = [[Request alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:target service:SERVICE_SPIRIT_SYNC_DATA characteristic:SPIRIT_KEYFUNC] method:RKBLEMethodWrite writeValue:[[NSData alloc] initWithBytes:&values length:sizeof(values)]];
+    request.dataParseProtocol = [[RK410APIService alloc] init];
+    
+    return  [[RKBLEClient shareClient] performRequest:request];
     
 }
 

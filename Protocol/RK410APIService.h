@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ReactiveCocoa/ReactiveCocoa.h>
 #import "Request.h"
+
 
 //---------------------------服务------------------------------------------
 // 车精灵服务
@@ -44,9 +46,8 @@
 #define RBL_BLE_FRAMEWORK_VER       0x0200
 
 
-@interface RK410BluetoothProtocol : NSObject<BLEDataParseProtocol>
+@interface RK410APIService : NSObject<BLEDataParseProtocol>
 
-
-
++(RACSignal*)lock:(NSString*)target;
 
 @end

@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "RequestQueue.h"
 
-@interface RKBLE : NSObject
+@interface RKBLEClient : NSObject
 
-+(RequestQueue*)newRequestQueue;
++(instancetype)shareClient;
 
+-(RACSignal*) performRequest:(Request*) request;
 
 @end

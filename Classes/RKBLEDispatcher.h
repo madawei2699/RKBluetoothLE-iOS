@@ -15,7 +15,7 @@
 
 @interface RKBLEDispatcher : NSObject
 
-- (id)initWithQueue:(RKBlockingQueue<Request*>*)mQueue bluetooth:(id<Bluetooth>) bluetooth andDelivery:(id<ResponseDelivery>)mDelivery;
+-(id)initWithQueue:(RKBlockingQueue<Request*>*)mQueue bluetooth:(id<Bluetooth>) bluetooth andDelivery:(id<ResponseDelivery>)mDelivery;
 
 -(void)start;
 
