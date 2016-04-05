@@ -9,7 +9,7 @@
 #import "RequestQueue.h"
 #import "RKBLEDispatcher.h"
 #import "ExecutorDelivery.h"
-#import "Request.h"
+#import "BLERequest.h"
 #import "RKBlockingQueue.h"
 
 @interface RequestQueue(){
@@ -20,9 +20,9 @@
     
     RKBLEDispatcher *mDispatcher;
     
-    RKBlockingQueue<Request*> *mBluetoothQueue;
+    RKBlockingQueue<BLERequest*> *mBluetoothQueue;
     
-    NSMutableArray<Request*> *mCurrentRequests;
+    NSMutableArray<BLERequest*> *mCurrentRequests;
     
     int sequence;
 }
@@ -32,7 +32,7 @@
 
 @implementation RequestFilterImpl
 
--(BOOL)apply:(Request*)request{
+-(BOOL)apply:(BLERequest*)request{
     return request.tag == self.tag;
 }
 
@@ -74,7 +74,7 @@
     }
 }
 
--(Request*)add:(Request*)request{
+-(BLERequest*)add:(BLERequest*)request{
     
     request.mRequestQueue = self;
     
@@ -93,7 +93,7 @@
 -(void)cancelAll{
     @synchronized (mCurrentRequests) {
         
-        [mCurrentRequests.rac_sequence.signal subscribeNext:^(Request *item) {
+        [mCurrentRequests.rac_sequence.signal subscribeNext:^(BLERequest *item) {
             
             [item cancel];
             
@@ -106,7 +106,7 @@
     
     @synchronized (mCurrentRequests) {
         
-        [mCurrentRequests.rac_sequence.signal subscribeNext:^(Request *item) {
+        [mCurrentRequests.rac_sequence.signal subscribeNext:^(BLERequest *item) {
             
             if (filter && [filter apply:item]) {
                 [item cancel];
@@ -125,7 +125,7 @@
     
 }
 
--(void)finish:(Request*)Request{
+-(void)finish:(BLERequest*)Request{
     
     @synchronized (mCurrentRequests) {
         [mCurrentRequests removeObject:Request];

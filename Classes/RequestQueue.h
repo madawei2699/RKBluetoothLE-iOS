@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Bluetooth.h"
-#import "Request.h"
+#import "BLERequest.h"
 
 @protocol RequestFilter<NSObject>
 
--(BOOL)apply:(Request*)request;
+-(BOOL)apply:(BLERequest*)request;
 
 @end
 
@@ -26,13 +26,13 @@
 
 -(id)initWithBluetooth:(id<Bluetooth>)_Bluetooth;
 
--(Request*)add:(Request*)request;
+-(BLERequest*)add:(BLERequest*)request;
 
 -(void)start;
 
 -(void)stop;
 
--(void)finish:(Request*)Request;
+-(void)finish:(BLERequest*)Request;
 
 -(void)cancelAll;
 

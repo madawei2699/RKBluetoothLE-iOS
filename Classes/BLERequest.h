@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
 @end
 
 
-@class Request;
+@class BLERequest;
 @protocol BLEDataParseProtocol<NSObject>
 
 @required
@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
  *
  *  @return yes: 符合 no:不符合
  */
--(BOOL)effectiveResponse:(Request*)Request characteristic:(NSString*)characteristic sourceChannel:(RKBLEResponseChannel)channel;
+-(BOOL)effectiveResponse:(BLERequest*)Request characteristic:(NSString*)characteristic sourceChannel:(RKBLEResponseChannel)channel value:(NSData*)value;
 
 
 /**
@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
  *
  *  @param callBack
  */
-- (void)createAuthProcessRequest:(void (^)(Request* request,NSError* error))callBack peripheralName:(NSString*)_peripheralName;
+- (void)createAuthProcessRequest:(void (^)(BLERequest* request,NSError* error))callBack peripheralName:(NSString*)_peripheralName;
 
 
 /**
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
  *
  *  @return
  */
-- (BOOL)isAuthenticationRequest:(Request*)request;
+- (BOOL)isAuthenticationRequest:(BLERequest*)request;
 
 /**
  *  解析鉴权返回值判断是否鉴权成功
@@ -96,13 +96,15 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
 
 @end
 
+typedef BOOL (^effectiveResponse)(NSString * characteristic,RKBLEResponseChannel channel,NSData *value);
+
 typedef void (^RequestSuccessBlock)(id response);
 
 typedef void (^RequestErrorBlock)(NSError * error);
 
 
 @class RequestQueue;
-@interface Request<ObjectType> : NSObject
+@interface BLERequest<ObjectType> : NSObject
 
 @property (nonatomic,copy,readonly   ) NSString             *identifier;
 
@@ -125,6 +127,8 @@ typedef void (^RequestErrorBlock)(NSError * error);
 @property (nonatomic,weak            ) RequestQueue         *mRequestQueue;
 
 @property (nonatomic,strong          ) id                   tag;
+//蓝牙协议相关
+@property (nonatomic,copy            ) effectiveResponse    effectiveResponse;
 
 +(void)setLogEnable:(BOOL)enable;
 
@@ -133,7 +137,7 @@ target:(NSDictionary*)target
 method:(RKBLEMethod) method
 writeValue:(NSData*)writeValue;
 
--(Request*)setSequence:(NSInteger)sequence;
+-(BLERequest*)setSequence:(NSInteger)sequence;
 
 -(NSInteger)getSequence;
 

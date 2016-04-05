@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Request.h"
+#import "BLERequest.h"
 #import "Runnable.h"
 
 @protocol ResponseDelivery <NSObject>
@@ -15,17 +15,17 @@
 /**
  * Parses a response from the ble and delivers it.
  */
--(void)postResponse:(Request*) request response:(Response*) response;
+-(void)postResponse:(BLERequest*) request response:(Response*) response;
 
 /**
  * Parses a response from the ble and delivers it. The provided
  * Runnable will be executed after delivery.
  */
--(void)postResponse:(Request*) request response:(Response*) response runnable:(id<Runnable>) runnable;
+-(void)postResponse:(BLERequest*) request response:(Response*) response runnable:(id<Runnable>) runnable;
 
 /**
  * Posts an error for the given request.
  */
--(void)postError:(Request*) request error:(NSError*) error;
+-(void)postError:(BLERequest*) request error:(NSError*) error;
 
 @end

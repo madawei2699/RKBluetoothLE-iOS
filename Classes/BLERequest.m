@@ -6,12 +6,12 @@
 //  Copyright © 2016年 rokyinfo. All rights reserved.
 //
 
-#import "Request.h"
+#import "BLERequest.h"
 #import "RequestQueue.h"
 
 static BOOL LOG_ENABLED = YES;
 
-@interface Request(){
+@interface BLERequest(){
     
     NSInteger mSequence;
     
@@ -24,7 +24,7 @@ static BOOL LOG_ENABLED = YES;
 
 @end
 
-@implementation Request
+@implementation BLERequest
 
 -(instancetype)initWithReponseClass:(Class)reponseClass
                              target:(NSDictionary*)target
@@ -51,7 +51,7 @@ static BOOL LOG_ENABLED = YES;
     LOG_ENABLED = enable;
 }
 
--(Request*)setSequence:(NSInteger)sequence{
+-(BLERequest*)setSequence:(NSInteger)sequence{
     mSequence = sequence;
     return self;
 }
@@ -62,7 +62,7 @@ static BOOL LOG_ENABLED = YES;
 
 -(void)addMarker:(NSString*)mark{
     if (LOG_ENABLED) {
-        NSLog(@"tag:%@ %@",mark,[NSThread currentThread]);
+        NSLog(@"UIThread:[%d] tag:%@",[[NSThread currentThread] isMainThread],mark);
     }
 }
 
@@ -99,14 +99,13 @@ static BOOL LOG_ENABLED = YES;
         [self.mRequestQueue finish:self];
         [self onFinish];
     }
-    if (LOG_ENABLED) {
-        NSLog(@"tag:%@ %@ finish",tag,[NSThread currentThread]);
-    }
+    [self addMarker:tag];
 }
 
 -(void)onFinish{
     self.mRequestSuccessBlock = nil;
     self.mRequestErrorBlock = nil;
+    self.effectiveResponse = nil;
 }
 
 -(Response*)parseNetworkResponse:(BLEResponse*)response{

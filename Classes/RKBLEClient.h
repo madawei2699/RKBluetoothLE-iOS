@@ -13,6 +13,8 @@
 
 +(instancetype)shareClient;
 
--(RACSignal*) performRequest:(Request*) request;
+-(instancetype)init;
+
+-(RACSignal*) performRequest:(BLERequest*) request;
 
 @end

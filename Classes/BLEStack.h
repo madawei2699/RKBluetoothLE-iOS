@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <BabyBluetooth/BabyBluetooth.h>
-#import "Request.h"
+#import "BLERequest.h"
 
 
 NS_ENUM(NSInteger)
@@ -35,9 +35,9 @@ typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 //连接状态回调
 typedef void (^RKConnectProgressBlock)(RKBLEConnectState mRKBLEState, NSError * error);
 //处理成功
-typedef void (^RKSuccessBlock)(Request *request, NSData* responseObject, NSError * error);
+typedef void (^RKSuccessBlock)(BLERequest *request, NSData* responseObject, NSError * error);
 //处理失败
-typedef void (^RKFailureBlock)(Request *request, NSData* responseObject, NSError * error);
+typedef void (^RKFailureBlock)(BLERequest *request, NSData* responseObject, NSError * error);
 
 @interface BLEStack : NSObject
 
@@ -70,6 +70,6 @@ typedef void (^RKFailureBlock)(Request *request, NSData* responseObject, NSError
  *
  *  @param request
  */
--(void)performRequest:(Request*)request;
+-(void)performRequest:(BLERequest*)request;
 
 @end

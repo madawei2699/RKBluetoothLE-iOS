@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "Request.h"
+#import "BLERequest.h"
 
 @protocol Bluetooth <NSObject>
 
-- (RACSignal*) performRequest:(Request*) request;
+- (RACSignal*) performRequest:(BLERequest*) request;
 
 @end

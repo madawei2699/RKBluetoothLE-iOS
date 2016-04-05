@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Request.h"
+#import "BLERequest.h"
 #import "Bluetooth.h"
 #import "ResponseDelivery.h"
 #import "RKBlockingQueue.h"
@@ -15,7 +15,7 @@
 
 @interface RKBLEDispatcher : NSObject
 
--(id)initWithQueue:(RKBlockingQueue<Request*>*)mQueue bluetooth:(id<Bluetooth>) bluetooth andDelivery:(id<ResponseDelivery>)mDelivery;
+-(id)initWithQueue:(RKBlockingQueue<BLERequest*>*)mQueue bluetooth:(id<Bluetooth>) bluetooth andDelivery:(id<ResponseDelivery>)mDelivery;
 
 -(void)start;
 

@@ -25,9 +25,9 @@ static BOOL bAuthOK = NO;
 
 }
 
-@property (nonatomic,strong) Request *request;
+@property (nonatomic,strong) BLERequest *request;
 
-@property (nonatomic,strong) Request *targetRequest;
+@property (nonatomic,strong) BLERequest *targetRequest;
 
 @end
 
@@ -98,7 +98,7 @@ static BOOL bAuthOK = NO;
     
 }
 
--(void)performRequest:(Request*)request{
+-(void)performRequest:(BLERequest*)request{
     
     if([self isAuthRequest:request]){
         self.targetRequest = self.request;
@@ -124,7 +124,7 @@ static BOOL bAuthOK = NO;
     //连接蓝牙
     [self connectToPeripheral];
     //添加超时判断逻辑
-//    [self addTimeOutLogic];
+    [self addTimeOutLogic];
     //执行任务
     [self executeWithPeripheral:[baby findConnectedPeripheral:self.peripheralName]];
 }
@@ -161,8 +161,8 @@ static BOOL bAuthOK = NO;
     
     mNSTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:timeoutValue] interval:timeoutValue target:self selector:@selector(checkTimeOut:) userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:mNSTimer forMode:NSDefaultRunLoopMode];
-    [[NSRunLoop currentRunLoop] run];
-
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:timeoutValue]];
+       
 }
 
 /**
@@ -368,7 +368,7 @@ static BOOL bAuthOK = NO;
         //数据交换协议需要鉴权
         if ([weekSelf isNeedAuth:weekSelf.request]) {
             
-            [weekSelf.request.dataParseProtocol createAuthProcessRequest:^(Request* authRequest,NSError* error) {
+            [weekSelf.request.dataParseProtocol createAuthProcessRequest:^(BLERequest* authRequest,NSError* error) {
                 
                 [weekSelf performRequest:authRequest];
 
@@ -415,7 +415,7 @@ static BOOL bAuthOK = NO;
         //注入了数据协议处理类则使用注入的协议类进行判断处理
         if (weekSelf.request.dataParseProtocol) {
             
-            if ([weekSelf.request.dataParseProtocol effectiveResponse: weekSelf.request characteristic: characteristic.UUID.UUIDString sourceChannel:channel]) {
+            if ([weekSelf.request.dataParseProtocol effectiveResponse: weekSelf.request characteristic: characteristic.UUID.UUIDString sourceChannel:channel  value:characteristic.value]) {
                 
                 [weekSelf completeTask:weekSelf withCharacteristic:characteristic channel:channel];
                 
@@ -521,7 +521,7 @@ static BOOL bAuthOK = NO;
  *
  *  @return
  */
--(BOOL)isAuthRequest:(Request*)request{
+-(BOOL)isAuthRequest:(BLERequest*)request{
 
     if (request.dataParseProtocol
         &&
@@ -544,7 +544,7 @@ static BOOL bAuthOK = NO;
  *
  *  @return
  */
--(BOOL)isNeedAuth:(Request*)request{
+-(BOOL)isNeedAuth:(BLERequest*)request{
 
     if (request.dataParseProtocol
         &&

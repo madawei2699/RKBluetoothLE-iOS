@@ -31,4 +31,8 @@
     return _error == nil;
 }
 
+-(void)dealloc{
+    NSLog(@"Response:dealloc");
+}
+
 @end

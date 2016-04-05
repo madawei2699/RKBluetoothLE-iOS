@@ -10,11 +10,11 @@
 
 @implementation ExecutorDelivery
 
--(void)postResponse:(Request*) request response:(Response*) response{
+-(void)postResponse:(BLERequest*) request response:(Response*) response{
     [self postResponse:request response:response  runnable:nil];
 }
 
--(void)postResponse:(Request*) request response:(Response*) response runnable:(id<Runnable>) runnable{
+-(void)postResponse:(BLERequest*) request response:(Response*) response runnable:(id<Runnable>) runnable{
   
     [request markDelivered];
     [request addMarker:@"post-response"];
@@ -39,7 +39,7 @@
     
 }
 
--(void)postError:(Request*) request error:(NSError*) error{
+-(void)postError:(BLERequest*) request error:(NSError*) error{
     
     [self postResponse:request response:[Response error:error]  runnable:nil];
     

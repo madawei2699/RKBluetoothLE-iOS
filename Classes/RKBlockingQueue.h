@@ -16,4 +16,6 @@
 
 -(ObjectType)take;
 
+-(NSInteger)size;
+
 @end

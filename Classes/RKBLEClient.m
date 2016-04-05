@@ -28,7 +28,7 @@
     return share;
 }
 
--(id)init{
+-(instancetype)init{
 
     self = [super init];
     if (self) {
@@ -40,16 +40,15 @@
     return self;
 }
 
--(void)performRequest:(Request*) request
+-(void)performRequest:(BLERequest*) request
                 success:(void (^)( id responseObject))success
                 failure:(void (^)(NSError* error))failure{
     request.mRequestSuccessBlock = success;
     request.mRequestErrorBlock = failure;
-    [self.mRequestQueue add:request];
 }
 
--(RACSignal*)performRequest:(Request*) request{
-    
+-(RACSignal*)performRequest:(BLERequest*) request{
+    [self.mRequestQueue add:request];
     @weakify(self)
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
         
@@ -67,7 +66,5 @@
     }];
     
 }
-
-
 
 @end
