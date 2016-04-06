@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 @class BLEStack;
 
 //连接状态回调
-typedef void (^RKConnectProgressBlock)(RKBLEConnectState mRKBLEState, NSError * error);
+typedef void (^RKConnectProgressBlock)(RKBLEConnectState mRKBLEState,CBCentralManagerState mCMState, NSError * error);
 //处理成功
 typedef void (^RKSuccessBlock)(BLERequest *request, NSData *responseObject);
 //处理失败

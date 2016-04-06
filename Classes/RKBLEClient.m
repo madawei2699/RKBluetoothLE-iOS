@@ -7,11 +7,15 @@
 //
 
 #import "RKBLEClient.h"
-#import "BasicBluetooth.h"
-#import "RequestQueue.h"
 
 
-@interface RKBLEClient()
+NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
+
+@interface RKBLEClient(){
+    
+    NSMutableArray<BLERequest*> *mCurrentRequests;
+    
+}
 
 @property (nonatomic,strong) RequestQueue *mRequestQueue;
 
@@ -29,32 +33,41 @@
 }
 
 -(instancetype)init{
-
+    
     self = [super init];
     if (self) {
+        mCurrentRequests = [[NSMutableArray alloc] init];
         //创建蓝牙处理模块类
-        BasicBluetooth *mBasicBluetooth = [[BasicBluetooth alloc] init];
-        _mRequestQueue =  [[RequestQueue alloc] initWithBluetooth:mBasicBluetooth];
+        BLEStack *mBLEStack = [BLEStack shareClient];
+        mBLEStack.connectProgressBlock = ^(RKBLEConnectState mRKBLEState,CBCentralManagerState mCMState, NSError * error){
+            [[NSNotificationCenter defaultCenter] postNotificationName:RKBLEConnectNotification object:nil userInfo:error ?@{@"RKBLEConnectState":@(mRKBLEState),@"CBCentralManagerState":@(mCMState),@"NSError" : error} : @{@"RKBLEConnectState":@(mRKBLEState),@"CBCentralManagerState":@(mCMState)}
+             ];
+        };
+        
+        _mRequestQueue =  [[RequestQueue alloc] initWithBluetooth:mBLEStack];
         [_mRequestQueue start];
     }
     return self;
 }
 
 -(void)performRequest:(BLERequest*) request
-                success:(void (^)( id responseObject))success
-                failure:(void (^)(NSError* error))failure{
+              success:(void (^)(id responseObject))success
+              failure:(void (^)(NSError* error))failure{
     request.mRequestSuccessBlock = success;
     request.mRequestErrorBlock = failure;
+    [self.mRequestQueue add:request];
+    [mCurrentRequests removeObject:request];
 }
 
 -(RACSignal*)performRequest:(BLERequest*) request{
-    [self.mRequestQueue add:request];
+    [mCurrentRequests addObject:request];
     @weakify(self)
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
         
         @strongify(self)
         [self performRequest:request
                      success:^( id responseObject){
+                         
                          [subscriber sendNext:responseObject];
                          [subscriber sendCompleted];
                      }
@@ -63,8 +76,17 @@
                      }];
         
         return nil;
+        
     }];
     
+}
+
+-(RACSignal*) bleConnectSignal{
+    return [[NSNotificationCenter defaultCenter] rac_addObserverForName:RKBLEConnectNotification object:nil];
+}
+
+-(void)closeBLE{
+    [[BLEStack shareClient] closeBLE];
 }
 
 @end

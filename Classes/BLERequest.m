@@ -33,7 +33,6 @@ static  BOOL  LOG_ENABLED = YES;
 
     self = [super init];
     if (self) {
-        
         reponseEntityClass = reponseClass;
         _peripheralName = target[@"peripheralName"];
         _service = target[@"service"];

@@ -70,12 +70,20 @@ static BOOL bAuthOK = NO;
     return self;
 }
 
+-(void)dealloc{
+    
+    NSLog(@"~BLEStack:dealloc");
+    
+}
+
+#pragma mark -
+#pragma mark 公共方法
 -(RACSignal*)performRequest:(BLERequest*)request{
     
     @weakify(self)
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
         [[NSThread currentThread] setName:@"BLEStack"];
-
+        
         @strongify(self)
         self.successBlock = ^(BLERequest* reqest, id responseObject){
             [subscriber sendNext:responseObject];
@@ -93,30 +101,23 @@ static BOOL bAuthOK = NO;
     
 }
 
--(void)execute:(BLERequest*)request{
-
-    if([self isAuthRequest:request]){
-        self.targetRequest = self.request;
-    } else {
-        self.targetRequest = nil;
-    }
-    
-    self.request       = request;
-    
-    [self execute];
+-(void)finish{
+    [self stopScan:nil];
+    self.request = nil;
+    self.targetRequest = nil;
 }
 
--(void)dealloc{
+- (void)closeBLE{
     
-    NSLog(@"~BLEStack:dealloc");
-    
+    [self stopScan:nil];
+    [self cancelPeripheralConnection:activePeripheral];
+
 }
 
 #pragma mark -
 #pragma mark 私有方法
 
-
-- (void)setBLEState:(RKBLEConnectState)mRKBLEState
+- (void)setBLEState:(RKBLEConnectState)mRKBLEState error:(NSError*)error
 {
     _BLEState = mRKBLEState;
     
@@ -149,7 +150,7 @@ static BOOL bAuthOK = NO;
     }
     
     if (self.connectProgressBlock) {
-        self.connectProgressBlock(_BLEState,nil);
+        self.connectProgressBlock(_BLEState,_CMState,error);
     }
     
     if (self.failureBlock) {
@@ -165,23 +166,20 @@ static BOOL bAuthOK = NO;
     
 }
 
-
--(void)execute{
+-(void)execute:(BLERequest*)request{
+    
+    if([self isAuthRequest:request]){
+        self.targetRequest = self.request;
+    } else {
+        self.targetRequest = nil;
+    }
+    
+    self.request       = request;
     
     //连接蓝牙
     [self connectToPeripheral];
     //执行任务
     [self executeWithPeripheral:[activePeripheral.name isEqualToString:self.request.peripheralName] ? activePeripheral : nil];
-    
-}
-
--(void)timeout:(id)sender{
-    if (![self.request hasHadResponseDelivered]) {
-        
-        [self failureWithError:[NSError errorWithDomain:BLEStackErrorDomain
-                                                   code:BLEStackErrorTimeOut
-                                               userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }]];
-    }
 }
 
 /**
@@ -220,7 +218,7 @@ static BOOL bAuthOK = NO;
 -(void)connectWithHaving:(CBPeripheral *)peripheral{
     
     
-    [self setBLEState:RKBLEStateStart];
+    [self setBLEState:RKBLEStateStart error:nil];
     
     [self stopScan:nil];
     
@@ -245,7 +243,7 @@ static BOOL bAuthOK = NO;
             
             [self.request.dataParseProtocol createAuthProcessRequest:^(BLERequest* authRequest,NSError* error) {
                 
-                [self performRequest:authRequest];
+                [self execute:authRequest];
                 
             } peripheralName:self.request.peripheralName];
             
@@ -335,7 +333,7 @@ static BOOL bAuthOK = NO;
             
             bAuthOK = YES;
             //鉴权成功，开始执行目标任务
-            [self performRequest:self.targetRequest];
+            [self execute:self.targetRequest];
             
         } else {
             
@@ -375,11 +373,6 @@ static BOOL bAuthOK = NO;
 }
 
 
--(void)finish{
-    [self stopScan:nil];
-    self.request = nil;
-    self.targetRequest = nil;
-}
 
 
 
@@ -489,7 +482,7 @@ static BOOL bAuthOK = NO;
     NSLog(@"BLEStack => discover:%@",peripheral.name);
     if([self.request.peripheralName isEqualToString:peripheral.name]) {
         [self stopScan:nil];
-        [self setBLEState:RKBLEStateConnecting];
+        [self setBLEState:RKBLEStateConnecting error:nil];
         
         activePeripheral = peripheral;
         [centralManager connectPeripheral:activePeripheral
@@ -499,7 +492,7 @@ static BOOL bAuthOK = NO;
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    [self setBLEState:RKBLEStateConnected];
+    [self setBLEState:RKBLEStateConnected error:nil];
     //设置委托
     activePeripheral = peripheral;
     [activePeripheral setDelegate:self];
@@ -509,7 +502,7 @@ static BOOL bAuthOK = NO;
 
 -(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    [self setBLEState:RKBLEStateFailure];
+    [self setBLEState:RKBLEStateFailure error:error];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error{
@@ -518,7 +511,7 @@ static BOOL bAuthOK = NO;
     {
         NSLog(@"BLEStack => didDisconnectPeripheral for %@ with error: %@", peripheral.name, [error localizedDescription]);
     }
-    [self setBLEState:RKBLEStateDisconnect];
+    [self setBLEState:RKBLEStateDisconnect error:error];
     
 }
 

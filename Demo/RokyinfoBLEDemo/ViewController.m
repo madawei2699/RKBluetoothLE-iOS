@@ -13,7 +13,7 @@
 #import "RKBLEClient.h"
 #import "RK410APIService.h"
 @interface ViewController (){
-
+    
     
 }
 
@@ -37,6 +37,21 @@
          NSLog(@"----------------:%@",error);
          
      }];
+    RACSignal *bleConnectSignal = [[RKBLEClient shareClient] bleConnectSignal];
+    
+    RACDisposable *mRACDisposable = [[bleConnectSignal
+      subscribeOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(id x) {
+         
+         NSLog(@"----------------:%@",x);
+         
+     }
+     error:^(NSError *error) {
+         
+         NSLog(@"----------------:%@",error);
+         
+     }];
+//    [mRACDisposable dispose];
     
 }
 

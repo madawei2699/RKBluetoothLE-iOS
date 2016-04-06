@@ -26,4 +26,10 @@
  */
 - (void)finish;
 
+/**
+ *  关闭连接
+ */
+- (void)closeBLE;
+
+
 @end

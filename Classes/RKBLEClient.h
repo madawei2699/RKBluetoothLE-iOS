@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RequestQueue.h"
+#import "BLEStack.h"
 
 @interface RKBLEClient : NSObject
 
@@ -16,5 +17,9 @@
 -(instancetype)init;
 
 -(RACSignal*) performRequest:(BLERequest*) request;
+
+-(RACSignal*) bleConnectSignal;
+
+- (void)closeBLE;
 
 @end
