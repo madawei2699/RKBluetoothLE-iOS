@@ -7,16 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <BabyBluetooth/BabyBluetooth.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 #import "BLERequest.h"
+#import "Bluetooth.h"
 
+//domain
+extern NSString * const BLEStackErrorDomain;
+//code
+extern const NSInteger BLEStackErrorTimeOut;
+extern const NSInteger BLEStackErrorDisconnect;
+extern const NSInteger BLEStackErrorAuth;
+//desc
+extern NSString * const BLEStackErrorTimeOutDesc;
+extern NSString * const BLEStackErrorDisconnectDesc;
+extern NSString * const BLEStackErrorAuthDesc;
 
-NS_ENUM(NSInteger)
-{
-    BLEStackErrorTimeOut    = 1,
-    BLEStackErrorDisconnect = 2,
-    BLEStackAuthError       = 3,
-};
 
 typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 
@@ -35,41 +40,34 @@ typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 //连接状态回调
 typedef void (^RKConnectProgressBlock)(RKBLEConnectState mRKBLEState, NSError * error);
 //处理成功
-typedef void (^RKSuccessBlock)(BLERequest *request, NSData* responseObject, NSError * error);
+typedef void (^RKSuccessBlock)(BLERequest *request, NSData *responseObject);
 //处理失败
-typedef void (^RKFailureBlock)(BLERequest *request, NSData* responseObject, NSError * error);
+typedef void (^RKFailureBlock)(BLERequest *request, NSError *error);
 
-@interface BLEStack : NSObject
+@interface BLEStack : NSObject<Bluetooth>
 
-@property (nonatomic,assign          ) NSInteger              requestSequence;
+@property (nonatomic,assign ,readonly) RKBLEConnectState      BLEState;
 
-@property (nonatomic,copy            ) NSString               *peripheralName;
-
-@property (nonatomic,copy            ) NSString               *service;
-
-@property (nonatomic,copy            ) NSString               *characteristic;
-
-@property (nonatomic,assign          ) RKBLEMethod            method;
-
-@property (nonatomic,strong          ) NSData                 *writeValue;
-
-@property (nonatomic,assign          ) RKBLEConnectState      BLEState;
-
-@property (nonatomic,assign          ) CBCentralManagerState  CMState;
+@property (nonatomic,assign ,readonly) CBCentralManagerState  CMState;
 
 @property (nonatomic,copy            ) RKConnectProgressBlock connectProgressBlock;
 
 @property (nonatomic,copy            ) RKSuccessBlock         successBlock;
 
-@property (nonatomic,copy            ) RKSuccessBlock         failureBlock;
+@property (nonatomic,copy            ) RKFailureBlock         failureBlock;
 
-- (id)init;
++(instancetype)shareClient;
 
 /**
  *  执行请求
  *
  *  @param request
  */
--(void)performRequest:(BLERequest*)request;
+-(RACSignal*)performRequest:(BLERequest*)request;
+
+/**
+ *  结束请求
+ */
+-(void)finish;
 
 @end

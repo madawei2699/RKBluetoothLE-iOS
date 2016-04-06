@@ -32,7 +32,7 @@
 }
 
 -(void)dealloc{
-    NSLog(@"Response:dealloc");
+    NSLog(@"~Response:dealloc");
 }
 
 @end

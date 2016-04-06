@@ -9,20 +9,26 @@
 #import "BLEStack.h"
 #import "RKBLEUtil.h"
 
-#define DISCONNECT_STATE_TIME_OUT     8
-#define CONNECTED_STATE_TIME_OUT      3
-#define AUTHENTICATION_STATE_TIME_OUT 35
+NSString * const BLEStackErrorDomain         = @"BLEStackErrorDomain";
+
+const NSInteger BLEStackErrorTimeOut         = 1;
+const NSInteger BLEStackErrorDisconnect      = 2;
+const NSInteger BLEStackErrorAuth            = 3;
+
+NSString * const BLEStackErrorTimeOutDesc    = @"当前业务处理超时";
+NSString * const BLEStackErrorDisconnectDesc = @"蓝牙连接断开";
+NSString * const BLEStackErrorAuthDesc       = @"鉴权失败";
 
 static BOOL bAuthOK = NO;
 
-@interface BLEStack(){
+@interface BLEStack()<CBCentralManagerDelegate,CBPeripheralDelegate>{
     
-    BabyBluetooth   *baby;
-
-    NSTimer         *mNSTimer;
-
-    NSInteger       timeoutValue;
-
+    int                 CENTRAL_MANAGER_INIT_WAIT_TIMES;
+    //已经连接的设备
+    CBPeripheral        *activePeripheral;
+    //主设备
+    CBCentralManager    *centralManager;
+    
 }
 
 @property (nonatomic,strong) BLERequest *request;
@@ -33,152 +39,148 @@ static BOOL bAuthOK = NO;
 
 @implementation BLEStack
 
+#pragma mark -
+#pragma mark 初始化
+
++(instancetype)shareClient{
+    
+    static BLEStack *shareClient = nil;
+    static dispatch_once_t token;
+    dispatch_once(&token, ^{
+        
+        shareClient = [[BLEStack alloc] init];
+        
+    });
+    
+    return shareClient;
+}
+
 - (id)init{
     
     self = [super init];
     
     if(self != nil){
         _BLEState       = RKBLEStateDefault;
-        timeoutValue    = DISCONNECT_STATE_TIME_OUT;
-        baby = [BabyBluetooth shareBabyBluetooth];
-        //设置蓝牙委托
-        [self babyDelegate];
+        //创建串行队列
+        dispatch_queue_t  queue = dispatch_queue_create("com.rokyinfo.BLEStack", NULL);
+        centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:queue];
+        
     }
     
     return self;
 }
 
-- (void)setBLEState:(RKBLEConnectState)mRKBLEState
-{
-    __weak BLEStack *weekSelf = self;
-    _BLEState = mRKBLEState;
+-(RACSignal*)performRequest:(BLERequest*)request{
     
-    switch (_BLEState) {
-        case RKBLEStateDefault:
-            NSLog(@"设备：缺省状态");
-            break;
-        case RKBLEStateStart:
-            NSLog(@"设备：准备连接");
-            break;
-        case RKBLEStateScanning:
-            NSLog(@"设备：打开设备成功，开始扫描设备");
-            break;
-        case RKBLEStateConnecting:
-            NSLog(@"设备：%@--连接中...",self.peripheralName);
-            break;
-        case RKBLEStateConnected:
-            bAuthOK = NO;
-            NSLog(@"设备：%@--连接成功",self.peripheralName);
-            break;
-        case RKBLEStateDisconnect:
-            NSLog(@"设备：%@--断开连接",self.peripheralName);
-            break;
-        case RKBLEStateFailure:
-            NSLog(@"设备：%@--连接失败",self.peripheralName);
-            break;
-            
-        default:
-            break;
-    }
-    
-    if (weekSelf.connectProgressBlock) {
-        weekSelf.connectProgressBlock(_BLEState,nil);
-    }
-    
-    if (weekSelf.failureBlock) {
-        //任务开始运行后，发现蓝牙连接断开或者蓝牙连接失败则发出通知任务执行失败
-        if (![weekSelf.request hasHadResponseDelivered] && (_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)) {
-            
-            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
-                                                                         code:BLEStackErrorDisconnect
-                                                                     userInfo:@{ NSLocalizedDescriptionKey: @"蓝牙连接断开" }]];
-            
-        }
-    }
+    @weakify(self)
+    return [RACSignal createSignal:^RACDisposable *(id subscriber) {
+        [[NSThread currentThread] setName:@"BLEStack"];
+
+        @strongify(self)
+        self.successBlock = ^(BLERequest* reqest, id responseObject){
+            [subscriber sendNext:responseObject];
+            [subscriber sendCompleted];
+        };
+        self.failureBlock = ^(BLERequest* reqest,NSError* error){
+            [subscriber sendError:error];
+        };
+        
+        [self execute:request];
+        
+        return nil;
+        
+    }];
     
 }
 
--(void)performRequest:(BLERequest*)request{
-    
+-(void)execute:(BLERequest*)request{
+
     if([self isAuthRequest:request]){
         self.targetRequest = self.request;
     } else {
         self.targetRequest = nil;
     }
     
-    self.request     = request;
-
-    _requestSequence = [self.request getSequence];
-    _peripheralName  = self.request.peripheralName;
-    _service         = self.request.service;
-    _characteristic  = self.request.characteristic;
-    _method          = self.request.method;
-    _writeValue      = self.request.writeValue;
+    self.request       = request;
     
     [self execute];
 }
 
+-(void)dealloc{
+    
+    NSLog(@"~BLEStack:dealloc");
+    
+}
+
+#pragma mark -
+#pragma mark 私有方法
+
+
+- (void)setBLEState:(RKBLEConnectState)mRKBLEState
+{
+    _BLEState = mRKBLEState;
+    
+    switch (_BLEState) {
+        case RKBLEStateDefault:
+            NSLog(@"BLEStack => 设备：缺省状态");
+            break;
+        case RKBLEStateStart:
+            NSLog(@"BLEStack => 设备：准备连接");
+            break;
+        case RKBLEStateScanning:
+            NSLog(@"BLEStack => 设备：打开设备成功，开始扫描设备");
+            break;
+        case RKBLEStateConnecting:
+            NSLog(@"BLEStack => 设备：%@--连接中...",self.request.peripheralName);
+            break;
+        case RKBLEStateConnected:
+            bAuthOK = NO;
+            NSLog(@"BLEStack => 设备：%@--连接成功",self.request.peripheralName);
+            break;
+        case RKBLEStateDisconnect:
+            NSLog(@"BLEStack => 设备：%@--断开连接",self.request.peripheralName);
+            break;
+        case RKBLEStateFailure:
+            NSLog(@"BLEStack => 设备：%@--连接失败",self.request.peripheralName);
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (self.connectProgressBlock) {
+        self.connectProgressBlock(_BLEState,nil);
+    }
+    
+    if (self.failureBlock) {
+        //任务开始运行后，发现蓝牙连接断开或者蓝牙连接失败则发出通知任务执行失败
+        if (![self.request hasHadResponseDelivered] && (_BLEState == RKBLEStateDisconnect || _BLEState == RKBLEStateFailure)) {
+            
+            [self failureWithError:[NSError errorWithDomain:BLEStackErrorDomain
+                                                       code:BLEStackErrorDisconnect
+                                                   userInfo:@{ NSLocalizedDescriptionKey:BLEStackErrorDisconnectDesc }]];
+            
+        }
+    }
+    
+}
+
+
 -(void)execute{
-    //开始任务
-    [self startTask];
+    
     //连接蓝牙
     [self connectToPeripheral];
-    //添加超时判断逻辑
-    [self addTimeOutLogic];
     //执行任务
-    [self executeWithPeripheral:[baby findConnectedPeripheral:self.peripheralName]];
-}
-
-/**
- *  开始任务
- */
--(void)startTask{
+    [self executeWithPeripheral:[activePeripheral.name isEqualToString:self.request.peripheralName] ? activePeripheral : nil];
     
 }
 
-/**
- *  添加超时逻辑
- */
--(void)addTimeOutLogic{
-
-    if ([self isNeedAuth:self.request]) {
-
-        timeoutValue = AUTHENTICATION_STATE_TIME_OUT;
-
-    } else if(self.BLEState == RKBLEStateConnected){
-
-        timeoutValue = CONNECTED_STATE_TIME_OUT;
-
-    } else {
-
-        timeoutValue = DISCONNECT_STATE_TIME_OUT;
-
-    }
-    if (mNSTimer) {
-        [mNSTimer invalidate];
-        mNSTimer = nil;
-    }
-    
-    mNSTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:timeoutValue] interval:timeoutValue target:self selector:@selector(checkTimeOut:) userInfo:nil repeats:NO];
-    [[NSRunLoop currentRunLoop] addTimer:mNSTimer forMode:NSDefaultRunLoopMode];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:timeoutValue]];
-       
-}
-
-/**
- *  超时处理
- *
- *  @param timer
- */
-- (void)checkTimeOut:(NSTimer *)timer
-{
-    [mNSTimer invalidate];
-    mNSTimer = nil;
+-(void)timeout:(id)sender{
     if (![self.request hasHadResponseDelivered]) {
-    
-        [self failureTask:self withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
-                                                             code:BLEStackErrorTimeOut
-                                                         userInfo:@{ NSLocalizedDescriptionKey: @"当前业务处理超时" }]];
+        
+        [self failureWithError:[NSError errorWithDomain:BLEStackErrorDomain
+                                                   code:BLEStackErrorTimeOut
+                                               userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }]];
     }
 }
 
@@ -187,23 +189,16 @@ static BOOL bAuthOK = NO;
  */
 - (void)connectToPeripheral{
     
-    CBPeripheral *peripheral = [baby findConnectedPeripheral:self.peripheralName];
+    CBPeripheral *peripheral =  [activePeripheral.name isEqualToString:self.request.peripheralName] ? activePeripheral : nil;
     
     if (peripheral.state == CBPeripheralStateConnected) {
         
-        if ([peripheral.name isEqualToString:self.peripheralName]) {
-            //不做处理表示当前需要连接的蓝牙设备已经在连接状态
-            _BLEState = RKBLEStateConnected;
-            
-        } else {
-            
+        if (![peripheral.name isEqualToString:self.request.peripheralName]) {
             [self connectWithHaving:nil];
-            
         }
-        
     } else {
         
-        if (peripheral && [peripheral.name isEqualToString:self.peripheralName]) {
+        if (peripheral && [peripheral.name isEqualToString:self.request.peripheralName]) {
             
             [self connectWithHaving:peripheral];
             
@@ -217,142 +212,24 @@ static BOOL bAuthOK = NO;
     
 }
 
-
-
 /**
- *  设置蓝牙委托
- */
--(void)babyDelegate{
-    
-    __weak BLEStack *weekSelf = self;
-    __weak BabyBluetooth *weekBaby = baby;
-    //设置扫描到设备的委托
-    [baby setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
-        
-        NSLog(@"搜索到了设备:%@",peripheral.name);
-        if([peripheral.name isEqualToString:weekSelf.peripheralName]){
-            NSLog(@"停止扫描");
-            [weekBaby cancelScan];
-        }
-        
-    }];
-    
-    //设置连接设备的过滤器
-    [baby setFilterOnConnetToPeripherals:^BOOL(NSString *peripheralName) {
-        
-        //设置查找规则是名称大于1 ， the search rule is peripheral.name length > 1
-        if (peripheralName.length >= 1 && [peripheralName isEqualToString:weekSelf.peripheralName]) {
-            weekSelf.BLEState = RKBLEStateConnecting;
-            return YES;
-        }
-        return NO;
-        
-    }];
-    
-    //设备状态改变的委托
-    [baby setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
-        
-        weekSelf.CMState = central.state;
-        if (central.state == CBCentralManagerStatePoweredOn) {
-            weekSelf.BLEState = RKBLEStateScanning;
-        } else {
-            weekSelf.BLEState = RKBLEStateFailure;
-        }
-        
-    }];
-    
-    //设置设备连接成功的委托,同一个baby对象，使用不同的channel切换委托回调
-    [baby setBlockOnConnected:^(CBCentralManager *central, CBPeripheral *peripheral) {
-        
-        weekSelf.BLEState = RKBLEStateConnected;
-        
-    }];
-    
-    //设置设备连接失败的委托
-    [baby setBlockOnFailToConnect:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
-        
-        weekSelf.BLEState = RKBLEStateFailure;
-        
-    }];
-    
-    //设置设备断开连接的委托
-    [baby setBlockOnDisconnect:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
-        
-        weekSelf.BLEState = RKBLEStateDisconnect;
-        
-    }];
-    
-    //设置写数据成功的block
-    [baby setBlockOnDidWriteValueForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
-        
-        [weekSelf parseResponse:characteristic channel:RKBLEResponseWriteResult];
-        
-    }];
-    
-    //设置获取到最新Characteristics值的block
-    [baby setBlockOnReadValueForCharacteristic:^(CBPeripheral *peripheral,CBCharacteristic *characteristic,NSError *error){
-        
-        [weekSelf parseResponse:characteristic channel:RKBLEResponseReadResult];
-        
-    }];
-    
-    //设置发现设service的Characteristics的委托
-    [baby setBlockOnDiscoverCharacteristics:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
-        
-        if (peripheral) {
-            
-            for (CBCharacteristic *characteristic in service.characteristics)
-            {
-                NSLog(@"==========service name:%@ ,characteristic name:%@",service.UUID,characteristic.UUID);
-                if (characteristic.properties & CBCharacteristicPropertyNotify) {
-                    
-                    if (weekSelf.request.dataParseProtocol) {
-                        if ([weekSelf.request.dataParseProtocol needSubscribeNotifyWithService:[service.UUID UUIDString] characteristic:[characteristic.UUID UUIDString]]) {
-                            [weekSelf setNotify:peripheral characteristic:characteristic];
-                        }
-                    } else {
-                        [weekSelf setNotify:peripheral characteristic:characteristic];
-                    }
-                    
-                }
-                
-                //发现和需要执行任务一样的特征后执行任务
-                if ([[service.UUID UUIDString] isEqualToString:weekSelf.service]
-                    &&
-                    [[characteristic.UUID UUIDString] isEqualToString:weekSelf.characteristic]) {
-                    
-                    [weekSelf executeWithPeripheral:peripheral];
-                    
-                }
-                
-            }
-            
-        }
-        
-    }];
-}
-
-/**
- *  订阅通知
+ *  连接一个已经连接过的peripheral
  *
  *  @param peripheral
- *  @param characteristic
  */
--(void)setNotify:(CBPeripheral *)peripheral characteristic:(CBCharacteristic*)characteristic {
+-(void)connectWithHaving:(CBPeripheral *)peripheral{
     
-    __weak BLEStack *weekSelf = self;
-    [baby
-     notify:peripheral
-     characteristic:characteristic
-     block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-        
-         NSLog(@">>>在特征%@接收到蓝牙上报数据：%@ ",characteristics.UUID,characteristics.value);
-        [weekSelf parseResponse:characteristics channel:RKBLEResponseNotify];
-         
-    }];
+    
+    [self setBLEState:RKBLEStateStart];
+    
+    [self stopScan:nil];
+    
+    [self cancelPeripheralConnection:activePeripheral];
+    
+    [self start:peripheral];
+    
     
 }
-
 
 /**
  *  执行任务
@@ -361,23 +238,21 @@ static BOOL bAuthOK = NO;
  */
 -(void)executeWithPeripheral:(CBPeripheral*) peripheral{
     
-    __weak BLEStack *weekSelf = self;
-    
-    if ( peripheral.state == CBPeripheralStateConnected && ![weekSelf.request hasHadResponseDelivered] ) {
+    if ( peripheral.state == CBPeripheralStateConnected && ![self.request hasHadResponseDelivered] ) {
         
         //数据交换协议需要鉴权
-        if ([weekSelf isNeedAuth:weekSelf.request]) {
+        if ([self isNeedAuth:self.request]) {
             
-            [weekSelf.request.dataParseProtocol createAuthProcessRequest:^(BLERequest* authRequest,NSError* error) {
+            [self.request.dataParseProtocol createAuthProcessRequest:^(BLERequest* authRequest,NSError* error) {
                 
-                [weekSelf performRequest:authRequest];
-
-            } peripheralName:weekSelf.peripheralName];
+                [self performRequest:authRequest];
+                
+            } peripheralName:self.request.peripheralName];
             
         } else {
             
-            CBUUID *uuid_service = [CBUUID UUIDWithString:weekSelf.service];
-            CBUUID *uuid_char = [CBUUID UUIDWithString:weekSelf.characteristic];
+            CBUUID *uuid_service = [CBUUID UUIDWithString:self.request.service];
+            CBUUID *uuid_char = [CBUUID UUIDWithString:self.request.characteristic];
             
             CBCharacteristic *mCBCharacteristic = [RKBLEUtil findCharacteristicFromUUID:uuid_char service:[RKBLEUtil findServiceFromUUID:uuid_service p:peripheral]];
             
@@ -385,15 +260,15 @@ static BOOL bAuthOK = NO;
                 return;
             }
             
-            if (weekSelf.method == RKBLEMethodRead) {
+            if (self.request.method == RKBLEMethodRead) {
                 
-                NSLog(@"<<<读取特征:%@",mCBCharacteristic.UUID);
+                NSLog(@"BLEStack => 读取特征:%@",mCBCharacteristic.UUID);
                 [peripheral readValueForCharacteristic:mCBCharacteristic];
                 
-            } else if (weekSelf.method == RKBLEMethodWrite){
+            } else if (self.request.method == RKBLEMethodWrite){
                 
-                NSLog(@"<<<写入特征:%@ 值：%@",mCBCharacteristic.UUID,weekSelf.writeValue);
-                [peripheral writeValue:weekSelf.writeValue forCharacteristic:mCBCharacteristic type:CBCharacteristicWriteWithResponse];
+                NSLog(@"BLEStack => 写入特征:%@ 值：%@",mCBCharacteristic.UUID,self.request.writeValue);
+                [peripheral writeValue:self.request.writeValue forCharacteristic:mCBCharacteristic type:CBCharacteristicWriteWithResponse];
                 
             }
             
@@ -401,6 +276,8 @@ static BOOL bAuthOK = NO;
         
     }
 }
+
+
 
 /**
  *  处理蓝牙返回数据
@@ -409,123 +286,118 @@ static BOOL bAuthOK = NO;
  */
 -(void)parseResponse:(CBCharacteristic *)characteristic channel:(RKBLEResponseChannel)channel{
     
-    __weak BLEStack *weekSelf = self;
     
-    if (![weekSelf.request hasHadResponseDelivered]) {
+    if (![self.request hasHadResponseDelivered]) {
         //注入了数据协议处理类则使用注入的协议类进行判断处理
-        if (weekSelf.request.dataParseProtocol) {
+        if (self.request.dataParseProtocol) {
             
-            if ([weekSelf.request.dataParseProtocol effectiveResponse: weekSelf.request characteristic: characteristic.UUID.UUIDString sourceChannel:channel  value:characteristic.value]) {
+            if ([self.request.dataParseProtocol effectiveResponse: self.request characteristic: characteristic.UUID.UUIDString sourceChannel:channel  value:characteristic.value]) {
                 
-                [weekSelf completeTask:weekSelf withCharacteristic:characteristic channel:channel];
+                [self completeWithCharacteristic:characteristic channel:channel];
                 
             }
             
         } else {
             
-            [weekSelf completeTask:weekSelf withCharacteristic:characteristic channel:channel];
+            [self completeWithCharacteristic:characteristic channel:channel];
             
         }
     }
     
 }
 
-/**
- *  连接一个已经连接过的peripheral
- *
- *  @param peripheral
- */
--(void)connectWithHaving:(CBPeripheral *)peripheral{
-    
-    self.BLEState = RKBLEStateStart;
-    [baby cancelScan];
-    [baby cancelAllPeripheralsConnection];
-    if (peripheral) {
-        baby.having(peripheral).connectToPeripherals().discoverServices().discoverCharacteristics().begin();
-    } else {
-        baby.scanForPeripherals().connectToPeripherals().discoverServices().discoverCharacteristics().begin();
-    }
-    
-}
+
 
 /**
  *  请求成功
  *
- *  @param weekSelf
+ *  @param self
  *  @param mCBCharacteristic
  *  @param channel
  */
--(void)completeTask:(BLEStack*) weekSelf withCharacteristic:(CBCharacteristic*) mCBCharacteristic channel:(RKBLEResponseChannel)channel{
+-(void)completeWithCharacteristic:(CBCharacteristic*) mCBCharacteristic channel:(RKBLEResponseChannel)channel{
     
     switch (channel) {
         case RKBLEResponseWriteResult:
-            NSLog(@">>>收到特征:%@写响应",mCBCharacteristic.UUID);
+            NSLog(@"BLEStack => 收到特征:%@写响应",mCBCharacteristic.UUID);
             break;
         case RKBLEResponseReadResult:
-            NSLog(@">>>收到特征:%@读取响应值：%@",mCBCharacteristic.UUID,mCBCharacteristic.value);
+            NSLog(@"BLEStack => 收到特征:%@读取响应值：%@",mCBCharacteristic.UUID,mCBCharacteristic.value);
             break;
         case RKBLEResponseNotify:
-            NSLog(@">>>收到特征:%@通知上报值：%@",mCBCharacteristic.UUID,mCBCharacteristic.value);
+            NSLog(@"BLEStack => 收到特征:%@通知上报值：%@",mCBCharacteristic.UUID,mCBCharacteristic.value);
             break;
         default:
             break;
     }
-    if ([weekSelf isAuthRequest:weekSelf.request]){
-        if ([weekSelf.request.dataParseProtocol authSuccess:mCBCharacteristic.value]) {
+    if ([self isAuthRequest:self.request]){
+        if ([self.request.dataParseProtocol authSuccess:mCBCharacteristic.value]) {
             
             bAuthOK = YES;
             //鉴权成功，开始执行目标任务
-            [weekSelf performRequest:weekSelf.targetRequest];
+            [self performRequest:self.targetRequest];
             
         } else {
             
-            [weekSelf failureTask:weekSelf withError:[NSError errorWithDomain:@"BLEStackErrorDomain"
-                                                                         code:BLEStackAuthError
-                                                                     userInfo:@{ NSLocalizedDescriptionKey: @"鉴权失败" }]];
+            [self failureWithError:[NSError errorWithDomain:BLEStackErrorDomain
+                                                       code:BLEStackErrorAuth
+                                                   userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorAuthDesc }]];
             
         }
         return;
     }
     
-    if (weekSelf.successBlock) {
-        weekSelf.successBlock(weekSelf.request,mCBCharacteristic.value ? mCBCharacteristic.value :[[NSData alloc] init],nil);
+    if (self.successBlock) {
+        self.successBlock(self.request,mCBCharacteristic.value ? mCBCharacteristic.value :[[NSData alloc] init]);
     }
     
-    [weekSelf cleanUp:weekSelf];
+    [self finish];
     
 }
 
 /**
  *  请求失败
  *
- *  @param weekSelf
+ *  @param self
  *  @param error
  */
--(void)failureTask:(BLEStack*) weekSelf withError:(NSError*) error{
-    NSLog(@"任务：执行失败%@",[error localizedDescription]);
-    if(weekSelf.targetRequest){
-        weekSelf.request = weekSelf.targetRequest;
+-(void)failureWithError:(NSError*) error{
+    
+    if(self.targetRequest){
+        self.request = self.targetRequest;
     }
     
-    if (weekSelf.failureBlock) {
-        weekSelf.failureBlock(weekSelf.request,nil,error);
+    if (self.failureBlock) {
+        self.failureBlock(self.request,error);
     }
     
-    [weekSelf cleanUp:weekSelf];
+    [self finish];
 }
+
+
+-(void)finish{
+    [self stopScan:nil];
+    self.request = nil;
+    self.targetRequest = nil;
+}
+
+
+
+#pragma mark -
+#pragma mark 协议辅助
 
 /**
  *  判断请求是否为鉴权请求
  *
- *  @param weekSelf
+ *  @param self
  *
  *  @return
  */
 -(BOOL)isAuthRequest:(BLERequest*)request{
-
+    
     if (request.dataParseProtocol
         &&
-       [request.dataParseProtocol isAuthenticationRequest:request]
+        [request.dataParseProtocol isAuthenticationRequest:request]
         ){
         
         return YES;
@@ -540,12 +412,12 @@ static BOOL bAuthOK = NO;
 /**
  *  判断是否需要鉴权
  *
- *  @param weekSelf
+ *  @param self
  *
  *  @return
  */
 -(BOOL)isNeedAuth:(BLERequest*)request{
-
+    
     if (request.dataParseProtocol
         &&
         [request.dataParseProtocol needAuthentication] && ![request.dataParseProtocol isAuthenticationRequest:request]
@@ -562,23 +434,230 @@ static BOOL bAuthOK = NO;
     
 }
 
-/**
- *  清除为当前超时定时器
- *
- *  @param weekSelf
- */
--(void)cleanUp:(BLEStack*) weekSelf{
-    //此处必须关闭定时器不然会有内存泄露
-    [weekSelf->mNSTimer invalidate];
-    weekSelf->mNSTimer = nil;
-    
-    weekSelf.request = nil;
-    weekSelf.targetRequest = nil;
+
+#pragma mark -
+#pragma mark 连接管理
+
+-(void)start:(CBPeripheral *)cachedPeripheral{
+    if (centralManager.state == CBCentralManagerStatePoweredOn) {
+        CENTRAL_MANAGER_INIT_WAIT_TIMES = 0;
+        if (cachedPeripheral) {
+            [centralManager connectPeripheral:cachedPeripheral options:nil];
+        } else {
+            [centralManager scanForPeripheralsWithServices:nil options:nil];
+        }
+        return;
+    }
+    //尝试重新等待CBCentralManager打开
+    CENTRAL_MANAGER_INIT_WAIT_TIMES ++;
+    if (CENTRAL_MANAGER_INIT_WAIT_TIMES >=5 ) {
+        NSLog(@"BLEStack => 第%d次等待CBCentralManager 打开任然失败，请检查你蓝牙使用权限或检查设备问题。",CENTRAL_MANAGER_INIT_WAIT_TIMES);
+        return;
+    }
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 3.0 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self start:cachedPeripheral];
+    });
+    NSLog(@"BLEStack => 第%d次等待CBCentralManager打开",CENTRAL_MANAGER_INIT_WAIT_TIMES);
 }
 
--(void)dealloc{
+-(void)stopScan:(id)sender{
+    NSLog(@"BLEStack => StopScan");
+    [centralManager stopScan];
+}
+
+//断开设备连接
+-(void)cancelPeripheralConnection:(CBPeripheral *)peripheral{
+    if (peripheral) {
+        [centralManager cancelPeripheralConnection:peripheral];
+    }
+}
+
+#pragma mark -
+#pragma mark CBCentralManagerDelegate
+
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central{
+    _CMState = central.state;
+}
+
+- (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary *)dict{
     
-    NSLog(@"BLEStack:dealloc");
+}
+
+- (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
+{
+    NSLog(@"BLEStack => discover:%@",peripheral.name);
+    if([self.request.peripheralName isEqualToString:peripheral.name]) {
+        [self stopScan:nil];
+        [self setBLEState:RKBLEStateConnecting];
+        
+        activePeripheral = peripheral;
+        [centralManager connectPeripheral:activePeripheral
+                                  options:nil];
+    }
+}
+
+- (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
+{
+    [self setBLEState:RKBLEStateConnected];
+    //设置委托
+    activePeripheral = peripheral;
+    [activePeripheral setDelegate:self];
+    [activePeripheral discoverServices:nil];
+    
+}
+
+-(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
+{
+    [self setBLEState:RKBLEStateFailure];
+}
+
+- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error{
+    
+    if (error)
+    {
+        NSLog(@"BLEStack => didDisconnectPeripheral for %@ with error: %@", peripheral.name, [error localizedDescription]);
+    }
+    [self setBLEState:RKBLEStateDisconnect];
+    
+}
+
+#pragma mark -
+#pragma mark CBPeripheralDelegate
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
+{
+    if (error)
+    {
+        NSLog(@"BLEStack => didDiscoverServices for %@ with error: %@", peripheral.name, [error localizedDescription]);
+    }
+    
+    //discover characteristics
+    for (CBService *service in peripheral.services) {
+        [peripheral discoverCharacteristics:nil forService:service];
+    }
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error{
+    
+    if (error)
+    {
+        NSLog(@"BLEStack => error didDiscoverCharacteristicsForService for %@ with error: %@", service.UUID, [error localizedDescription]);
+    }
+    
+    if (peripheral) {
+        
+        for (CBCharacteristic *characteristic in service.characteristics)
+        {
+            
+            if (characteristic.properties & CBCharacteristicPropertyNotify) {
+                
+                if (self.request.dataParseProtocol) {
+                    if ([self.request.dataParseProtocol needSubscribeNotifyWithService:[service.UUID UUIDString] characteristic:[characteristic.UUID UUIDString]]) {
+                        
+                        [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+                        
+                    }
+                } else {
+                    
+                    [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+                    
+                }
+                
+            }
+            
+            //发现和需要执行任务一样的特征后执行任务
+            if ([[service.UUID UUIDString] isEqualToString:self.request.service]
+                &&
+                [[characteristic.UUID UUIDString] isEqualToString:self.request.characteristic]) {
+                
+                [self executeWithPeripheral:peripheral];
+                
+            }
+            
+        }
+        
+    }
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+    
+    if (error)
+    {
+        NSLog(@"BLEStack => error didUpdateValueForCharacteristic %@ with error: %@", characteristic.UUID, [error localizedDescription]);
+    }
+    
+    if ((characteristic.properties & CBCharacteristicPropertyNotify)
+        &&
+        self.request.dataParseProtocol
+        &&
+        [self.request.dataParseProtocol needSubscribeNotifyWithService:[characteristic.service.UUID UUIDString] characteristic:[characteristic.UUID UUIDString]]) {
+        
+        [self parseResponse:characteristic channel:RKBLEResponseNotify];
+        return;
+        
+    }
+    
+    [self parseResponse:characteristic channel:RKBLEResponseReadResult];
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+    
+    if (error)
+    {
+        NSLog(@"BLEStack => error Discovered DescriptorsForCharacteristic for %@ with error: %@", characteristic.UUID, [error localizedDescription]);
+    }
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error{
+    
+    
+    if (error)
+    {
+        NSLog(@"BLEStack => error didUpdateValueForDescriptor  for %@ with error: %@", descriptor.UUID, [error localizedDescription]);
+    }
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+    
+    [self parseResponse:characteristic channel:RKBLEResponseWriteResult];
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error{
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+    
+    
+    //    NSLog(@"BLEStack => didUpdateNotificationStateForCharacteristic");
+    //    NSLog(@"BLEStack => uuid:%@,isNotifying:%@",characteristic.UUID,characteristic.isNotifying?@"isNotifying":@"Notifying");
+    
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didDiscoverIncludedServicesForService:(CBService *)service error:(NSError *)error{
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error{
+    
+    
+    //    NSLog(@"BLEStack => peripheralDidUpdateRSSI -> RSSI:%@",RSSI);
+    
+    
+}
+
+-(void)peripheralDidUpdateName:(CBPeripheral *)peripheral{
+    
+}
+
+-(void)peripheral:(CBPeripheral *)peripheral didModifyServices:(NSArray *)invalidatedServices{
     
 }
 

@@ -9,7 +9,7 @@
 #import "BLERequest.h"
 #import "RequestQueue.h"
 
-static BOOL LOG_ENABLED = YES;
+static  BOOL  LOG_ENABLED = YES;
 
 @interface BLERequest(){
     
@@ -51,6 +51,10 @@ static BOOL LOG_ENABLED = YES;
     LOG_ENABLED = enable;
 }
 
++(BOOL)logEnable{
+    return LOG_ENABLED;
+}
+
 -(BLERequest*)setSequence:(NSInteger)sequence{
     mSequence = sequence;
     return self;
@@ -62,7 +66,7 @@ static BOOL LOG_ENABLED = YES;
 
 -(void)addMarker:(NSString*)mark{
     if (LOG_ENABLED) {
-        NSLog(@"UIThread:[%d] tag:%@",[[NSThread currentThread] isMainThread],mark);
+        NSLog(@"BLERequest life cycle:[%d] tag:%@",[[NSThread currentThread] isMainThread],mark);
     }
 }
 
@@ -134,7 +138,7 @@ static BOOL LOG_ENABLED = YES;
 
 -(void)dealloc{
     if (LOG_ENABLED)
-        NSLog(@"Request:dealloc");
+        NSLog(@"~BLERequest:dealloc");
 }
 
 @end

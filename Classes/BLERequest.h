@@ -132,6 +132,8 @@ typedef void (^RequestErrorBlock)(NSError * error);
 
 +(void)setLogEnable:(BOOL)enable;
 
++(BOOL)logEnable;
+
 -(instancetype)initWithReponseClass:(Class)reponseClass
 target:(NSDictionary*)target
 method:(RKBLEMethod) method

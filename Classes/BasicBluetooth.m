@@ -8,11 +8,9 @@
 
 #import "BasicBluetooth.h"
 
-
 @interface BasicBluetooth(){
     
-    BLEStack *mBLEStack;
-    
+
 }
 
 @end
@@ -25,9 +23,9 @@
     self = [super init];
     
     if(self != nil){
-        mBLEStack = [[BLEStack alloc] init];
-        mBLEStack.connectProgressBlock = ^(RKBLEConnectState mRKBLEState, NSError * error){
+        [BLEStack shareClient].connectProgressBlock = ^(RKBLEConnectState mRKBLEState, NSError * error){
             //蓝牙连接回调
+            
         };
     }
     
@@ -40,10 +38,10 @@
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
         [[NSThread currentThread] setName:@"BasicBluetooth"];
         @strongify(self)
-        [self performRequest:request success:^(BLERequest* reqest, id responseObject,NSError* error){
+        [self performRequest:request success:^(BLERequest* reqest, id responseObject){
             [subscriber sendNext:responseObject];
             [subscriber sendCompleted];
-        } failure:^(BLERequest* reqest, id responseObject,NSError* error){
+        } failure:^(BLERequest* reqest,NSError* error){
             [subscriber sendError:error];
         }];
         
@@ -53,14 +51,20 @@
 
 }
 
+-(void)finish{
+
+    [[BLEStack shareClient] finish];
+
+}
+
 -(void)performRequest:(BLERequest*) request
-              success:(void (^)(BLERequest* reqest, id responseObject,NSError* error))success
-              failure:(void (^)(BLERequest* reqest, id responseObject,NSError* error))failure{
+              success:(void (^)(BLERequest* reqest, id responseObject))success
+              failure:(void (^)(BLERequest* reqest, NSError* error))failure{
     
-    mBLEStack.successBlock = success;
-    mBLEStack.failureBlock = failure;
     [request addMarker:@"perform-Request"];
-    [mBLEStack performRequest:request];
+    [BLEStack shareClient].successBlock = success;
+    [BLEStack shareClient].failureBlock = failure;
+    [[BLEStack shareClient] performRequest:request];
     
 }
 

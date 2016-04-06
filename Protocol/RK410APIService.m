@@ -59,7 +59,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
  */
 -(BOOL)needAuthentication{
     
-    return NO;
+    return YES;
     
 }
 

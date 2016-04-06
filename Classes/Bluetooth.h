@@ -12,6 +12,18 @@
 
 @protocol Bluetooth <NSObject>
 
+/**
+ *  执行请求
+ *
+ *  @param request
+ *
+ *  @return
+ */
 - (RACSignal*) performRequest:(BLERequest*) request;
+
+/**
+ *  结束请求
+ */
+- (void)finish;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "RKBLEDispatcher.h"
+#import "BLEStack.h"
 
 static dispatch_semaphore_t sem;
 
@@ -71,15 +72,26 @@ static dispatch_semaphore_t sem;
                 __block NSError *bleError = nil;
                 // Parse the response here on the worker thread.
                 RACSignal* responseRACSignal = [self.bluetooth performRequest:request];
-                [[responseRACSignal
+                [[[responseRACSignal
                   subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
+                  timeout:8
+                  onScheduler:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
                  subscribeNext:^(id x) {
                      mBLEResponse = x;
+                     
                      //唤醒线程
                      dispatch_semaphore_signal(sem);
                  }
                  error:^(NSError *error) {
                      bleError = error;
+                     if ([bleError.domain isEqualToString:RACSignalErrorDomain] && bleError.code == RACSignalErrorTimedOut) {
+                         
+                         bleError = [NSError errorWithDomain:BLEStackErrorDomain
+                                                        code:BLEStackErrorTimeOut
+                                                    userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
+                         [self.bluetooth finish];
+                     }
+                     
                      //唤醒线程
                      dispatch_semaphore_signal(sem);
                  }];
@@ -87,11 +99,11 @@ static dispatch_semaphore_t sem;
                 //等待BLE处理结束如果不结束则一直等待
                 while (!mQuit && mBLEResponse == nil && bleError == nil) {
                     //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
-                    if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 5 * NSEC_PER_SEC )) != 0)
+                    if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 60 * NSEC_PER_SEC )) != 0)
                     {
-                        bleError = [NSError errorWithDomain:@"BLEStackErrorDomain"
-                                                       code:1
-                                                   userInfo:@{ NSLocalizedDescriptionKey: @"当前业务处理超时" }];
+                        bleError = [NSError errorWithDomain:BLEStackErrorDomain
+                                                       code:BLEStackErrorTimeOut
+                                                   userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
                     }
                 }
                 
