@@ -73,23 +73,27 @@ static dispatch_semaphore_t sem;
                 // Parse the response here on the worker thread.
                 RACSignal* responseRACSignal = [self.bluetooth performRequest:request];
                 [[[responseRACSignal
-                  subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
+                  subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"PerformRequest"]]
                   timeout:8
-                  onScheduler:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
+                  onScheduler:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"Timeout"]]
                  subscribeNext:^(id x) {
+                     
                      mBLEResponse = x;
                      
                      //唤醒线程
                      dispatch_semaphore_signal(sem);
+                     
                  }
                  error:^(NSError *error) {
+                     
                      bleError = error;
+                     
                      if ([bleError.domain isEqualToString:RACSignalErrorDomain] && bleError.code == RACSignalErrorTimedOut) {
                          
                          bleError = [NSError errorWithDomain:BLEStackErrorDomain
                                                         code:BLEStackErrorTimeOut
                                                     userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
-                         [self.bluetooth finish];
+                         [self.bluetooth finish:request];
                      }
                      
                      //唤醒线程
@@ -119,7 +123,7 @@ static dispatch_semaphore_t sem;
                     
                 } else {
                     
-                    Response *response = [request parseNetworkResponse:mBLEResponse];
+                    Response *response = [request parseBLEResponse:mBLEResponse];
                     [request addMarker:@"ble-parse—complete"];
                     [request markDelivered];
                     

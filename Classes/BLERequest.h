@@ -10,30 +10,22 @@
 #import "BLEResponse.h"
 #import "Response.h"
 
+
 typedef NS_ENUM(NSInteger, RKBLEMethod) {
     
-    RKBLEMethodRead            = 0,
-    RKBLEMethodWrite           = 1,
-    
+    RKBLEMethodRead          = 0,
+    RKBLEMethodWrite         = 1,
+    RKBLEMethodNotify        = 2,
+
 };
 
 typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
-    
-    RKBLEResponseWriteResult   = 0,
-    RKBLEResponseReadResult    = 1,
-    RKBLEResponseNotify        = 2,
+
+    RKBLEResponseWriteResult = 0,
+    RKBLEResponseReadResult  = 1,
+    RKBLEResponseNotify      = 2,
     
 };
-
-
-@protocol BLEDataEntityProtocol<NSObject>
-
--(NSData*)entityToByte;
-
--(id)byteToEntity:(NSData*)data;
-
-@end
-
 
 @class BLERequest;
 @protocol BLEDataParseProtocol<NSObject>
@@ -96,6 +88,8 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
 
 @end
 
+typedef id   (^parseBLEResponseData)(NSData *value);
+
 typedef BOOL (^effectiveResponse)(NSString * characteristic,RKBLEResponseChannel channel,NSData *value);
 
 typedef void (^RequestSuccessBlock)(id response);
@@ -130,12 +124,13 @@ typedef void (^RequestErrorBlock)(NSError * error);
 //蓝牙协议相关
 @property (nonatomic,copy            ) effectiveResponse    effectiveResponse;
 
+@property (nonatomic,copy            ) parseBLEResponseData parseBLEResponseData;
+
 +(void)setLogEnable:(BOOL)enable;
 
 +(BOOL)logEnable;
 
--(instancetype)initWithReponseClass:(Class)reponseClass
-target:(NSDictionary*)target
+-(instancetype)initWithTarget:(NSDictionary*)target
 method:(RKBLEMethod) method
 writeValue:(NSData*)writeValue;
 
@@ -149,7 +144,7 @@ writeValue:(NSData*)writeValue;
 
 -(BOOL)isCanceled;
 
--(Response<ObjectType>*)parseNetworkResponse:(BLEResponse*)response;
+-(Response<ObjectType>*)parseBLEResponse:(BLEResponse*)response;
 
 -(void)deliverResponse:(ObjectType)response;
 

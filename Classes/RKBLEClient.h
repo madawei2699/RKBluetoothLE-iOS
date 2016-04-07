@@ -7,19 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RequestQueue.h"
 #import "BLEStack.h"
 
+/**
+ *  蓝牙库对外暴露API
+ */
 @interface RKBLEClient : NSObject
 
+@property (nonatomic,strong) id<Bluetooth> ble;
+
+/**
+ *  必须使用单例创建对象
+ *
+ *  @return 
+ */
 +(instancetype)shareClient;
 
--(instancetype)init;
-
 -(RACSignal*) performRequest:(BLERequest*) request;
-
--(RACSignal*) bleConnectSignal;
-
-- (void)closeBLE;
 
 @end

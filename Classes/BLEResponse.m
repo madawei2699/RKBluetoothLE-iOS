@@ -11,7 +11,7 @@
 @implementation BLEResponse
 
 -(void)dealloc{
-    NSLog(@"BLEResponse:dealloc");
+    NSLog(@"~BLEResponse:dealloc");
 }
 
 @end

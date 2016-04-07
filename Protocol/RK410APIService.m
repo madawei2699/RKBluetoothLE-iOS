@@ -12,6 +12,8 @@
 #import "RKBLEClient.h"
 #import "BLERequest.h"
 
+#import "KeyEventResponse.h"
+
 //---------------------------服务------------------------------------------
 // 车精灵服务
 static NSString* const SERVICE_SPIRIT_SYNC_DATA = @"9900";
@@ -114,7 +116,11 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
     CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
     NSData *authCode = [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
     
-    BLERequest *authRequest = [[BLERequest alloc] initWithReponseClass:nil target:[RKBLEUtil createTarget:_peripheralName service:SERVICE_SPIRIT_SYNC_DATA characteristic:SPIRIT_AUTH_CODE] method:RKBLEMethodWrite writeValue:authCode];
+    BLERequest *authRequest = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:_peripheralName
+                                                                                 service:SERVICE_SPIRIT_SYNC_DATA
+                                                                          characteristic:SPIRIT_AUTH_CODE]
+                                                                method:RKBLEMethodWrite
+                                                            writeValue:authCode];
     authRequest.dataParseProtocol = self;
     authRequest.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
@@ -167,7 +173,6 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 
 @interface RK410APIService(){
     BLEDataParseProtocolImpl *mBLEDataParseProtocolImpl;
-    RKBLEClient *mRKBLEClient;
 }
 
 @end
@@ -189,20 +194,46 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
     self = [super init];
     if (self) {
         mBLEDataParseProtocolImpl = [[BLEDataParseProtocolImpl alloc] init];
-        mRKBLEClient = [[RKBLEClient alloc] init];
     }
     return self;
 }
 
--(RACSignal*)lock:(NSString*)target{
+typedef NS_ENUM(NSInteger, KeyEventType) {
     
-    Byte values[1] = {0x00};
-    BLERequest *request = [[BLERequest alloc] initWithReponseClass:nil
-                                                      target:[RKBLEUtil createTarget:target
+    KeyEventTypeLock    = 0,
+    KeyEventTypeUnlock  = 1,
+    KeyEventTypeSearch  = 2,
+    KeyEventTypeOpenBox = 3,
+    
+};
+
+-(BLERequest*)createKeyEventRequest:(NSString*)target keyEventType:(KeyEventType)actionIndex{
+    
+    Byte requestParame[1] = {0x00};
+    
+    switch (actionIndex) {
+        case KeyEventTypeLock:
+            requestParame[0] = 0x00;
+            break;
+        case KeyEventTypeUnlock:
+            requestParame[0] = 0x11;
+            break;
+        case KeyEventTypeSearch:
+            requestParame[0] = 0x01;
+            break;
+        case KeyEventTypeOpenBox:
+            requestParame[0] = 0x02;
+            break;
+            
+        default:
+            break;
+    }
+
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:SPIRIT_KEYFUNC]
                                                       method:RKBLEMethodWrite
-                                                  writeValue:[[NSData alloc] initWithBytes:&values length:sizeof(values)]];
+                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
     
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
@@ -214,9 +245,69 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
         }
         
     };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        unsigned char state;
+        [data getBytes:&state range:NSMakeRange(0, 1)];
+        if (state == 0) {
+            mKeyEventResponse.success = YES;
+        } else {
+            mKeyEventResponse.success = NO;
+        }
+        return mKeyEventResponse;
+    };
     
-    return  [mRKBLEClient performRequest:request];
+    return request;
+}
+
+/**
+ *  锁车
+ *
+ *  @param target
+ *
+ *  @return
+ */
+-(RACSignal*)lock:(NSString*)target{
     
+    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeLock]];
+    
+}
+
+/**
+ *  解锁
+ *
+ *  @param target
+ *
+ *  @return
+ */
+-(RACSignal*)unlock:(NSString*)target{
+    
+    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeUnlock]];
+    
+}
+
+/**
+ *  寻车
+ *
+ *  @param target
+ *
+ *  @return
+ */
+-(RACSignal*)search:(NSString*)target{
+    
+    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeSearch]];
+}
+
+/**
+ *  开启座桶
+ *
+ *  @param target
+ *
+ *  @return
+ */
+-(RACSignal*)openBox:(NSString*)target{
+    
+    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeOpenBox]];
 }
 
 @end

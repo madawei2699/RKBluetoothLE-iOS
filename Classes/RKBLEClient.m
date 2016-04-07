@@ -7,9 +7,9 @@
 //
 
 #import "RKBLEClient.h"
+#import "RequestQueue.h"
 
 
-NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
 
 @interface RKBLEClient(){
     
@@ -37,14 +37,8 @@ NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
     self = [super init];
     if (self) {
         mCurrentRequests = [[NSMutableArray alloc] init];
-        //创建蓝牙处理模块类
-        BLEStack *mBLEStack = [BLEStack shareClient];
-        mBLEStack.connectProgressBlock = ^(RKBLEConnectState mRKBLEState,CBCentralManagerState mCMState, NSError * error){
-            [[NSNotificationCenter defaultCenter] postNotificationName:RKBLEConnectNotification object:nil userInfo:error ?@{@"RKBLEConnectState":@(mRKBLEState),@"CBCentralManagerState":@(mCMState),@"NSError" : error} : @{@"RKBLEConnectState":@(mRKBLEState),@"CBCentralManagerState":@(mCMState)}
-             ];
-        };
-        
-        _mRequestQueue =  [[RequestQueue alloc] initWithBluetooth:mBLEStack];
+        _ble = [BLEStack shareClient];
+        _mRequestQueue = [[RequestQueue alloc] initWithBluetooth:_ble];
         [_mRequestQueue start];
     }
     return self;
@@ -53,14 +47,18 @@ NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
 -(void)performRequest:(BLERequest*) request
               success:(void (^)(id responseObject))success
               failure:(void (^)(NSError* error))failure{
+    
     request.mRequestSuccessBlock = success;
     request.mRequestErrorBlock = failure;
     [self.mRequestQueue add:request];
+    
     [mCurrentRequests removeObject:request];
 }
 
 -(RACSignal*)performRequest:(BLERequest*) request{
+    
     [mCurrentRequests addObject:request];
+    
     @weakify(self)
     return [RACSignal createSignal:^RACDisposable *(id subscriber) {
         
@@ -75,18 +73,12 @@ NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
                          [subscriber sendError:error];
                      }];
         
-        return nil;
+        return [RACDisposable disposableWithBlock:^{
+            [mCurrentRequests removeObject:request];
+        }];
         
     }];
     
-}
-
--(RACSignal*) bleConnectSignal{
-    return [[NSNotificationCenter defaultCenter] rac_addObserverForName:RKBLEConnectNotification object:nil];
-}
-
--(void)closeBLE{
-    [[BLEStack shareClient] closeBLE];
 }
 
 @end

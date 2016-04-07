@@ -8,6 +8,7 @@
 
 #import "BLEStack.h"
 #import "RKBLEUtil.h"
+#import "BLEResponse.h"
 
 NSString * const BLEStackErrorDomain         = @"BLEStackErrorDomain";
 
@@ -19,7 +20,16 @@ NSString * const BLEStackErrorTimeOutDesc    = @"当前业务处理超时";
 NSString * const BLEStackErrorDisconnectDesc = @"蓝牙连接断开";
 NSString * const BLEStackErrorAuthDesc       = @"鉴权失败";
 
+
+NSString * const RKBLEConnectNotification = @"RKBLEConnectNotification";
+
+NSString * const ConnectStateKey          = @"ConnectStateKey";
+NSString * const CentralManagerStateKey   = @"CentralManagerStateKey";
+NSString * const CentralManagerErrorKey   = @"CentralManagerErrorKey";
+
 static BOOL bAuthOK = NO;
+
+typedef void (^ScanResult)(CBPeripheral *peripheral);
 
 @interface BLEStack()<CBCentralManagerDelegate,CBPeripheralDelegate>{
     
@@ -28,6 +38,12 @@ static BOOL bAuthOK = NO;
     CBPeripheral        *activePeripheral;
     //主设备
     CBCentralManager    *centralManager;
+    
+    volatile BOOL       scanModel;
+    
+    ScanFilter          mScanFilter;
+    
+    ScanResult          mScanResult;
     
 }
 
@@ -64,7 +80,7 @@ static BOOL bAuthOK = NO;
         //创建串行队列
         dispatch_queue_t  queue = dispatch_queue_create("com.rokyinfo.BLEStack", NULL);
         centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:queue];
-        
+    
     }
     
     return self;
@@ -78,6 +94,11 @@ static BOOL bAuthOK = NO;
 
 #pragma mark -
 #pragma mark 公共方法
+
+-(RACSignal*) bleConnectSignal{
+    return [[NSNotificationCenter defaultCenter] rac_addObserverForName:RKBLEConnectNotification object:nil];
+}
+
 -(RACSignal*)performRequest:(BLERequest*)request{
     
     @weakify(self)
@@ -86,7 +107,9 @@ static BOOL bAuthOK = NO;
         
         @strongify(self)
         self.successBlock = ^(BLERequest* reqest, id responseObject){
-            [subscriber sendNext:responseObject];
+            BLEResponse *mBLEResponse = [[BLEResponse alloc] init];
+            mBLEResponse.data = responseObject;
+            [subscriber sendNext:mBLEResponse];
             [subscriber sendCompleted];
         };
         self.failureBlock = ^(BLERequest* reqest,NSError* error){
@@ -101,10 +124,38 @@ static BOOL bAuthOK = NO;
     
 }
 
--(void)finish{
+-(void)finish:(BLERequest*) request{
+    if(self.request == request){
+        if (!scanModel) {
+            [self stopScan:nil];
+        }
+        self.request = nil;
+        self.targetRequest = nil;
+    }
+}
+
+- (RACSignal*) scanWitchFilter:(ScanFilter) _mScanFilter{
+    
+    mScanFilter = _mScanFilter;
+    
+    @weakify(self)
+    return [RACSignal createSignal:^RACDisposable *(id subscriber) {
+        
+        @strongify(self)
+        [self scanForPeripherals:^(CBPeripheral *peripheral){
+            [subscriber sendNext:peripheral];
+        }];
+        
+        return [RACDisposable disposableWithBlock:^{
+            [self stopScan];
+        }];
+        
+    }];
+}
+
+-(void)stopScan{
+    scanModel = NO;
     [self stopScan:nil];
-    self.request = nil;
-    self.targetRequest = nil;
 }
 
 - (void)closeBLE{
@@ -117,7 +168,13 @@ static BOOL bAuthOK = NO;
 #pragma mark -
 #pragma mark 私有方法
 
-- (void)setBLEState:(RKBLEConnectState)mRKBLEState error:(NSError*)error
+-(void)scanForPeripherals:(ScanResult)_ScanResult{
+    scanModel = YES;
+    mScanResult = _ScanResult;
+    [centralManager scanForPeripheralsWithServices:nil options:nil];
+}
+
+- (void)didUpdateBLEState:(RKBLEConnectState)mRKBLEState error:(NSError*)error
 {
     _BLEState = mRKBLEState;
     
@@ -149,9 +206,9 @@ static BOOL bAuthOK = NO;
             break;
     }
     
-    if (self.connectProgressBlock) {
-        self.connectProgressBlock(_BLEState,_CMState,error);
-    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:RKBLEConnectNotification object:nil userInfo:error ?@{ConnectStateKey:@(_BLEState),CentralManagerStateKey:@(_CMState),CentralManagerErrorKey : error} : @{ConnectStateKey:@(mRKBLEState),CentralManagerStateKey:@(_CMState)}
+     ];
     
     if (self.failureBlock) {
         //任务开始运行后，发现蓝牙连接断开或者蓝牙连接失败则发出通知任务执行失败
@@ -218,7 +275,7 @@ static BOOL bAuthOK = NO;
 -(void)connectWithHaving:(CBPeripheral *)peripheral{
     
     
-    [self setBLEState:RKBLEStateStart error:nil];
+    [self didUpdateBLEState:RKBLEStateStart error:nil];
     
     [self stopScan:nil];
     
@@ -250,7 +307,7 @@ static BOOL bAuthOK = NO;
         } else {
             
             CBUUID *uuid_service = [CBUUID UUIDWithString:self.request.service];
-            CBUUID *uuid_char = [CBUUID UUIDWithString:self.request.characteristic];
+            CBUUID *uuid_char    = [CBUUID UUIDWithString:self.request.characteristic];
             
             CBCharacteristic *mCBCharacteristic = [RKBLEUtil findCharacteristicFromUUID:uuid_char service:[RKBLEUtil findServiceFromUUID:uuid_service p:peripheral]];
             
@@ -268,6 +325,11 @@ static BOOL bAuthOK = NO;
                 NSLog(@"BLEStack => 写入特征:%@ 值：%@",mCBCharacteristic.UUID,self.request.writeValue);
                 [peripheral writeValue:self.request.writeValue forCharacteristic:mCBCharacteristic type:CBCharacteristicWriteWithResponse];
                 
+            } else if(self.request.method == RKBLEMethodNotify){
+                
+                NSLog(@"BLEStack => 监听特征:%@", mCBCharacteristic.UUID);
+                [peripheral setNotifyValue:YES forCharacteristic:mCBCharacteristic];
+                
             }
             
         }
@@ -283,6 +345,8 @@ static BOOL bAuthOK = NO;
  *  @param characteristic 特征
  */
 -(void)parseResponse:(CBCharacteristic *)characteristic channel:(RKBLEResponseChannel)channel{
+    
+    //通知类型单独发送广播
     
     
     if (![self.request hasHadResponseDelivered]) {
@@ -349,7 +413,7 @@ static BOOL bAuthOK = NO;
         self.successBlock(self.request,mCBCharacteristic.value ? mCBCharacteristic.value :[[NSData alloc] init]);
     }
     
-    [self finish];
+    [self finish:self.request];
     
 }
 
@@ -369,7 +433,7 @@ static BOOL bAuthOK = NO;
         self.failureBlock(self.request,error);
     }
     
-    [self finish];
+    [self finish:self.request];
 }
 
 
@@ -471,6 +535,7 @@ static BOOL bAuthOK = NO;
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central{
     _CMState = central.state;
+    [self didUpdateBLEState:_BLEState error:nil];
 }
 
 - (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary *)dict{
@@ -479,10 +544,19 @@ static BOOL bAuthOK = NO;
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
+    if (scanModel) {
+        
+        if (mScanFilter && mScanFilter(peripheral)) {
+            mScanResult(peripheral);
+        }
+        return;
+    }
+    
+    
     NSLog(@"BLEStack => discover:%@",peripheral.name);
     if([self.request.peripheralName isEqualToString:peripheral.name]) {
         [self stopScan:nil];
-        [self setBLEState:RKBLEStateConnecting error:nil];
+        [self didUpdateBLEState:RKBLEStateConnecting error:nil];
         
         activePeripheral = peripheral;
         [centralManager connectPeripheral:activePeripheral
@@ -492,7 +566,7 @@ static BOOL bAuthOK = NO;
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    [self setBLEState:RKBLEStateConnected error:nil];
+    [self didUpdateBLEState:RKBLEStateConnected error:nil];
     //设置委托
     activePeripheral = peripheral;
     [activePeripheral setDelegate:self];
@@ -502,7 +576,7 @@ static BOOL bAuthOK = NO;
 
 -(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    [self setBLEState:RKBLEStateFailure error:error];
+    [self didUpdateBLEState:RKBLEStateFailure error:error];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error{
@@ -511,7 +585,7 @@ static BOOL bAuthOK = NO;
     {
         NSLog(@"BLEStack => didDisconnectPeripheral for %@ with error: %@", peripheral.name, [error localizedDescription]);
     }
-    [self setBLEState:RKBLEStateDisconnect error:error];
+    [self didUpdateBLEState:RKBLEStateDisconnect error:error];
     
 }
 

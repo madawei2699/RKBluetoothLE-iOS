@@ -8,6 +8,7 @@
 
 #import "BLERequest.h"
 #import "RequestQueue.h"
+#import "DefaultBLEDataParseProtocol.h"
 
 static  BOOL  LOG_ENABLED = YES;
 
@@ -18,28 +19,26 @@ static  BOOL  LOG_ENABLED = YES;
     BOOL mResponseDelivered;
     
     BOOL mCanceled;
-    
-    Class reponseEntityClass;
+
 }
 
 @end
 
 @implementation BLERequest
 
--(instancetype)initWithReponseClass:(Class)reponseClass
-                             target:(NSDictionary*)target
+-(instancetype)initWithTarget:(NSDictionary*)target
                              method:(RKBLEMethod) method
                          writeValue:(NSData*)writeValue{
 
     self = [super init];
     if (self) {
-        reponseEntityClass = reponseClass;
         _peripheralName = target[@"peripheralName"];
         _service = target[@"service"];
         _characteristic = target[@"characteristic"];
         _method = method;
         _writeValue = writeValue;
         
+        _dataParseProtocol = [[DefaultBLEDataParseProtocol alloc] init];
         _identifier = [[NSUUID UUID] UUIDString];
     }
     return self;
@@ -111,28 +110,21 @@ static  BOOL  LOG_ENABLED = YES;
     self.effectiveResponse = nil;
 }
 
--(Response*)parseNetworkResponse:(BLEResponse*)response{
+-(Response*)parseBLEResponse:(BLEResponse*)response{
     
-    id target = [[reponseEntityClass alloc] init];
-    SEL action = @selector(byteToEntity:);
-    
-    if (target == nil) {
-        
+    if (self.parseBLEResponseData) {
+        id entity = self.parseBLEResponseData(response.data);
+        if ([entity isKindOfClass:[NSError class]]) {
+            return [Response error:entity];
+        } else {
+            return [Response success:entity];
+        }
+    } else {
         return [Response error:[NSError errorWithDomain:@"BLERequestDomain"
                                                    code:0
-                                               userInfo:@{ NSLocalizedDescriptionKey: @"实体对象创建失败" }]];
+                                               userInfo:@{ NSLocalizedDescriptionKey: @"实体对象没有实现parseBLEResponseData block" }]];
     }
     
-    if ([target respondsToSelector:action]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        return [Response success:[target performSelector:action withObject:response.data]];
-#pragma clang diagnostic pop
-    }
-    
-    return [Response error:[NSError errorWithDomain:@"BLERequestDomain"
-                                               code:0
-                                           userInfo:@{ NSLocalizedDescriptionKey: @"实体对象没有实现BLEDataEntityProtocol协议" }]];
 }
 
 -(void)dealloc{

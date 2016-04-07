@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreBluetooth/CoreBluetooth.h>
+
 #import "BLERequest.h"
 #import "Bluetooth.h"
 
@@ -22,6 +22,10 @@ extern NSString * const BLEStackErrorTimeOutDesc;
 extern NSString * const BLEStackErrorDisconnectDesc;
 extern NSString * const BLEStackErrorAuthDesc;
 
+//notify error key
+extern NSString * const ConnectStateKey;
+extern NSString * const CentralManagerStateKey;
+extern NSString * const CentralManagerErrorKey;
 
 typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 
@@ -37,8 +41,6 @@ typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 
 @class BLEStack;
 
-//连接状态回调
-typedef void (^RKConnectProgressBlock)(RKBLEConnectState mRKBLEState,CBCentralManagerState mCMState, NSError * error);
 //处理成功
 typedef void (^RKSuccessBlock)(BLERequest *request, NSData *responseObject);
 //处理失败
@@ -50,24 +52,10 @@ typedef void (^RKFailureBlock)(BLERequest *request, NSError *error);
 
 @property (nonatomic,assign ,readonly) CBCentralManagerState  CMState;
 
-@property (nonatomic,copy            ) RKConnectProgressBlock connectProgressBlock;
-
 @property (nonatomic,copy            ) RKSuccessBlock         successBlock;
 
 @property (nonatomic,copy            ) RKFailureBlock         failureBlock;
 
 +(instancetype)shareClient;
-
-/**
- *  执行请求
- *
- *  @param request
- */
--(RACSignal*)performRequest:(BLERequest*)request;
-
-/**
- *  结束请求
- */
--(void)finish;
 
 @end
