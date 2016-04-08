@@ -15,6 +15,8 @@ static dispatch_semaphore_t sem;
     
     volatile BOOL mQuit;
     
+    NSDate *startTimeMs;
+    
 }
 
 @property(nonatomic,weak) RKBlockingQueue<BLERequest*> *mQueue;
@@ -70,46 +72,66 @@ static dispatch_semaphore_t sem;
                 
                 __block BLEResponse *mBLEResponse = nil;
                 __block NSError *bleError = nil;
-                // Parse the response here on the worker thread.
-                RACSignal* responseRACSignal = [self.bluetooth performRequest:request];
-                [[[responseRACSignal
-                  subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"PerformRequest"]]
-                  timeout:8
-                  onScheduler:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"Timeout"]]
-                 subscribeNext:^(id x) {
-                     
-                     mBLEResponse = x;
-                     
-                     //唤醒线程
-                     dispatch_semaphore_signal(sem);
-                     
-                 }
-                 error:^(NSError *error) {
-                     
-                     bleError = error;
-                     
-                     if ([bleError.domain isEqualToString:RACSignalErrorDomain] && bleError.code == RACSignalErrorTimedOut) {
-                         
-                         bleError = [NSError errorWithDomain:BLEStackErrorDomain
-                                                        code:BLEStackErrorTimeOut
-                                                    userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
-                         [self.bluetooth finish:request];
-                     }
-                     
-                     //唤醒线程
-                     dispatch_semaphore_signal(sem);
-                 }];
                 
-                //等待BLE处理结束如果不结束则一直等待
-                while (!mQuit && mBLEResponse == nil && bleError == nil) {
-                    //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
-                    if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 60 * NSEC_PER_SEC )) != 0)
-                    {
-                        bleError = [NSError errorWithDomain:BLEStackErrorDomain
-                                                       code:BLEStackErrorTimeOut
-                                                   userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
+                //---------------------------------------------loop to retry-------------------------------------------
+                while (true) {
+                    
+                    // Parse the response here on the worker thread.
+                    RACSignal* responseRACSignal = [self.bluetooth performRequest:request];
+                    [[[responseRACSignal
+                       subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"PerformRequest"]]
+                      timeout:[request getTimeoutS]
+                      onScheduler:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"Timeout"]]
+                     subscribeNext:^(id x) {
+                         
+                         mBLEResponse = x;
+                         
+                         //唤醒线程
+                         dispatch_semaphore_signal(sem);
+                         
+                     }
+                     error:^(NSError *error) {
+                         
+                         bleError = error;
+                         
+                         if ([bleError.domain isEqualToString:RACSignalErrorDomain] && bleError.code == RACSignalErrorTimedOut) {
+                             
+                             bleError = [NSError errorWithDomain:BLEStackErrorDomain
+                                                            code:BLEStackErrorTimeOut
+                                                        userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
+                             [self.bluetooth finish:request];
+                         }
+                         
+                         //唤醒线程
+                         dispatch_semaphore_signal(sem);
+                     }];
+                    
+                    startTimeMs = [NSDate date];
+                    
+                    //等待BLE处理结束如果不结束则一直等待
+                    while (!mQuit && mBLEResponse == nil && bleError == nil) {
+                        //等待信号，可以设置超时参数。该函数返回0表示得到通知，非0表示超时
+                        if(dispatch_semaphore_wait (sem, dispatch_time ( DISPATCH_TIME_NOW , 60 * NSEC_PER_SEC )) != 0)
+                        {
+                            bleError = [NSError errorWithDomain:BLEStackErrorDomain
+                                                           code:BLEStackErrorTimeOut
+                                                       userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorTimeOutDesc }];
+                        }
                     }
+                    
+                    mBLEResponse.bleTimeMs = -[startTimeMs timeIntervalSinceNow];
+                    
+                    if (mBLEResponse) {
+                        break;
+                    } else if([[request getRetryPolicy] retry:bleError]){
+                        break;
+                    } else {
+                        bleError = nil;
+                        [request addMarker:@"ble-retry"];
+                    }
+                    
                 }
+                //---------------------------------------------loop-------------------------------------------
                 
                 if (mQuit) {
                     return;
@@ -129,6 +151,13 @@ static dispatch_semaphore_t sem;
                     
                     [self.mDelivery postResponse:request response:response];
                     
+                }
+                
+                //处理特定指令需要间隔一段时间后才能发生下一条
+                float mDelayTime = [[request getRetryPolicy] getDelayTime] - (-[startTimeMs timeIntervalSinceNow]);
+                if ( mDelayTime > 0) {
+                    [request addMarker:[NSString stringWithFormat:@"ble-delay%.3fs",mDelayTime]];
+                    [NSThread sleepForTimeInterval:mDelayTime];
                 }
                 
             }

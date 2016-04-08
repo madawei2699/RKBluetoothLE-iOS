@@ -9,6 +9,7 @@
 #import "BLERequest.h"
 #import "RequestQueue.h"
 #import "DefaultBLEDataParseProtocol.h"
+#import "DefaultRetryPolicy.h"
 
 static  BOOL  LOG_ENABLED = YES;
 
@@ -20,6 +21,7 @@ static  BOOL  LOG_ENABLED = YES;
     
     BOOL mCanceled;
 
+    id<RetryPolicy> mRetryPolicy;
 }
 
 @end
@@ -38,6 +40,7 @@ static  BOOL  LOG_ENABLED = YES;
         _method = method;
         _writeValue = writeValue;
         
+        mRetryPolicy = [[DefaultRetryPolicy alloc] init];
         _dataParseProtocol = [[DefaultBLEDataParseProtocol alloc] init];
         _identifier = [[NSUUID UUID] UUIDString];
     }
@@ -60,6 +63,11 @@ static  BOOL  LOG_ENABLED = YES;
 
 -(NSInteger)getSequence{
     return mSequence;
+}
+
+-(BLERequest *)setRetryPolicy:(id<RetryPolicy>)retryPolicy{
+    mRetryPolicy = retryPolicy;
+    return self;
 }
 
 -(void)addMarker:(NSString*)mark{
@@ -86,6 +94,14 @@ static  BOOL  LOG_ENABLED = YES;
     if (self.mRequestErrorBlock) {
         self.mRequestErrorBlock(error);
     }
+}
+
+-(int) getTimeoutS{
+    return [mRetryPolicy getCurrentTimeoutS];
+}
+
+-(id<RetryPolicy>)getRetryPolicy{
+    return mRetryPolicy;
 }
 
 -(void)markDelivered{

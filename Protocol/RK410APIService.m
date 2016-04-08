@@ -12,7 +12,7 @@
 #import "RKBLEClient.h"
 #import "BLERequest.h"
 
-#import "KeyEventResponse.h"
+
 
 //---------------------------服务------------------------------------------
 // 车精灵服务
@@ -270,7 +270,6 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
 -(RACSignal*)lock:(NSString*)target{
     
     return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeLock]];
-    
 }
 
 /**
@@ -283,7 +282,6 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
 -(RACSignal*)unlock:(NSString*)target{
     
     return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeUnlock]];
-    
 }
 
 /**

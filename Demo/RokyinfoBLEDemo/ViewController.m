@@ -27,9 +27,9 @@
     RACSignal *mRACSignal = [[RK410APIService shareService] openBox:@"B00G10B6F3"];
     [[mRACSignal
       deliverOnMainThread]
-     subscribeNext:^(id x) {
+     subscribeNext:^(KeyEventResponse *response) {
          
-         NSLog(@"----------------:%@",x);
+         NSLog(@"----------------:%d",response.success);
          
      }
      error:^(NSError *error) {
@@ -76,12 +76,11 @@
 //         
 //     }];
     
-    RACSignal* scanRACSignal = [[RKBLEClient shareClient].ble scanWitchFilter:^(CBPeripheral *peripheral){
+    RACSignal *scanRACSignal = [[RKBLEClient shareClient].ble scanWitchFilter:^(CBPeripheral *peripheral){
         return YES;
     }];
     
-   mRACDisposable = [[scanRACSignal
-                                       deliverOnMainThread]
+    mRACDisposable = [[scanRACSignal deliverOnMainThread]
                                      subscribeNext:^(id x) {
                                          
                                          NSLog(@"----------------:%@",x);

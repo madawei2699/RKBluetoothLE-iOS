@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "BLEResponse.h"
 #import "Response.h"
-
+#import "RetryPolicy.h"
 
 typedef NS_ENUM(NSInteger, RKBLEMethod) {
     
@@ -138,6 +138,8 @@ writeValue:(NSData*)writeValue;
 
 -(NSInteger)getSequence;
 
+-(BLERequest<ObjectType> *)setRetryPolicy:(id<RetryPolicy>)retryPolicy;
+
 -(void)addMarker:(NSString*)mark;
 
 -(void)cancel;
@@ -149,6 +151,10 @@ writeValue:(NSData*)writeValue;
 -(void)deliverResponse:(ObjectType)response;
 
 -(void)deliverError:(NSError*)error;
+
+-(int) getTimeoutS;
+
+-(id<RetryPolicy>)getRetryPolicy;
 
 -(void)markDelivered;
 

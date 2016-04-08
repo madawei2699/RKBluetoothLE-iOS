@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "KeyEventResponse.h"
 
 @interface RK410APIService : NSObject
 

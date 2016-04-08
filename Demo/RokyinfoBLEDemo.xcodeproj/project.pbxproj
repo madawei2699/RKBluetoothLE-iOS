@@ -12,6 +12,7 @@
 		182F78E21C92B08300AD3652 /* BLEStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEStack.m */; };
 		182F78E31C92B08300AD3652 /* BLEStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 182F78E11C92B08300AD3652 /* BLEStack.m */; };
 		184F847A1CAA76AB009016A0 /* RKBLEDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 184F84791CAA76AB009016A0 /* RKBLEDispatcher.m */; };
+		186BEF821CB7781B00B08C43 /* DefaultRetryPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 186BEF811CB7781B00B08C43 /* DefaultRetryPolicy.m */; };
 		18790DF71C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
 		18790DF81C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
 		18790DFB1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
@@ -57,6 +58,9 @@
 		182F78E11C92B08300AD3652 /* BLEStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEStack.m; sourceTree = "<group>"; };
 		184F84781CAA76AB009016A0 /* RKBLEDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKBLEDispatcher.h; sourceTree = "<group>"; };
 		184F84791CAA76AB009016A0 /* RKBLEDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKBLEDispatcher.m; sourceTree = "<group>"; };
+		186BEF7F1CB74CC900B08C43 /* RetryPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RetryPolicy.h; sourceTree = "<group>"; };
+		186BEF801CB7781B00B08C43 /* DefaultRetryPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultRetryPolicy.h; sourceTree = "<group>"; };
+		186BEF811CB7781B00B08C43 /* DefaultRetryPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefaultRetryPolicy.m; sourceTree = "<group>"; };
 		18790DF51C91738500A619DC /* RKFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKFrame.h; sourceTree = "<group>"; };
 		18790DF61C91738500A619DC /* RKFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKFrame.m; sourceTree = "<group>"; };
 		18790DF91C91739800A619DC /* RKPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKPackage.h; sourceTree = "<group>"; };
@@ -261,6 +265,9 @@
 				18BDDE6D1CAB7674006E8C0F /* BLEResponse.m */,
 				18EFD8F41CB65CE4004CD1E2 /* DefaultBLEDataParseProtocol.h */,
 				18EFD8F51CB65CE4004CD1E2 /* DefaultBLEDataParseProtocol.m */,
+				186BEF7F1CB74CC900B08C43 /* RetryPolicy.h */,
+				186BEF801CB7781B00B08C43 /* DefaultRetryPolicy.h */,
+				186BEF811CB7781B00B08C43 /* DefaultRetryPolicy.m */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -486,6 +493,7 @@
 				184F847A1CAA76AB009016A0 /* RKBLEDispatcher.m in Sources */,
 				F53B69C61CAAB4B500A6B2CB /* RequestQueue.m in Sources */,
 				18CEB5161CB6263100C4EDC5 /* KeyEventResponse.m in Sources */,
+				186BEF821CB7781B00B08C43 /* DefaultRetryPolicy.m in Sources */,
 				18BDDE6B1CAB762A006E8C0F /* Response.m in Sources */,
 				18BDDE6E1CAB7674006E8C0F /* BLEResponse.m in Sources */,
 				18790DF71C91738500A619DC /* RKFrame.m in Sources */,
