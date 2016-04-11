@@ -37,13 +37,29 @@
          NSLog(@"----------------:%@",error);
          
      }];
-    RACSignal *bleConnectSignal = [[RKBLEClient shareClient].ble bleConnectSignal];
     
-    RACDisposable *mRACDisposable = [[bleConnectSignal
-      subscribeOn:[RACScheduler mainThreadScheduler]]
-     subscribeNext:^(id x) {
+//    RACSignal *bleConnectSignal = [[RKBLEClient shareClient].ble bleConnectSignal];
+//    
+//    RACDisposable *mRACDisposable = [[bleConnectSignal
+//      subscribeOn:[RACScheduler mainThreadScheduler]]
+//     subscribeNext:^(id x) {
+//         
+//         NSLog(@"----------------:%@",x);
+//         
+//     }
+//     error:^(NSError *error) {
+//         
+//         NSLog(@"----------------:%@",error);
+//         
+//     }];
+//    [mRACDisposable dispose];
+    
+    mRACSignal = [[RK410APIService shareService] search:@"B00G10B6F3"];
+    [[mRACSignal
+      deliverOnMainThread]
+     subscribeNext:^(KeyEventResponse *response) {
          
-         NSLog(@"----------------:%@",x);
+         NSLog(@"----------------:%d",response.success);
          
      }
      error:^(NSError *error) {
@@ -51,7 +67,63 @@
          NSLog(@"----------------:%@",error);
          
      }];
-    [mRACDisposable dispose];
+    
+    mRACSignal = [[RK410APIService shareService] search:@"B00G10B6F3"];
+    [[mRACSignal
+      deliverOnMainThread]
+     subscribeNext:^(KeyEventResponse *response) {
+         
+         NSLog(@"----------------:%d",response.success);
+         
+     }
+     error:^(NSError *error) {
+         
+         NSLog(@"----------------:%@",error);
+         
+     }];
+    
+    mRACSignal = [[RK410APIService shareService] search:@"B00G10B6F3"];
+    [[mRACSignal
+      deliverOnMainThread]
+     subscribeNext:^(KeyEventResponse *response) {
+         
+         NSLog(@"----------------:%d",response.success);
+         
+     }
+     error:^(NSError *error) {
+         
+         NSLog(@"----------------:%@",error);
+         
+     }];
+    
+    mRACSignal = [[RK410APIService shareService] search:@"B00G10B6F3"];
+    [[mRACSignal
+      deliverOnMainThread]
+     subscribeNext:^(KeyEventResponse *response) {
+         
+         NSLog(@"----------------:%d",response.success);
+         
+     }
+     error:^(NSError *error) {
+         
+         NSLog(@"----------------:%@",error);
+         
+     }];
+    
+    mRACSignal = [[RK410APIService shareService] lock:@"B00G10B6F3"];
+    [[mRACSignal
+      deliverOnMainThread]
+     subscribeNext:^(KeyEventResponse *response) {
+         
+         NSLog(@"----------------:%d",response.success);
+         
+     }
+     error:^(NSError *error) {
+         
+         NSLog(@"----------------:%@",error);
+         
+     }];
+
     
 }
 

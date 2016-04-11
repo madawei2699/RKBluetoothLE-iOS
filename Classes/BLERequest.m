@@ -40,6 +40,7 @@ static  BOOL  LOG_ENABLED = YES;
         _method = method;
         _writeValue = writeValue;
         
+        _RKBLEpriority = NORMAL;
         mRetryPolicy = [[DefaultRetryPolicy alloc] init];
         _dataParseProtocol = [[DefaultBLEDataParseProtocol alloc] init];
         _identifier = [[NSUUID UUID] UUIDString];

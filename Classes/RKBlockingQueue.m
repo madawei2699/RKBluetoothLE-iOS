@@ -7,6 +7,7 @@
 //
 
 #import "RKBlockingQueue.h"
+#import "BLERequest.h"
 
 @interface RKBlockingQueue() {
     
@@ -29,18 +30,27 @@
 
 -(id)dequeue
 {
-    if ([array count] > 0) {
-        id object = [self peek];
-        [array removeObjectAtIndex:0];
-        return object;
+    @synchronized (self) {
+        if ([array count] > 0) {
+            id object = [self peek];
+            [array removeObjectAtIndex:0];
+            return object;
+        }
+        
+        return nil;
     }
-    
-    return nil;
 }
 
 -(void)enqueue:(id)element
 {
-    [array addObject:element];
+    @synchronized (self) {
+        [array addObject:element];
+        // 降序
+        // 10 --> 0
+        [array sortUsingComparator:^NSComparisonResult(__strong BLERequest* obj1,__strong BLERequest* obj2){
+            return obj1.RKBLEpriority < obj2.RKBLEpriority;
+        }];
+    }
 }
 
 -(void)enqueueElementsFromArray:(NSArray*)arr

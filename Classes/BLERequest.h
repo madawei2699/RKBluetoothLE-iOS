@@ -27,6 +27,16 @@ typedef NS_ENUM(NSInteger, RKBLEResponseChannel) {
     
 };
 
+typedef NS_ENUM(NSInteger, RKBLEPriority) {
+    
+    LOW       = 0,
+    NORMAL    = 1,
+    HIGH      = 2,
+    IMMEDIATE = 3,
+    
+};
+
+
 @class BLERequest;
 @protocol BLEDataParseProtocol<NSObject>
 
@@ -109,6 +119,8 @@ typedef void (^RequestErrorBlock)(NSError * error);
 @property (nonatomic,copy,readonly   ) NSString             *characteristic;
 
 @property (nonatomic,assign,readonly ) RKBLEMethod          method;
+
+@property (nonatomic,assign          ) RKBLEPriority        RKBLEpriority;
 
 @property (nonatomic,strong          ) NSData               *writeValue;
 

@@ -257,6 +257,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
         return mKeyEventResponse;
     };
     
+    request.RKBLEpriority = IMMEDIATE;
     return request;
 }
 
@@ -268,7 +269,6 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *  @return
  */
 -(RACSignal*)lock:(NSString*)target{
-    
     return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeLock]];
 }
 
