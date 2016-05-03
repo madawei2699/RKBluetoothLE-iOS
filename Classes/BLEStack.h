@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <CoreBluetooth/CoreBluetooth.h>
 #import "BLERequest.h"
 #import "Bluetooth.h"
 
@@ -45,6 +45,8 @@ typedef NS_ENUM(NSInteger, RKBLEConnectState) {
 typedef void (^RKSuccessBlock)(BLERequest *request, NSData *responseObject);
 //处理失败
 typedef void (^RKFailureBlock)(BLERequest *request, NSError *error);
+//扫描过滤器
+typedef BOOL (^ScanFilter)(CBPeripheral *peripheral);
 
 @interface BLEStack : NSObject<Bluetooth>
 
@@ -57,5 +59,46 @@ typedef void (^RKFailureBlock)(BLERequest *request, NSError *error);
 @property (nonatomic,copy            ) RKFailureBlock         failureBlock;
 
 +(instancetype)shareClient;
+
+/**
+ *  执行请求
+ *
+ *  @param request
+ *
+ *  @return
+ */
+- (RACSignal*) performRequest:(BLERequest*) request;
+
+/**
+ *  结束请求
+ */
+- (void)finish:(BLERequest*) request;
+
+
+/**
+ *  连接状态信号
+ *
+ *  @return
+ */
+-(RACSignal*) bleConnectSignal;
+
+/**
+ *  扫描
+ *
+ *  @param mScanFilter
+ *
+ *  @return
+ */
+- (RACSignal*) scanWitchFilter:(ScanFilter) mScanFilter;
+
+/**
+ *  停止扫描
+ */
+-(void)stopScan;
+
+/**
+ *  关闭连接
+ */
+- (void)closeBLE;
 
 @end

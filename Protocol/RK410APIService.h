@@ -14,7 +14,12 @@
 #import "RKFrame.h"
 #import "RequestQueue.h"
 
+//鉴权码生成器
+typedef id (^PostAuthCode)(NSString *peripheralName);
+
 @interface RK410APIService : NSObject
+
+@property(nonatomic,copy)PostAuthCode postAuthCode;
 
 -(id)initWithRequestQueue:(RequestQueue *)mRequestQueue;
 

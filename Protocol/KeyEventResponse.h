@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RKBLEClient.h"
+
 
 @interface KeyEventResponse : NSObject
 

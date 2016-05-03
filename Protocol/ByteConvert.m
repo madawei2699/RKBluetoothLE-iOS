@@ -11,10 +11,10 @@
 @implementation ByteConvert
 
 + (int)  bytesToUint:(Byte[]) array {
-    return ((long) (array[3] & 0xff))
+    return (int)(((long) (array[3] & 0xff))
     | ((long) (array[2] & 0xff)) << 8
     | ((long) (array[1] & 0xff)) << 16
-    | ((long) (array[0] & 0xff)) << 24;
+    | ((long) (array[0] & 0xff)) << 24);
 }
 
 + (int)  bytesToUshort:(Byte[]) b offset:(int) offset {

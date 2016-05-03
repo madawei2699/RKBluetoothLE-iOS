@@ -52,6 +52,18 @@
     [self.ble closeBLE];
 }
 
+/**
+ *  扫描设备
+ *
+ *  @param mScanFilter 设备过滤器
+ *
+ *  @return
+ */
+-(RACSignal*)scanBleDevices:(ScanFilter) mScanFilter{
+    return [self.ble scanWitchFilter:mScanFilter];
+}
+
+
 -(RK410APIService*)createRk410ApiService{
     return [[RK410APIService alloc] initWithRequestQueue:self.mRequestQueue];
 }

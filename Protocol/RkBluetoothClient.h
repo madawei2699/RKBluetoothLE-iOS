@@ -18,10 +18,32 @@
  */
 +(instancetype)shareClient;
 
+/**
+ *  获取连接状态
+ *
+ *  @return
+ */
 -(RACSignal*)observeConnectionStateChanges;
 
+/**
+ *  断开连接
+ */
 -(void)disconnect;
 
+/**
+ *  扫描设备
+ *
+ *  @param mScanFilter 设备过滤器
+ *
+ *  @return
+ */
+-(RACSignal*)scanBleDevices:(ScanFilter) mScanFilter;
+
+/**
+ *  获取RK410APIService
+ *
+ *  @return 
+ */
 -(RK410APIService*)createRk410ApiService;
 
 @end

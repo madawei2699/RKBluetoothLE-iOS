@@ -21,11 +21,11 @@ NSString * const BLEStackErrorDisconnectDesc = @"蓝牙连接断开";
 NSString * const BLEStackErrorAuthDesc       = @"鉴权失败";
 
 
-NSString * const RKBLEConnectNotification = @"RKBLEConnectNotification";
+NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
 
-NSString * const ConnectStateKey          = @"ConnectStateKey";
-NSString * const CentralManagerStateKey   = @"CentralManagerStateKey";
-NSString * const CentralManagerErrorKey   = @"CentralManagerErrorKey";
+NSString * const ConnectStateKey             = @"ConnectStateKey";
+NSString * const CentralManagerStateKey      = @"CentralManagerStateKey";
+NSString * const CentralManagerErrorKey      = @"CentralManagerErrorKey";
 
 static BOOL bAuthOK = NO;
 

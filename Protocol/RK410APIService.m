@@ -9,7 +9,6 @@
 #import "RK410APIService.h"
 #import "CocoaSecurity.h"
 #import "RKBLEUtil.h"
-#import "RKBLEClient.h"
 #import "BLERequest.h"
 #import "ByteConvert.h"
 
@@ -55,11 +54,13 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 
 //static int RBL_BLE_FRAMEWORK_VER                = 0x0200;
 
-@interface BLEDataParseProtocolImpl : NSObject<BLEDataParseProtocol>
+@interface Rk410BleProtocolImpl : NSObject<BLEDataParseProtocol>
+
+@property(nonatomic,copy)PostAuthCode postAuthCode;
 
 @end
 
-@implementation BLEDataParseProtocolImpl
+@implementation Rk410BleProtocolImpl
 
 /**
  *  当前蓝牙交互协议连接成功后是否需要鉴权
@@ -122,27 +123,36 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
  */
 - (void)createAuthProcessRequest:(void (^)(BLERequest* request,NSError* error))callBack peripheralName:(NSString*)_peripheralName{
     
-    CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
-    NSData *authCode = [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
-    
-    BLERequest *authRequest = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:_peripheralName
-                                                                                 service:SERVICE_SPIRIT_SYNC_DATA
-                                                                          characteristic:SPIRIT_AUTH_CODE]
-                                                          method:RKBLEMethodWrite
-                                                      writeValue:authCode];
-    authRequest.dataParseProtocol = self;
-    authRequest.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+    if (self.postAuthCode) {
         
-        if ([characteristic isEqualToString:SPIRIT_AUTH_CODE] && channel == RKBLEResponseNotify) {
-            return YES;
-        } else {
-            return NO;
+        id authCode = self.postAuthCode(_peripheralName);
+        
+        if ([authCode isKindOfClass:[NSError class]]) {
+            if (callBack) {
+                callBack(nil,authCode);
+            }
+            return;
         }
         
-    };
-    
-    if (callBack) {
-        callBack(authRequest,nil);
+        BLERequest *authRequest = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:_peripheralName
+                                                                                     service:SERVICE_SPIRIT_SYNC_DATA
+                                                                              characteristic:SPIRIT_AUTH_CODE]
+                                                              method:RKBLEMethodWrite
+                                                          writeValue:authCode];
+        authRequest.dataParseProtocol = self;
+        authRequest.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+            
+            if ([characteristic isEqualToString:SPIRIT_AUTH_CODE] && channel == RKBLEResponseNotify) {
+                return YES;
+            } else {
+                return NO;
+            }
+            
+        };
+        
+        if (callBack) {
+            callBack(authRequest,nil);
+        }
     }
     
 }
@@ -181,7 +191,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 
 
 @interface RK410APIService(){
-    BLEDataParseProtocolImpl *mBLEDataParseProtocolImpl;
+    Rk410BleProtocolImpl *mBLEDataParseProtocolImpl;
     
       NSMutableArray<BLERequest*> *mCurrentRequests;
 }
@@ -195,11 +205,18 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 -(id)initWithRequestQueue:(RequestQueue *)mRequestQueue{
     self = [super init];
     if (self) {
-        mBLEDataParseProtocolImpl = [[BLEDataParseProtocolImpl alloc] init];
+        mBLEDataParseProtocolImpl = [[Rk410BleProtocolImpl alloc] init];
         _mRequestQueue = mRequestQueue;
     }
     return self;
 }
+
+-(void)setPostAuthCode:(PostAuthCode)postAuthCode{
+    mBLEDataParseProtocolImpl.postAuthCode = postAuthCode;
+}
+
+#pragma mark -
+#pragma mark 私有方法
 
 -(void)performRequest:(BLERequest*) request
               success:(void (^)(id responseObject))success
@@ -240,6 +257,9 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
     }];
     
 }
+
+#pragma mark -
+#pragma mark 遥控器控制类指令
 
 typedef NS_ENUM(NSInteger, KeyEventType) {
     
@@ -351,6 +371,9 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeOpenBox]];
 }
 
+#pragma mark -
+#pragma mark 固件升级
+
 /**
  *  请求升级
  *
@@ -365,10 +388,10 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     Byte buildCount = (Byte)([_Firmware.version componentsSeparatedByString:@"."][1]).intValue;;
     
     Byte fileSize[3];
-    [[ByteConvert intToBytes:_Firmware.fileSize] getBytes:fileSize range:NSMakeRange(1, 3)];
+    [[ByteConvert intToBytes:(int)_Firmware.fileSize] getBytes:fileSize range:NSMakeRange(1, 3)];
     
     Byte singleFrameSize[2];
-    [[ByteConvert intToBytes:_Firmware.singleFrameSize] getBytes:singleFrameSize range:NSMakeRange(2, 2)];
+    [[ByteConvert intToBytes:(int)_Firmware.singleFrameSize] getBytes:singleFrameSize range:NSMakeRange(2, 2)];
     
     Byte requestParame[12] = {
         0x08,
