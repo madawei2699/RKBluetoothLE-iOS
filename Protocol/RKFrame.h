@@ -10,4 +10,6 @@
 
 @interface RKFrame : NSObject
 
+@property(nonatomic,copy)NSData *data;
+
 @end

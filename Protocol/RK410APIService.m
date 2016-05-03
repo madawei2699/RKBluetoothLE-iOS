@@ -11,6 +11,7 @@
 #import "RKBLEUtil.h"
 #import "RKBLEClient.h"
 #import "BLERequest.h"
+#import "ByteConvert.h"
 
 
 
@@ -43,6 +44,12 @@ static NSString* const SPIRIT_KEYFUNC           = @"9906";
 //    模拟按键	SPIRIT_KEYPRESS	0x9907	Write	模拟按键
 //#define SPIRIT_KEYPRESS             @"9907"
 
+//    1.1	固件升级控制（0x9908）
+static NSString* const FIRMWARE_UPGRADE         = @"9908";
+
+//    1.1	固件数据通道(0x9909)
+static NSString* const DATA_CHANNEL             = @"9909";
+
 //    配一配设置
 static NSString* const SPIRIT_SET_PARAM         = @"9801";
 
@@ -61,7 +68,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
  */
 -(BOOL)needAuthentication{
     
-    return YES;
+    return NO;
     
 }
 
@@ -84,6 +91,8 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
         } else if ([characteristic isEqualToString:SPIRIT_PARAM_RST]){
             return YES;
         } else if ([characteristic isEqualToString:SPIRIT_KEYFUNC]){
+            return YES;
+        } else if ([characteristic isEqualToString:FIRMWARE_UPGRADE]){
             return YES;
         }
         
@@ -119,8 +128,8 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
     BLERequest *authRequest = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:_peripheralName
                                                                                  service:SERVICE_SPIRIT_SYNC_DATA
                                                                           characteristic:SPIRIT_AUTH_CODE]
-                                                                method:RKBLEMethodWrite
-                                                            writeValue:authCode];
+                                                          method:RKBLEMethodWrite
+                                                      writeValue:authCode];
     authRequest.dataParseProtocol = self;
     authRequest.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
@@ -173,29 +182,63 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 
 @interface RK410APIService(){
     BLEDataParseProtocolImpl *mBLEDataParseProtocolImpl;
+    
+      NSMutableArray<BLERequest*> *mCurrentRequests;
 }
+
+@property (nonatomic,strong) RequestQueue *mRequestQueue;
 
 @end
 
 @implementation RK410APIService
 
-+(instancetype)shareService{
-    
-    static RK410APIService *share = nil;
-    static dispatch_once_t oneToken;
-    dispatch_once(&oneToken, ^{
-        share = [[RK410APIService alloc]init];
-    });
-    return share;
-    
-}
-
--(id)init{
+-(id)initWithRequestQueue:(RequestQueue *)mRequestQueue{
     self = [super init];
     if (self) {
         mBLEDataParseProtocolImpl = [[BLEDataParseProtocolImpl alloc] init];
+        _mRequestQueue = mRequestQueue;
     }
     return self;
+}
+
+-(void)performRequest:(BLERequest*) request
+              success:(void (^)(id responseObject))success
+              failure:(void (^)(NSError* error))failure{
+    
+    request.mRequestSuccessBlock = success;
+    request.mRequestErrorBlock = failure;
+    [self.mRequestQueue add:request];
+    
+    [mCurrentRequests removeObject:request];
+}
+
+-(RACSignal*)performRequest:(BLERequest*) request{
+    
+    [mCurrentRequests addObject:request];
+    
+    @weakify(self)
+    return [RACSignal createSignal:^RACDisposable *(id subscriber) {
+        
+        @strongify(self)
+        [self performRequest:request
+                     success:^( id responseObject){
+                         
+                         [subscriber sendNext:responseObject];
+                         [subscriber sendCompleted];
+                     }
+                     failure:^( NSError *error){
+                         [subscriber sendError:error];
+                     }];
+        
+        return [RACDisposable disposableWithBlock:^{
+            if (![request hasHadResponseDelivered]) {
+                [request cancel];
+            }
+            [mCurrentRequests removeObject:request];
+        }];
+        
+    }];
+    
 }
 
 typedef NS_ENUM(NSInteger, KeyEventType) {
@@ -228,7 +271,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
         default:
             break;
     }
-
+    
     BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:SPIRIT_KEYFUNC]
@@ -269,7 +312,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *  @return
  */
 -(RACSignal*)lock:(NSString*)target{
-    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeLock]];
+    return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeLock]];
 }
 
 /**
@@ -281,7 +324,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  */
 -(RACSignal*)unlock:(NSString*)target{
     
-    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeUnlock]];
+    return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeUnlock]];
 }
 
 /**
@@ -293,7 +336,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  */
 -(RACSignal*)search:(NSString*)target{
     
-    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeSearch]];
+    return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeSearch]];
 }
 
 /**
@@ -305,7 +348,248 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  */
 -(RACSignal*)openBox:(NSString*)target{
     
-    return  [[RKBLEClient shareClient] performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeOpenBox]];
+    return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeOpenBox]];
+}
+
+/**
+ *  请求升级
+ *
+ *  @param target
+ *
+ *  @return
+ */
+-(RACSignal*)requestUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware{
+    
+    Byte year = (Byte)[_Firmware.version substringWithRange:NSMakeRange(0, 2)].intValue;
+    Byte week = (Byte)[_Firmware.version substringWithRange:NSMakeRange(2, 2)].intValue;
+    Byte buildCount = (Byte)([_Firmware.version componentsSeparatedByString:@"."][1]).intValue;;
+    
+    Byte fileSize[3];
+    [[ByteConvert intToBytes:_Firmware.fileSize] getBytes:fileSize range:NSMakeRange(1, 3)];
+    
+    Byte singleFrameSize[2];
+    [[ByteConvert intToBytes:_Firmware.singleFrameSize] getBytes:singleFrameSize range:NSMakeRange(2, 2)];
+    
+    Byte requestParame[12] = {
+        0x08,
+        year,week,buildCount,0xff,
+        fileSize[0],fileSize[1],fileSize[2],
+        _Firmware.singlePackageSize,
+        singleFrameSize[0],singleFrameSize[1],
+        _Firmware.isForceUpgradeMode ? 1 : 0
+    };
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:FIRMWARE_UPGRADE]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        //        unsigned char state;
+        //        [data getBytes:&state range:NSMakeRange(0, 1)];
+        //        if (state == 0) {
+        //            mKeyEventResponse.success = YES;
+        //        } else {
+        //            mKeyEventResponse.success = NO;
+        //        }
+        return data;
+    };
+    
+    request.RKBLEpriority = NORMAL;
+    
+    return  [self performRequest:request];
+}
+
+/**
+ *  请求开始传输包
+ *
+ *  @param target
+ *  @param _RKPackage
+ *
+ *  @return
+ */
+-(RACSignal*)requestStartPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage{
+    
+    Byte requestParame[11] = {0x01,0,0,0,0,0,0xff,0,0,0,20};
+    
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:FIRMWARE_UPGRADE]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        //        unsigned char state;
+        //        [data getBytes:&state range:NSMakeRange(0, 1)];
+        //        if (state == 0) {
+        //            mKeyEventResponse.success = YES;
+        //        } else {
+        //            mKeyEventResponse.success = NO;
+        //        }
+        return data;
+    };
+    
+    request.RKBLEpriority = NORMAL;
+    
+    return  [self performRequest:request];
+}
+
+
+/**
+ *  请求结束传输包
+ *
+ *  @param target
+ *  @param _RKPackage
+ *
+ *  @return
+ */
+-(RACSignal*)requestEndPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage{
+    
+    Byte requestParame[5] = {0x03,0,1,0xff,0xff};
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:FIRMWARE_UPGRADE]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        //        unsigned char state;
+        //        [data getBytes:&state range:NSMakeRange(0, 1)];
+        //        if (state == 0) {
+        //            mKeyEventResponse.success = YES;
+        //        } else {
+        //            mKeyEventResponse.success = NO;
+        //        }
+        return data;
+    };
+    
+    request.RKBLEpriority = NORMAL;
+    
+    return  [self performRequest:request];
+}
+
+/**
+ *  升级文件MD5校验
+ *
+ *  @param target
+ *  @param _RKPackage
+ *
+ *  @return
+ */
+-(RACSignal*)checkFileMD5:(NSString*)target withFirmware:(Firmware*)_Firmware{
+    
+    Byte requestParame[17] = {0x05,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:FIRMWARE_UPGRADE]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        //        unsigned char state;
+        //        [data getBytes:&state range:NSMakeRange(0, 1)];
+        //        if (state == 0) {
+        //            mKeyEventResponse.success = YES;
+        //        } else {
+        //            mKeyEventResponse.success = NO;
+        //        }
+        return data;
+    };
+    
+    request.RKBLEpriority = NORMAL;
+    
+    return  [self performRequest:request];
+}
+
+/**
+ *  发送数据
+ *
+ *  @param target
+ *  @param _RKFrame
+ *
+ *  @return
+ */
+-(RACSignal*)sendData:(NSString*)target withFrame:(RKFrame*)_RKFrame{
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:DATA_CHANNEL]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:_RKFrame.data];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:DATA_CHANNEL] && channel == RKBLEResponseWriteResult) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        //        unsigned char state;
+        //        [data getBytes:&state range:NSMakeRange(0, 1)];
+        //        if (state == 0) {
+        //            mKeyEventResponse.success = YES;
+        //        } else {
+        //            mKeyEventResponse.success = NO;
+        //        }
+        return data;
+    };
+    
+    request.RKBLEpriority = NORMAL;
+    
+    return  [self performRequest:request];
 }
 
 @end
