@@ -13,7 +13,7 @@
 static const  float DEFAULT_TIMEOUT_S  = 25.0f;
 
 
-static const  float DEFAULT_DELAY_TIME = 0.0f;
+static const  float DEFAULT_DELAY_TIME = 0.100f;
 
 /** The default number of retries */
 static const int DEFAULT_MAX_RETRIES   = 0;

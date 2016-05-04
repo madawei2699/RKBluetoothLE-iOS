@@ -16,10 +16,14 @@
 		186FE3901CD8856300954FF6 /* Firmware.m in Sources */ = {isa = PBXBuildFile; fileRef = 186FE38F1CD8856300954FF6 /* Firmware.m */; };
 		186FE3931CD88D9900954FF6 /* RkBluetoothClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 186FE3921CD88D9900954FF6 /* RkBluetoothClient.m */; };
 		186FE3961CD897EB00954FF6 /* ByteConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = 186FE3951CD897EB00954FF6 /* ByteConvert.m */; };
+		187630481CD9A187005C3270 /* UpgradeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 187630471CD9A187005C3270 /* UpgradeManager.m */; };
+		1876304E1CD9CEE1005C3270 /* crc8_16.c in Sources */ = {isa = PBXBuildFile; fileRef = 1876304C1CD9CEE1005C3270 /* crc8_16.c */; };
+		187630501CD9DC6C005C3270 /* testfile.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1876304F1CD9DC6C005C3270 /* testfile.strings */; };
 		18790DF71C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
 		18790DF81C91738500A619DC /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DF61C91738500A619DC /* RKFrame.m */; };
 		18790DFB1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
 		18790DFC1C91739800A619DC /* RKPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 18790DFA1C91739800A619DC /* RKPackage.m */; };
+		187C72A11CD9EEE500503B02 /* File.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 187C72A01CD9EEE500503B02 /* File.rtf */; };
 		18863BDE1C9BCD7000F824F6 /* RK410APIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 18863BDD1C9BCD7000F824F6 /* RK410APIService.m */; };
 		18863BDF1C9BCD7000F824F6 /* RK410APIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 18863BDD1C9BCD7000F824F6 /* RK410APIService.m */; };
 		18B4404D1C992DEB00B15823 /* BLEDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */; };
@@ -69,10 +73,16 @@
 		186FE3921CD88D9900954FF6 /* RkBluetoothClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RkBluetoothClient.m; sourceTree = "<group>"; };
 		186FE3941CD897EB00954FF6 /* ByteConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteConvert.h; sourceTree = "<group>"; };
 		186FE3951CD897EB00954FF6 /* ByteConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ByteConvert.m; sourceTree = "<group>"; };
+		187630461CD9A187005C3270 /* UpgradeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeManager.h; sourceTree = "<group>"; };
+		187630471CD9A187005C3270 /* UpgradeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeManager.m; sourceTree = "<group>"; };
+		1876304C1CD9CEE1005C3270 /* crc8_16.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc8_16.c; sourceTree = "<group>"; };
+		1876304D1CD9CEE1005C3270 /* crc8_16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc8_16.h; sourceTree = "<group>"; };
+		1876304F1CD9DC6C005C3270 /* testfile.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = testfile.strings; sourceTree = "<group>"; };
 		18790DF51C91738500A619DC /* RKFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKFrame.h; sourceTree = "<group>"; };
 		18790DF61C91738500A619DC /* RKFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKFrame.m; sourceTree = "<group>"; };
 		18790DF91C91739800A619DC /* RKPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKPackage.h; sourceTree = "<group>"; };
 		18790DFA1C91739800A619DC /* RKPackage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKPackage.m; sourceTree = "<group>"; };
+		187C72A01CD9EEE500503B02 /* File.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = File.rtf; sourceTree = "<group>"; };
 		18863BDC1C9BCD7000F824F6 /* RK410APIService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RK410APIService.h; sourceTree = "<group>"; };
 		18863BDD1C9BCD7000F824F6 /* RK410APIService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RK410APIService.m; sourceTree = "<group>"; };
 		18B4404B1C992DEB00B15823 /* BLEDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataProtocol.h; sourceTree = "<group>"; };
@@ -151,6 +161,8 @@
 			children = (
 				186FE3941CD897EB00954FF6 /* ByteConvert.h */,
 				186FE3951CD897EB00954FF6 /* ByteConvert.m */,
+				1876304C1CD9CEE1005C3270 /* crc8_16.c */,
+				1876304D1CD9CEE1005C3270 /* crc8_16.h */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -179,6 +191,8 @@
 				18790DFA1C91739800A619DC /* RKPackage.m */,
 				186FE38E1CD8856300954FF6 /* Firmware.h */,
 				186FE38F1CD8856300954FF6 /* Firmware.m */,
+				187630461CD9A187005C3270 /* UpgradeManager.h */,
+				187630471CD9A187005C3270 /* UpgradeManager.m */,
 			);
 			name = Upgrade;
 			sourceTree = "<group>";
@@ -219,6 +233,8 @@
 				18C93E4D1C8EDAD000BDD086 /* LaunchScreen.storyboard */,
 				18C93E501C8EDAD000BDD086 /* Info.plist */,
 				18C93E3F1C8EDAD000BDD086 /* Supporting Files */,
+				1876304F1CD9DC6C005C3270 /* testfile.strings */,
+				187C72A01CD9EEE500503B02 /* File.rtf */,
 			);
 			path = RokyinfoBLEDemo;
 			sourceTree = "<group>";
@@ -388,6 +404,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				187C72A11CD9EEE500503B02 /* File.rtf in Resources */,
+				187630501CD9DC6C005C3270 /* testfile.strings in Resources */,
 				18C93E4F1C8EDAD000BDD086 /* LaunchScreen.storyboard in Resources */,
 				18C93E4C1C8EDAD000BDD086 /* Assets.xcassets in Resources */,
 				18C93E4A1C8EDAD000BDD086 /* Main.storyboard in Resources */,
@@ -501,6 +519,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1876304E1CD9CEE1005C3270 /* crc8_16.c in Sources */,
 				186FE3931CD88D9900954FF6 /* RkBluetoothClient.m in Sources */,
 				182F78DE1C929E3600AD3652 /* RKBLEUtil.m in Sources */,
 				18BDDE621CAB60C5006E8C0F /* RKBlockingQueue.m in Sources */,
@@ -509,6 +528,7 @@
 				18863BDE1C9BCD7000F824F6 /* RK410APIService.m in Sources */,
 				182F78E21C92B08300AD3652 /* BLEStack.m in Sources */,
 				184F847A1CAA76AB009016A0 /* RKBLEDispatcher.m in Sources */,
+				187630481CD9A187005C3270 /* UpgradeManager.m in Sources */,
 				F53B69C61CAAB4B500A6B2CB /* RequestQueue.m in Sources */,
 				186FE3961CD897EB00954FF6 /* ByteConvert.m in Sources */,
 				18CEB5161CB6263100C4EDC5 /* KeyEventResponse.m in Sources */,

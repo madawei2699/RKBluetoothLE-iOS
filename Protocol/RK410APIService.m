@@ -11,7 +11,7 @@
 #import "RKBLEUtil.h"
 #import "BLERequest.h"
 #import "ByteConvert.h"
-
+#import "UpgradeManager.h"
 
 
 //---------------------------服务------------------------------------------
@@ -191,9 +191,13 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 
 
 @interface RK410APIService(){
+    
     Rk410BleProtocolImpl *mBLEDataParseProtocolImpl;
     
-      NSMutableArray<BLERequest*> *mCurrentRequests;
+    NSMutableArray<BLERequest*> *mCurrentRequests;
+    
+    UpgradeManager *mUpgradeManager;
+    
 }
 
 @property (nonatomic,strong) RequestQueue *mRequestQueue;
@@ -201,6 +205,9 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 @end
 
 @implementation RK410APIService
+
+#pragma mark -
+#pragma mark life cycle
 
 -(id)initWithRequestQueue:(RequestQueue *)mRequestQueue{
     self = [super init];
@@ -214,6 +221,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
 -(void)setPostAuthCode:(PostAuthCode)postAuthCode{
     mBLEDataParseProtocolImpl.postAuthCode = postAuthCode;
 }
+
 
 #pragma mark -
 #pragma mark 私有方法
@@ -354,7 +362,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *
  *  @return
  */
--(RACSignal*)search:(NSString*)target{
+-(RACSignal*)find:(NSString*)target{
     
     return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeSearch]];
 }
@@ -375,6 +383,21 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
 #pragma mark 固件升级
 
 /**
+ *  启动升级
+ *
+ *  @param target
+ *  @param _Firmware 固件信息
+ *
+ *  @return
+ */
+-(RACSignal*)activateUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware{
+    if (mUpgradeManager == nil) {
+        mUpgradeManager = [[UpgradeManager alloc] init];
+    }
+    return [mUpgradeManager upgradeTarget:target withAPIService:self andFirmware:_Firmware];
+}
+
+/**
  *  请求升级
  *
  *  @param target
@@ -386,27 +409,30 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     Byte year = (Byte)[_Firmware.version substringWithRange:NSMakeRange(0, 2)].intValue;
     Byte week = (Byte)[_Firmware.version substringWithRange:NSMakeRange(2, 2)].intValue;
     Byte buildCount = (Byte)([_Firmware.version componentsSeparatedByString:@"."][1]).intValue;;
-    
-    Byte fileSize[3];
-    [[ByteConvert intToBytes:(int)_Firmware.fileSize] getBytes:fileSize range:NSMakeRange(1, 3)];
-    
-    Byte singleFrameSize[2];
-    [[ByteConvert intToBytes:(int)_Firmware.singleFrameSize] getBytes:singleFrameSize range:NSMakeRange(2, 2)];
-    
-    Byte requestParame[12] = {
-        0x08,
-        year,week,buildCount,0xff,
-        fileSize[0],fileSize[1],fileSize[2],
-        _Firmware.singlePackageSize,
-        singleFrameSize[0],singleFrameSize[1],
-        _Firmware.isForceUpgradeMode ? 1 : 0
-    };
+   
+    NSMutableData *writeValue =  [[NSMutableData alloc] init];
+    Byte command[1] = {0x08};
+    //指令
+    [writeValue appendBytes:command length:1];
+    //固件版本
+    Byte version[4] = {year,week,buildCount,0xff};
+    [writeValue appendBytes:version length:4];
+    //文件长度
+    [writeValue appendData:[[ByteConvert intToBytes:_Firmware.fileSize] subdataWithRange:NSMakeRange(1, 3)] ];
+    //单包长度 单位kb
+    Byte singlePackageSize[1] = {_Firmware.singlePackageSize};
+    [writeValue appendBytes:singlePackageSize length:1];
+    //单帧长度
+    [writeValue appendData:[ByteConvert shortToBytes:_Firmware.singleFrameSize]];
+    //是否强制升级
+    Byte isForceUpgradeMode[1] = {_Firmware.isForceUpgradeMode ? 1 : 0};
+    [writeValue appendBytes:isForceUpgradeMode length:1];
     
     BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:FIRMWARE_UPGRADE]
                                                       method:RKBLEMethodWrite
-                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+                                                  writeValue:writeValue];
     
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
@@ -444,15 +470,24 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *  @return
  */
 -(RACSignal*)requestStartPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage{
-    
-    Byte requestParame[11] = {0x01,0,0,0,0,0,0xff,0,0,0,20};
+
+    NSMutableData *writeValue =  [[NSMutableData alloc] init];
+    Byte command[1] = {0x01};
+    //指令
+    [writeValue appendBytes:command length:1];
+    //包号
+    [writeValue appendData:[ByteConvert shortToBytes:_RKPackage.packageIndex]];
+    //包大小
+    [writeValue appendData:[ByteConvert intToBytes:_RKPackage.packageSize]];
+    //已经上传文件长度
+    [writeValue appendData:[ByteConvert intToBytes:_RKPackage.uploadLength]];
     
     
     BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:FIRMWARE_UPGRADE]
                                                       method:RKBLEMethodWrite
-                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+                                                  writeValue:writeValue];
     
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
@@ -492,13 +527,20 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  */
 -(RACSignal*)requestEndPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage{
     
-    Byte requestParame[5] = {0x03,0,1,0xff,0xff};
+    NSMutableData *writeValue =  [[NSMutableData alloc] init];
+    Byte command[1] = {0x03};
+    //指令
+    [writeValue appendBytes:command length:1];
+    //包号
+    [writeValue appendData:[ByteConvert shortToBytes:_RKPackage.packageIndex]];
+    //CRC校验
+    [writeValue appendData:[ByteConvert shortToBytes:_RKPackage.crc]];
     
     BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:FIRMWARE_UPGRADE]
                                                       method:RKBLEMethodWrite
-                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+                                                  writeValue:writeValue];
     
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
@@ -537,13 +579,18 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  */
 -(RACSignal*)checkFileMD5:(NSString*)target withFirmware:(Firmware*)_Firmware{
     
-    Byte requestParame[17] = {0x05,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+    NSMutableData *writeValue =  [[NSMutableData alloc] init];
+    Byte command[1] = {0x05};
+    //指令
+    [writeValue appendBytes:command length:1];
+    //MD5
+    [writeValue appendData:[[[CocoaSecurityDecoder alloc] init] hex:_Firmware.md5]];
     
     BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:FIRMWARE_UPGRADE]
                                                       method:RKBLEMethodWrite
-                                                  writeValue:[[NSData alloc] initWithBytes:&requestParame length:sizeof(requestParame)]];
+                                                  writeValue:writeValue];
     
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
@@ -614,5 +661,6 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     
     return  [self performRequest:request];
 }
+
 
 @end

@@ -16,9 +16,11 @@
 
 @property (nonatomic,assign) Byte      singlePackageSize;
 
-@property (nonatomic,assign) NSInteger singleFrameSize;
+@property (nonatomic,assign) short     singleFrameSize;
 
 @property (nonatomic,assign) BOOL      isForceUpgradeMode;
+
+@property (nonatomic,copy  ) NSData    *data;
 
 @property (nonatomic,copy  ) NSString  *md5;
 

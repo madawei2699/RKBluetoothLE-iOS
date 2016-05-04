@@ -49,7 +49,7 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *
  *  @return
  */
--(RACSignal*)search:(NSString*)target;
+-(RACSignal*)find:(NSString*)target;
 
 /**
  *  开启座桶
@@ -59,6 +59,18 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *  @return
  */
 -(RACSignal*)openBox:(NSString*)target;
+
+
+
+/**
+ *  启动升级
+ *
+ *  @param target
+ *  @param _Firmware 固件信息
+ *
+ *  @return
+ */
+-(RACSignal*)activateUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware;
 
 /**
  *  请求升级

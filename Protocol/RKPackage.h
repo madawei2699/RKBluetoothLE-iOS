@@ -10,4 +10,12 @@
 
 @interface RKPackage : NSObject
 
+@property (nonatomic,assign) short packageIndex;
+
+@property (nonatomic,assign) int   packageSize;
+
+@property (nonatomic,assign) int   uploadLength;
+
+@property (nonatomic,assign) short crc;
+
 @end

@@ -15,6 +15,8 @@
 @interface ViewController (){
     
     RACDisposable *mRACDisposable ;
+    
+    RK410APIService* mRK410APIService ;
 }
 
 @end
@@ -23,6 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    mRK410APIService = [[RkBluetoothClient shareClient] createRk410ApiService];
     
     //    RACSignal *mRACSignal = [[RK410APIService shareService] openBox:@"B00G10B6F3"];
     //    [[mRACSignal
@@ -232,55 +235,80 @@
     //
     //     }];
     
-    RK410APIService* mRK410APIService = [[RkBluetoothClient shareClient] createRk410ApiService];
+
     
     [mRK410APIService setPostAuthCode:^(NSString *peripheralName){
         CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
         return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
     }];
     
+   
+//    RACSignal *mRACSignal = [mRK410APIService requestUpgrade:@"B00G20B6T3" withFirmware:mFirmware];
+//    [[mRACSignal
+//      deliverOnMainThread]
+//     subscribeNext:^(NSData *response) {
+//         
+//         NSLog(@"----------------:%@",response);
+//         
+//     }
+//     error:^(NSError *error) {
+//         
+//         NSLog(@"----------------:%@",error);
+//         
+//     }];
+//    
+//    mRACSignal = [mRK410APIService requestStartPackage:@"B00G20B6T3" withPackage:nil];
+//    [[mRACSignal
+//      deliverOnMainThread]
+//     subscribeNext:^(NSData *response) {
+//         
+//         NSLog(@"----------------:%@",response);
+//         
+//     }
+//     error:^(NSError *error) {
+//         
+//         NSLog(@"----------------:%@",error);
+//         
+//     }];
+//    
+//    
+//    for (int i = 1; i < 100; i++) {
+//        
+//        RKFrame *mRKFrame = [[RKFrame alloc] init];
+//        Byte bytes[20] = {i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i};
+//        mRKFrame.data = [[NSData alloc] initWithBytes:bytes length:20];
+//        
+//        [[[mRK410APIService sendData:@"B00G20B6T3" withFrame:mRKFrame]
+//          deliverOnMainThread]
+//         subscribeNext:^(NSData *response) {
+//             
+//             NSLog(@"----------------:%@",response);
+//             
+//         }
+//         error:^(NSError *error) {
+//             
+//             NSLog(@"----------------:%@",error);
+//             
+//         }];
+    
+        
+//           }
+    
+    NSString *filePath = [[NSBundle mainBundle]pathForResource:@"File"ofType:@"rtf"];
     Firmware *mFirmware = [[Firmware alloc] init];
     mFirmware.version = @"1610.02";
-    mFirmware.fileSize = 1258291;
-    mFirmware.singlePackageSize = 1;
+    mFirmware.singlePackageSize = 16;
     mFirmware.singleFrameSize = 20;
     mFirmware.isForceUpgradeMode = YES;
-    RACSignal *mRACSignal = [mRK410APIService requestUpgrade:@"B00G20B6T3" withFirmware:mFirmware];
-    [[mRACSignal
-      deliverOnMainThread]
-     subscribeNext:^(NSData *response) {
-         
-         NSLog(@"----------------:%@",response);
-         
-     }
-     error:^(NSError *error) {
-         
-         NSLog(@"----------------:%@",error);
-         
-     }];
+    mFirmware.data =  [[NSData alloc]initWithContentsOfFile:filePath];
+    mFirmware.fileSize = mFirmware.data.length;
+    mFirmware.md5 = [CocoaSecurity md5WithData:mFirmware.data].hex;
+    //获取文件路径
     
+    [mRK410APIService activateUpgrade:@"B00G20B6T3" withFirmware:mFirmware];
+   
     
-    for (int i = 1; i < 100; i++) {
-        
-        RKFrame *mRKFrame = [[RKFrame alloc] init];
-        Byte bytes[20] = {i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i,i};
-        mRKFrame.data = [[NSData alloc] initWithBytes:bytes length:20];
-        
-        [[[mRK410APIService sendData:@"B00G20B6T3" withFrame:mRKFrame]
-          deliverOnMainThread]
-         subscribeNext:^(NSData *response) {
-             
-             NSLog(@"----------------:%@",response);
-             
-         }
-         error:^(NSError *error) {
-             
-             NSLog(@"----------------:%@",error);
-             
-         }];
-    }
-    
-    
+
 }
 
 @end
