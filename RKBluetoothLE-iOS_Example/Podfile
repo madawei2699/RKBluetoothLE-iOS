@@ -1,0 +1,9 @@
+use_frameworks!
+
+target 'RKBluetoothLE-iOS_Example'  do
+  pod 'RKBluetoothLE-iOS', :path => '../'
+end
+
+target 'RKBluetoothLE-iOS_ExampleTests'  do
+  pod 'RKBluetoothLE-iOS', :path => '../'
+end

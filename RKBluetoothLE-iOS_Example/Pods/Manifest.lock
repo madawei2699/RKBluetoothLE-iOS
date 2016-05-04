@@ -1,0 +1,34 @@
+PODS:
+  - CocoaSecurity (1.2.4)
+  - ReactiveCocoa (4.1.0):
+    - ReactiveCocoa/UI (= 4.1.0)
+    - Result (~> 2.0)
+  - ReactiveCocoa/Core (4.1.0):
+    - ReactiveCocoa/no-arc
+    - Result (~> 2.0)
+  - ReactiveCocoa/no-arc (4.1.0):
+    - Result (~> 2.0)
+  - ReactiveCocoa/UI (4.1.0):
+    - ReactiveCocoa/Core
+    - Result (~> 2.0)
+  - Result (2.0.0)
+  - RKBluetoothLE-iOS (0.1.0):
+    - CocoaSecurity
+    - ReactiveCocoa
+
+DEPENDENCIES:
+  - RKBluetoothLE-iOS (from `../`)
+
+EXTERNAL SOURCES:
+  RKBluetoothLE-iOS:
+    :path: ../
+
+SPEC CHECKSUMS:
+  CocoaSecurity: d288a6f87e0f363823d2cb83e753814a6944f71a
+  ReactiveCocoa: d70004d7a366a7b8e87e60ce2347182c77701949
+  Result: 9e75e1111c774c6ac594e14907b15057053a7959
+  RKBluetoothLE-iOS: 6324c77e8b0e006109921c1f9aad7d16b6a1bad1
+
+PODFILE CHECKSUM: 338fb943f5e58b1e85647a76d16e2524c684327f
+
+COCOAPODS: 1.0.0.rc.1
