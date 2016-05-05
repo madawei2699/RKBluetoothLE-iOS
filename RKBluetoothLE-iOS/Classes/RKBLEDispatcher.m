@@ -79,9 +79,9 @@ static dispatch_semaphore_t sem;
                     // Parse the response here on the worker thread.
                     RACSignal* responseRACSignal = [self.bluetooth performRequest:request];
                     [[[responseRACSignal
-                       subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"PerformRequest"]]
+                       subscribeOn:[RACScheduler mainThreadScheduler]]
                       timeout:[request getTimeoutS]
-                      onScheduler:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground name:@"Timeout"]]
+                      onScheduler:[RACScheduler mainThreadScheduler]]
                      subscribeNext:^(id x) {
                          
                          mBLEResponse = x;

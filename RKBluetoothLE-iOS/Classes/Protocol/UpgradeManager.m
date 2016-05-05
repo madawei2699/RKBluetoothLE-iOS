@@ -78,7 +78,7 @@ static dispatch_queue_t  queue;
     
     NSData *data = mFirmware.data;
     
-    int packageCount = data.length/byteSinglePackageSize + ((data.length % byteSinglePackageSize) == 0 ? 0 : 1);
+    int packageCount = (int)(data.length/byteSinglePackageSize + ((data.length % byteSinglePackageSize) == 0 ? 0 : 1));
     
     int curUploadLength = 0;
     for (int packageIndex = 0; packageIndex < packageCount; packageIndex++) {

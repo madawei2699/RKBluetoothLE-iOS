@@ -8,18 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "KeyEventResponse.h"
+#import "RequestQueue.h"
+
+#import "RemoteControlResult.h"
 #import "Firmware.h"
 #import "RKPackage.h"
 #import "RKFrame.h"
-#import "RequestQueue.h"
+#import "VehicleStatus.h"
+#import "Fault.h"
 
 //鉴权码生成器
 typedef id (^PostAuthCode)(NSString *peripheralName);
 
 @interface RK410APIService : NSObject
 
-@property(nonatomic,copy)PostAuthCode postAuthCode;
+@property(nonatomic,copy)PostAuthCode postAuthCodeBlock;
 
 -(id)initWithRequestQueue:(RequestQueue *)mRequestQueue;
 
@@ -28,7 +31,7 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)lock:(NSString*)target;
 
@@ -38,7 +41,7 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)unlock:(NSString*)target;
 
@@ -47,7 +50,7 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)find:(NSString*)target;
 
@@ -60,7 +63,23 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  */
 -(RACSignal*)openBox:(NSString*)target;
 
+/**
+ *  获取车况
+ *
+ *  @param target
+ *
+ *  @return VehicleStatus
+ */
+-(RACSignal*)getVehicleStatus:(NSString*)target;
 
+/**
+ *  获取故障
+ *
+ *  @param target
+ *
+ *  @return Fault
+ */
+-(RACSignal*)getFault:(NSString*)target;
 
 /**
  *  启动升级

@@ -14,6 +14,7 @@
 #import "UpgradeManager.h"
 
 
+
 //---------------------------服务------------------------------------------
 // 车精灵服务
 static NSString* const SERVICE_SPIRIT_SYNC_DATA = @"9900";
@@ -69,7 +70,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
  */
 -(BOOL)needAuthentication{
     
-    return NO;
+    return YES;
     
 }
 
@@ -218,7 +219,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
     return self;
 }
 
--(void)setPostAuthCode:(PostAuthCode)postAuthCode{
+-(void)setPostAuthCodeBlock:(PostAuthCode)postAuthCode{
     mBLEDataParseProtocolImpl.postAuthCode = postAuthCode;
 }
 
@@ -317,7 +318,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
         
     };
     request.parseBLEResponseData = (id) ^(NSData *data){
-        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
+        RemoteControlResult *mKeyEventResponse = [[RemoteControlResult alloc] init];
         unsigned char state;
         [data getBytes:&state range:NSMakeRange(0, 1)];
         if (state == 0) {
@@ -337,7 +338,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)lock:(NSString*)target{
     return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeLock]];
@@ -348,7 +349,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)unlock:(NSString*)target{
     
@@ -360,7 +361,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)find:(NSString*)target{
     
@@ -372,11 +373,93 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *
  *  @param target
  *
- *  @return
+ *  @return RemoteControlResult
  */
 -(RACSignal*)openBox:(NSString*)target{
     
     return  [self performRequest:[self createKeyEventRequest:target keyEventType:KeyEventTypeOpenBox]];
+}
+
+#pragma mark -
+#pragma mark 车况、故障查询
+
+/**
+ *  获取车况
+ *
+ *  @param target
+ *
+ *  @return VehicleStatus
+ */
+-(RACSignal*)getVehicleStatus:(NSString*)target{
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:SPIRIT_SYNCDATA]
+                                                      method:RKBLEMethodRead
+                                                  writeValue:nil];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:SPIRIT_SYNCDATA] && channel == RKBLEResponseReadResult) {
+            if (value.length >= 16) {
+                return YES;
+            } else {
+                return NO;
+            }
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        
+        VehicleStatus *mVehicleStatus = [[VehicleStatus alloc] init];
+        return [mVehicleStatus bytes2entity:data];
+        
+    };
+    
+    request.RKBLEpriority = HIGH;
+    
+    return  [self performRequest:request];
+    
+}
+
+/**
+ *  获取故障
+ *
+ *  @param target
+ *
+ *  @return Fault
+ */
+-(RACSignal*)getFault:(NSString*)target{
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:SPIRIT_FAULTDATA]
+                                                      method:RKBLEMethodRead
+                                                  writeValue:nil];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:SPIRIT_FAULTDATA] && channel == RKBLEResponseReadResult) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        
+        return [[[Fault alloc] init] bytes2entity:data];
+        
+    };
+    
+    request.RKBLEpriority = HIGH;
+    
+    return  [self performRequest:request];
+    
 }
 
 #pragma mark -

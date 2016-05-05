@@ -10,18 +10,18 @@
 
 @interface Firmware : NSObject
 
-@property (nonatomic,copy  ) NSString  *version;
+@property (nonatomic,copy  ) NSString *version;
 
-@property (nonatomic,assign) NSInteger fileSize;
+@property (nonatomic,assign) int      fileSize;
 
-@property (nonatomic,assign) Byte      singlePackageSize;
+@property (nonatomic,assign) Byte     singlePackageSize;
 
-@property (nonatomic,assign) short     singleFrameSize;
+@property (nonatomic,assign) short    singleFrameSize;
 
-@property (nonatomic,assign) BOOL      isForceUpgradeMode;
+@property (nonatomic,assign) BOOL     isForceUpgradeMode;
 
-@property (nonatomic,copy  ) NSData    *data;
+@property (nonatomic,copy  ) NSData   *data;
 
-@property (nonatomic,copy  ) NSString  *md5;
+@property (nonatomic,copy  ) NSString *md5;
 
 @end

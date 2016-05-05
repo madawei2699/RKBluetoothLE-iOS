@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface KeyEventResponse : NSObject
+@interface RemoteControlResult : NSObject
 
 @property(nonatomic,assign)BOOL success;
 

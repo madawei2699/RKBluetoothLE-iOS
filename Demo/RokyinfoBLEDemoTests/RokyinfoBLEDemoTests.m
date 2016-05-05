@@ -8,10 +8,10 @@
 
 #import <XCTest/XCTest.h>
 #import "CocoaSecurity.h"
-#import "BLEDataProtocol.h"
-#import "RKBLEClient.h"
-
-@interface RokyinfoBLEDemoTests : XCTestCase
+#import "RkBluetoothClient.h"
+@interface RokyinfoBLEDemoTests : XCTestCase{
+    RK410APIService* mRK410APIService;
+}
 
 @end
 
@@ -20,6 +20,11 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+     mRK410APIService = [[RkBluetoothClient shareClient] createRk410ApiService];
+    [mRK410APIService setPostAuthCodeBlock:^(NSString *peripheralName){
+        CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
+        return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf9ut47RN6/3Xg=="];
+    }];
 }
 
 - (void)tearDown {
@@ -30,27 +35,20 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    RACSignal *mRACSignal = [mRK410APIService getVehicleStatus:@"B00G10B6F3"];
+    [[mRACSignal
+      deliverOnMainThread]
+     subscribeNext:^(VehicleStatus *response) {
+         
+         NSLog(@"subscribeNext:%@",[response description]);
+         
+     }
+     error:^(NSError *error) {
+         
+         NSLog(@"error:%@",error);
+         
+     }];
     
-    
-//    BLEDataProtocol *mBLEDataProtocol = [[BLEDataProtocol alloc] init];
-//    mBLEDataProtocol.type = PARAM_WRITE;
-//    mBLEDataProtocol.index = 0x30;
-//    
-//    Byte byte[] = {0x00,0,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-//    NSData *org = [NSData dataWithBytes:byte length:17];
-//    
-//    mBLEDataProtocol.org = org;
-//    [[RKBLEClient sharedClient] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"]
-//                                method:RKBLEMethodWrite
-//                            parameters:[mBLEDataProtocol encodeRK410]
-//                               success:nil
-//                               failure:nil];
-//    
-//    [[RKBLEClient sharedClient] target:[RKBLEUtil createTarget:@"B00G10B6F3" service:@"9900" characteristic:@"9904"]
-//                                method:RKBLEMethodWrite
-//                            parameters:[mBLEDataProtocol encodeRK410]
-//                               success:nil
-//                               failure:nil];
 }
 
 - (void)testPerformanceExample {

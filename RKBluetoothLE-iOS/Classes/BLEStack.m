@@ -78,8 +78,8 @@ typedef void (^ScanResult)(CBPeripheral *peripheral);
     if(self != nil){
         _BLEState       = RKBLEStateDefault;
         //创建串行队列
-        dispatch_queue_t  queue = dispatch_queue_create("com.rokyinfo.BLEStack", NULL);
-        centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:queue];
+//        dispatch_queue_t  queue = dispatch_queue_create("com.rokyinfo.BLEStack", NULL);
+        centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:nil];
     
     }
     

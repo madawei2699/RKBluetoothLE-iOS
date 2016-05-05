@@ -6,10 +6,8 @@
 //  Copyright © 2016年 rokyinfo. All rights reserved.
 //
 
-#import "KeyEventResponse.h"
+#import "RemoteControlResult.h"
 
-@implementation KeyEventResponse
-
-
+@implementation RemoteControlResult
 
 @end

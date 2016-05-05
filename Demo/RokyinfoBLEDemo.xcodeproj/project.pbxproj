@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		183F14461CDAE29D00878F3D /* VehicleStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 183F14451CDAE29D00878F3D /* VehicleStatus.m */; };
+		183F144A1CDAE95300878F3D /* Fault.m in Sources */ = {isa = PBXBuildFile; fileRef = 183F14491CDAE95300878F3D /* Fault.m */; };
 		187630501CD9DC6C005C3270 /* testfile.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1876304F1CD9DC6C005C3270 /* testfile.strings */; };
 		187C72A11CD9EEE500503B02 /* File.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 187C72A01CD9EEE500503B02 /* File.rtf */; };
 		18B4404D1C992DEB00B15823 /* BLEDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */; };
@@ -30,7 +32,7 @@
 		F523FBF01CDA36880064F45E /* ByteConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBCA1CDA36880064F45E /* ByteConvert.m */; };
 		F523FBF11CDA36880064F45E /* crc8_16.c in Sources */ = {isa = PBXBuildFile; fileRef = F523FBCB1CDA36880064F45E /* crc8_16.c */; };
 		F523FBF21CDA36880064F45E /* Firmware.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBCE1CDA36880064F45E /* Firmware.m */; };
-		F523FBF31CDA36880064F45E /* KeyEventResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBD01CDA36880064F45E /* KeyEventResponse.m */; };
+		F523FBF31CDA36880064F45E /* RemoteControlResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBD01CDA36880064F45E /* RemoteControlResult.m */; };
 		F523FBF41CDA36880064F45E /* RK410APIService.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBD21CDA36880064F45E /* RK410APIService.m */; };
 		F523FBF51CDA36880064F45E /* RkBluetoothClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBD41CDA36880064F45E /* RkBluetoothClient.m */; };
 		F523FBF61CDA36880064F45E /* RKFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FBD61CDA36880064F45E /* RKFrame.m */; };
@@ -54,6 +56,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		183F14441CDAE29D00878F3D /* VehicleStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VehicleStatus.h; sourceTree = "<group>"; };
+		183F14451CDAE29D00878F3D /* VehicleStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VehicleStatus.m; sourceTree = "<group>"; };
+		183F14471CDAE49A00878F3D /* RkFieldConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RkFieldConverter.h; sourceTree = "<group>"; };
+		183F14481CDAE95300878F3D /* Fault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fault.h; sourceTree = "<group>"; };
+		183F14491CDAE95300878F3D /* Fault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fault.m; sourceTree = "<group>"; };
 		1876304F1CD9DC6C005C3270 /* testfile.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = testfile.strings; sourceTree = "<group>"; };
 		187C72A01CD9EEE500503B02 /* File.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = File.rtf; sourceTree = "<group>"; };
 		18B4404B1C992DEB00B15823 /* BLEDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataProtocol.h; sourceTree = "<group>"; };
@@ -96,8 +103,8 @@
 		F523FBCC1CDA36880064F45E /* crc8_16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc8_16.h; sourceTree = "<group>"; };
 		F523FBCD1CDA36880064F45E /* Firmware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Firmware.h; sourceTree = "<group>"; };
 		F523FBCE1CDA36880064F45E /* Firmware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Firmware.m; sourceTree = "<group>"; };
-		F523FBCF1CDA36880064F45E /* KeyEventResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyEventResponse.h; sourceTree = "<group>"; };
-		F523FBD01CDA36880064F45E /* KeyEventResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyEventResponse.m; sourceTree = "<group>"; };
+		F523FBCF1CDA36880064F45E /* RemoteControlResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteControlResult.h; sourceTree = "<group>"; };
+		F523FBD01CDA36880064F45E /* RemoteControlResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteControlResult.m; sourceTree = "<group>"; };
 		F523FBD11CDA36880064F45E /* RK410APIService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RK410APIService.h; sourceTree = "<group>"; };
 		F523FBD21CDA36880064F45E /* RK410APIService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RK410APIService.m; sourceTree = "<group>"; };
 		F523FBD31CDA36880064F45E /* RkBluetoothClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RkBluetoothClient.h; sourceTree = "<group>"; };
@@ -291,6 +298,7 @@
 		F523FBFE1CDA36CE0064F45E /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				183F14471CDAE49A00878F3D /* RkFieldConverter.h */,
 				F523FBC91CDA36880064F45E /* ByteConvert.h */,
 				F523FBCA1CDA36880064F45E /* ByteConvert.m */,
 				F523FBCB1CDA36880064F45E /* crc8_16.c */,
@@ -317,8 +325,12 @@
 		F523FC001CDA36FA0064F45E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F523FBCF1CDA36880064F45E /* KeyEventResponse.h */,
-				F523FBD01CDA36880064F45E /* KeyEventResponse.m */,
+				F523FBCF1CDA36880064F45E /* RemoteControlResult.h */,
+				F523FBD01CDA36880064F45E /* RemoteControlResult.m */,
+				183F14441CDAE29D00878F3D /* VehicleStatus.h */,
+				183F14451CDAE29D00878F3D /* VehicleStatus.m */,
+				183F14481CDAE95300878F3D /* Fault.h */,
+				183F14491CDAE95300878F3D /* Fault.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -535,17 +547,19 @@
 				18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */,
 				F523FBF71CDA36880064F45E /* RKPackage.m in Sources */,
 				F523FBFB1CDA36880064F45E /* RKBLEDispatcher.m in Sources */,
+				183F144A1CDAE95300878F3D /* Fault.m in Sources */,
 				F523FBFC1CDA36880064F45E /* RKBLEUtil.m in Sources */,
 				F523FBFA1CDA36880064F45E /* Response.m in Sources */,
 				F523FBEF1CDA36880064F45E /* ExecutorDelivery.m in Sources */,
 				F523FBEA1CDA36880064F45E /* BLERequest.m in Sources */,
+				183F14461CDAE29D00878F3D /* VehicleStatus.m in Sources */,
 				F523FBF01CDA36880064F45E /* ByteConvert.m in Sources */,
 				F523FBEB1CDA36880064F45E /* BLEResponse.m in Sources */,
 				F523FBEC1CDA36880064F45E /* BLEStack.m in Sources */,
 				18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */,
 				F523FBF81CDA36880064F45E /* UpgradeManager.m in Sources */,
 				18C93E411C8EDAD000BDD086 /* main.m in Sources */,
-				F523FBF31CDA36880064F45E /* KeyEventResponse.m in Sources */,
+				F523FBF31CDA36880064F45E /* RemoteControlResult.m in Sources */,
 				18B4404D1C992DEB00B15823 /* BLEDataProtocol.m in Sources */,
 				F523FBED1CDA36880064F45E /* DefaultBLEDataParseProtocol.m in Sources */,
 				F523FBFD1CDA36880064F45E /* RKBlockingQueue.m in Sources */,
