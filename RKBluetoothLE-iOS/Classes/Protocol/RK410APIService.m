@@ -443,8 +443,13 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
-        if ([characteristic isEqualToString:SPIRIT_FAULTDATA] && channel == RKBLEResponseReadResult) {
-            return YES;
+        if ([characteristic isEqualToString:SPIRIT_FAULTDATA] && channel == RKBLEResponseNotify) {
+            if (value.length >= 6) {
+                return YES;
+            } else {
+                return NO;
+            }
+            
         } else {
             return NO;
         }
