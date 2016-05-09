@@ -37,7 +37,7 @@ TODO: Add long description of the pod here.
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'Foundation', 'CoreBluetooth'
-  s.dependency 'ReactiveCocoa'
-  s.dependency 'CocoaSecurity'
+  # s.frameworks = 'UIKit', 'MapKit'
+  s.dependency 'ReactiveCocoa', '~> 4.1.0'
+  s.dependency 'CocoaSecurity', '~> 1.2.4'
 end
