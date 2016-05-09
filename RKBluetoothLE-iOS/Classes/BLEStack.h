@@ -17,6 +17,8 @@ extern NSString * const BLEStackErrorDomain;
 extern const NSInteger BLEStackErrorTimeOut;
 extern const NSInteger BLEStackErrorDisconnect;
 extern const NSInteger BLEStackErrorAuth;
+extern const NSInteger BLEStackErrorNotPowerOn;
+
 //desc
 extern NSString * const BLEStackErrorTimeOutDesc;
 extern NSString * const BLEStackErrorDisconnectDesc;

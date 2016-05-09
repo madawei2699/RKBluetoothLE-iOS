@@ -15,10 +15,12 @@ NSString * const BLEStackErrorDomain         = @"BLEStackErrorDomain";
 const NSInteger BLEStackErrorTimeOut         = 1;
 const NSInteger BLEStackErrorDisconnect      = 2;
 const NSInteger BLEStackErrorAuth            = 3;
+const NSInteger BLEStackErrorNotPowerOn      = 4;
 
 NSString * const BLEStackErrorTimeOutDesc    = @"当前业务处理超时";
 NSString * const BLEStackErrorDisconnectDesc = @"蓝牙连接断开";
 NSString * const BLEStackErrorAuthDesc       = @"鉴权失败";
+NSString * const BLEStackErrorNotPowerOnDesc = @"蓝牙不可用";
 
 
 NSString * const RKBLEConnectNotification    = @"RKBLEConnectNotification";
@@ -292,6 +294,16 @@ typedef void (^ScanResult)(CBPeripheral *peripheral);
  *  @param peripheral 需要处理的特征
  */
 -(void)executeWithPeripheral:(CBPeripheral*) peripheral{
+    
+    if (self.CMState != CBCentralManagerStatePoweredOn) {
+        
+        [self failureWithError:[NSError errorWithDomain:BLEStackErrorDomain
+                                                   code:BLEStackErrorNotPowerOn
+                                               userInfo:@{ NSLocalizedDescriptionKey: BLEStackErrorNotPowerOnDesc }]];
+        return;
+        
+        
+    }
     
     if ( peripheral.state == CBPeripheralStateConnected && ![self.request hasHadResponseDelivered] ) {
         

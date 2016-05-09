@@ -3,19 +3,23 @@
   "version": "0.1.0",
   "summary": "A short description of RKBluetoothLE-iOS.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/RKBluetoothLE-iOS",
+  "homepage": "https://github.com/yuanzj/RKBluetoothLE-iOS",
   "license": "MIT",
   "authors": {
     "yuanzj": "jswxyzj@qq.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/RKBluetoothLE-iOS.git",
+    "git": "https://github.com/yuanzj/RKBluetoothLE-iOS.git",
     "tag": "0.1.0"
   },
   "platforms": {
     "ios": "8.0"
   },
   "source_files": "RKBluetoothLE-iOS/Classes/**/*",
+  "frameworks": [
+    "Foundation",
+    "CoreBluetooth"
+  ],
   "dependencies": {
     "ReactiveCocoa": [
 

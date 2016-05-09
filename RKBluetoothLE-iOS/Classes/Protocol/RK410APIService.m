@@ -12,7 +12,7 @@
 #import "BLERequest.h"
 #import "ByteConvert.h"
 #import "UpgradeManager.h"
-
+#import "DefaultRetryPolicy.h"
 
 
 //---------------------------服务------------------------------------------
@@ -150,7 +150,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
             }
             
         };
-        
+        [authRequest setRetryPolicy:[[DefaultRetryPolicy alloc] initWithTimeout:15.0f delayTime:0.100f maxRetries:0]];
         if (callBack) {
             callBack(authRequest,nil);
         }

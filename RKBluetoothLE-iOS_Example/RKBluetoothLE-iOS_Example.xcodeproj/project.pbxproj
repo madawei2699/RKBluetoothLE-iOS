@@ -1,1278 +1,652 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>archiveVersion</key>
-	<string>1</string>
-	<key>classes</key>
-	<dict/>
-	<key>objectVersion</key>
-	<string>46</string>
-	<key>objects</key>
-	<dict>
-		<key>1C93204877656D2CA3F59777</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Embed Pods Frameworks</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-frameworks.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>38A1A5185A036D0427ADE5D4</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>&#128230; Copy Pods Resources</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-resources.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>4404CF771FE8A37343744C7A</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-RKBluetoothLE-iOS_Example.debug.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example.debug.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4603A05AB59F975AF13FAB2B</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Check Pods Manifest.lock</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>4D71F98B6D82DE94F330CDCB</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>&#128230; Embed Pods Frameworks</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-frameworks.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>67C0BC2E4CBF37D9A89BDD31</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>B2100BF4C8F50648958AFB16</string>
-				<string>992C2BEBE1E7820B386CDF66</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>68CA294B53132E1C8C805C83</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Copy Pods Resources</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-resources.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>6EC4DEDFF459C8C590B56652</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>&#128230; Check Pods Manifest.lock</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>7CBB8D90E1880CF8847E9290</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>&#128230; Embed Pods Frameworks</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-frameworks.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>8423ECE29C78654E656ADDB2</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-RKBluetoothLE-iOS_Example.release.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example.release.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>923C47FCDC2FDB851B2A57B7</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Check Pods Manifest.lock</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>988E8430F3464032069C256F</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Embed Pods Frameworks</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-frameworks.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>992C2BEBE1E7820B386CDF66</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>wrapper.framework</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>Pods_RKBluetoothLE_iOS_ExampleTests.framework</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>9C59D55B4C422E2D32E98C23</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>4404CF771FE8A37343744C7A</string>
-				<string>8423ECE29C78654E656ADDB2</string>
-				<string>A1E9642190DBD26F34EA2C51</string>
-				<string>AA9B2F670023B0D2683B24F5</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Pods</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>A1E9642190DBD26F34EA2C51</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>AA9B2F670023B0D2683B24F5</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>name</key>
-			<string>Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig</string>
-			<key>path</key>
-			<string>Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B08CE37EB67A20F4220C38EF</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>&#128230; Copy Pods Resources</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-resources.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>B2100BF4C8F50648958AFB16</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>wrapper.framework</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>Pods_RKBluetoothLE_iOS_Example.framework</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>C1CBC5793289168298CA99CA</key>
-		<dict>
-			<key>fileRef</key>
-			<string>B2100BF4C8F50648958AFB16</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>E530386F9D769B062E160DFB</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>&#128230; Check Pods Manifest.lock</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
-if [[ $? != 0 ]] ; then
-    cat &lt;&lt; EOM
-error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
-EOM
-    exit 1
-fi
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>E7B1B6200C0F72ACF673871C</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>inputPaths</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXShellScriptBuildPhase</string>
-			<key>name</key>
-			<string>Copy Pods Resources</string>
-			<key>outputPaths</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-			<key>shellPath</key>
-			<string>/bin/sh</string>
-			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-resources.sh"
-</string>
-			<key>showEnvVarsInLog</key>
-			<string>0</string>
-		</dict>
-		<key>ECFF9D49BEAFBA4870BA6696</key>
-		<dict>
-			<key>fileRef</key>
-			<string>992C2BEBE1E7820B386CDF66</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC401CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC4B1CDA39370064F45E</string>
-				<string>F523FC651CDA39370064F45E</string>
-				<string>F523FC4A1CDA39370064F45E</string>
-				<string>9C59D55B4C422E2D32E98C23</string>
-				<string>67C0BC2E4CBF37D9A89BDD31</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC411CDA39370064F45E</key>
-		<dict>
-			<key>attributes</key>
-			<dict>
-				<key>LastUpgradeCheck</key>
-				<string>0730</string>
-				<key>ORGANIZATIONNAME</key>
-				<string>Rokyinfo</string>
-				<key>TargetAttributes</key>
-				<dict>
-					<key>F523FC481CDA39370064F45E</key>
-					<dict>
-						<key>CreatedOnToolsVersion</key>
-						<string>7.3</string>
-					</dict>
-					<key>F523FC611CDA39370064F45E</key>
-					<dict>
-						<key>CreatedOnToolsVersion</key>
-						<string>7.3</string>
-						<key>TestTargetID</key>
-						<string>F523FC481CDA39370064F45E</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>buildConfigurationList</key>
-			<string>F523FC441CDA39370064F45E</string>
-			<key>compatibilityVersion</key>
-			<string>Xcode 3.2</string>
-			<key>developmentRegion</key>
-			<string>English</string>
-			<key>hasScannedForEncodings</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXProject</string>
-			<key>knownRegions</key>
-			<array>
-				<string>en</string>
-				<string>Base</string>
-			</array>
-			<key>mainGroup</key>
-			<string>F523FC401CDA39370064F45E</string>
-			<key>productRefGroup</key>
-			<string>F523FC4A1CDA39370064F45E</string>
-			<key>projectDirPath</key>
-			<string></string>
-			<key>projectReferences</key>
-			<array/>
-			<key>projectRoot</key>
-			<string></string>
-			<key>targets</key>
-			<array>
-				<string>F523FC481CDA39370064F45E</string>
-				<string>F523FC611CDA39370064F45E</string>
-			</array>
-		</dict>
-		<key>F523FC441CDA39370064F45E</key>
-		<dict>
-			<key>buildConfigurations</key>
-			<array>
-				<string>F523FC691CDA39370064F45E</string>
-				<string>F523FC6A1CDA39370064F45E</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Release</string>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-		</dict>
-		<key>F523FC451CDA39370064F45E</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>F523FC541CDA39370064F45E</string>
-				<string>F523FC511CDA39370064F45E</string>
-				<string>F523FC4E1CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>F523FC461CDA39370064F45E</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>C1CBC5793289168298CA99CA</string>
-			</array>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>F523FC471CDA39370064F45E</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>F523FC5C1CDA39370064F45E</string>
-				<string>F523FC591CDA39370064F45E</string>
-				<string>F523FC571CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXResourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>F523FC481CDA39370064F45E</key>
-		<dict>
-			<key>buildConfigurationList</key>
-			<string>F523FC6B1CDA39370064F45E</string>
-			<key>buildPhases</key>
-			<array>
-				<string>4603A05AB59F975AF13FAB2B</string>
-				<string>E530386F9D769B062E160DFB</string>
-				<string>F523FC451CDA39370064F45E</string>
-				<string>F523FC461CDA39370064F45E</string>
-				<string>F523FC471CDA39370064F45E</string>
-				<string>4D71F98B6D82DE94F330CDCB</string>
-				<string>38A1A5185A036D0427ADE5D4</string>
-				<string>1C93204877656D2CA3F59777</string>
-				<string>68CA294B53132E1C8C805C83</string>
-			</array>
-			<key>buildRules</key>
-			<array/>
-			<key>dependencies</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXNativeTarget</string>
-			<key>name</key>
-			<string>RKBluetoothLE-iOS_Example</string>
-			<key>productName</key>
-			<string>RKBluetoothLE-iOS_Example</string>
-			<key>productReference</key>
-			<string>F523FC491CDA39370064F45E</string>
-			<key>productType</key>
-			<string>com.apple.product-type.application</string>
-		</dict>
-		<key>F523FC491CDA39370064F45E</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>wrapper.application</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>RKBluetoothLE-iOS_Example.app</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>F523FC4A1CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC491CDA39370064F45E</string>
-				<string>F523FC621CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Products</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC4B1CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC4F1CDA39370064F45E</string>
-				<string>F523FC501CDA39370064F45E</string>
-				<string>F523FC521CDA39370064F45E</string>
-				<string>F523FC531CDA39370064F45E</string>
-				<string>F523FC551CDA39370064F45E</string>
-				<string>F523FC581CDA39370064F45E</string>
-				<string>F523FC5A1CDA39370064F45E</string>
-				<string>F523FC5D1CDA39370064F45E</string>
-				<string>F523FC4C1CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>path</key>
-			<string>RKBluetoothLE-iOS_Example</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC4C1CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC4D1CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Supporting Files</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC4D1CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>main.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC4E1CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC4D1CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC4F1CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>AppDelegate.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC501CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>AppDelegate.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC511CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC501CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC521CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>ViewController.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC531CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>ViewController.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC541CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC531CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC551CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC561CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXVariantGroup</string>
-			<key>name</key>
-			<string>Main.storyboard</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC561CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>file.storyboard</string>
-			<key>name</key>
-			<string>Base</string>
-			<key>path</key>
-			<string>Base.lproj/Main.storyboard</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC571CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC551CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC581CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>folder.assetcatalog</string>
-			<key>path</key>
-			<string>Assets.xcassets</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC591CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC581CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC5A1CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC5B1CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXVariantGroup</string>
-			<key>name</key>
-			<string>LaunchScreen.storyboard</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC5B1CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>file.storyboard</string>
-			<key>name</key>
-			<string>Base</string>
-			<key>path</key>
-			<string>Base.lproj/LaunchScreen.storyboard</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC5C1CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC5A1CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC5D1CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.plist.xml</string>
-			<key>path</key>
-			<string>Info.plist</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC5E1CDA39370064F45E</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>F523FC671CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>F523FC5F1CDA39370064F45E</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>ECFF9D49BEAFBA4870BA6696</string>
-			</array>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>F523FC601CDA39370064F45E</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXResourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>F523FC611CDA39370064F45E</key>
-		<dict>
-			<key>buildConfigurationList</key>
-			<string>F523FC6E1CDA39370064F45E</string>
-			<key>buildPhases</key>
-			<array>
-				<string>923C47FCDC2FDB851B2A57B7</string>
-				<string>6EC4DEDFF459C8C590B56652</string>
-				<string>F523FC5E1CDA39370064F45E</string>
-				<string>F523FC5F1CDA39370064F45E</string>
-				<string>F523FC601CDA39370064F45E</string>
-				<string>7CBB8D90E1880CF8847E9290</string>
-				<string>B08CE37EB67A20F4220C38EF</string>
-				<string>988E8430F3464032069C256F</string>
-				<string>E7B1B6200C0F72ACF673871C</string>
-			</array>
-			<key>buildRules</key>
-			<array/>
-			<key>dependencies</key>
-			<array>
-				<string>F523FC641CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXNativeTarget</string>
-			<key>name</key>
-			<string>RKBluetoothLE-iOS_ExampleTests</string>
-			<key>productName</key>
-			<string>RKBluetoothLE-iOS_ExampleTests</string>
-			<key>productReference</key>
-			<string>F523FC621CDA39370064F45E</string>
-			<key>productType</key>
-			<string>com.apple.product-type.bundle.unit-test</string>
-		</dict>
-		<key>F523FC621CDA39370064F45E</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>wrapper.cfbundle</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>RKBluetoothLE-iOS_ExampleTests.xctest</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>F523FC631CDA39370064F45E</key>
-		<dict>
-			<key>containerPortal</key>
-			<string>F523FC411CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXContainerItemProxy</string>
-			<key>proxyType</key>
-			<string>1</string>
-			<key>remoteGlobalIDString</key>
-			<string>F523FC481CDA39370064F45E</string>
-			<key>remoteInfo</key>
-			<string>RKBluetoothLE-iOS_Example</string>
-		</dict>
-		<key>F523FC641CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXTargetDependency</string>
-			<key>target</key>
-			<string>F523FC481CDA39370064F45E</string>
-			<key>targetProxy</key>
-			<string>F523FC631CDA39370064F45E</string>
-		</dict>
-		<key>F523FC651CDA39370064F45E</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>F523FC661CDA39370064F45E</string>
-				<string>F523FC681CDA39370064F45E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>path</key>
-			<string>RKBluetoothLE-iOS_ExampleTests</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC661CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>RKBluetoothLE_iOS_ExampleTests.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC671CDA39370064F45E</key>
-		<dict>
-			<key>fileRef</key>
-			<string>F523FC661CDA39370064F45E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>F523FC681CDA39370064F45E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.plist.xml</string>
-			<key>path</key>
-			<string>Info.plist</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F523FC691CDA39370064F45E</key>
-		<dict>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>CLANG_ANALYZER_NONNULL</key>
-				<string>YES</string>
-				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
-				<string>gnu++0x</string>
-				<key>CLANG_CXX_LIBRARY</key>
-				<string>libc++</string>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CLANG_ENABLE_OBJC_ARC</key>
-				<string>YES</string>
-				<key>CLANG_WARN_BOOL_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
-				<string>YES_ERROR</string>
-				<key>CLANG_WARN_EMPTY_BODY</key>
-				<string>YES</string>
-				<key>CLANG_WARN_ENUM_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_INT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
-				<string>YES_ERROR</string>
-				<key>CLANG_WARN_UNREACHABLE_CODE</key>
-				<string>YES</string>
-				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
-				<string>YES</string>
-				<key>CODE_SIGN_IDENTITY[sdk=iphoneos*]</key>
-				<string>iPhone Developer</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>NO</string>
-				<key>DEBUG_INFORMATION_FORMAT</key>
-				<string>dwarf</string>
-				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
-				<string>YES</string>
-				<key>ENABLE_TESTABILITY</key>
-				<string>YES</string>
-				<key>GCC_C_LANGUAGE_STANDARD</key>
-				<string>gnu99</string>
-				<key>GCC_DYNAMIC_NO_PIC</key>
-				<string>NO</string>
-				<key>GCC_NO_COMMON_BLOCKS</key>
-				<string>YES</string>
-				<key>GCC_OPTIMIZATION_LEVEL</key>
-				<string>0</string>
-				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
-				<array>
-					<string>DEBUG=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
-				<string>YES</string>
-				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
-				<string>YES_ERROR</string>
-				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
-				<string>YES_AGGRESSIVE</string>
-				<key>GCC_WARN_UNUSED_FUNCTION</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNUSED_VARIABLE</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>9.3</string>
-				<key>MTL_ENABLE_DEBUG_INFO</key>
-				<string>YES</string>
-				<key>ONLY_ACTIVE_ARCH</key>
-				<string>YES</string>
-				<key>SDKROOT</key>
-				<string>iphoneos</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>F523FC6A1CDA39370064F45E</key>
-		<dict>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>CLANG_ANALYZER_NONNULL</key>
-				<string>YES</string>
-				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
-				<string>gnu++0x</string>
-				<key>CLANG_CXX_LIBRARY</key>
-				<string>libc++</string>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CLANG_ENABLE_OBJC_ARC</key>
-				<string>YES</string>
-				<key>CLANG_WARN_BOOL_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
-				<string>YES_ERROR</string>
-				<key>CLANG_WARN_EMPTY_BODY</key>
-				<string>YES</string>
-				<key>CLANG_WARN_ENUM_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_INT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
-				<string>YES_ERROR</string>
-				<key>CLANG_WARN_UNREACHABLE_CODE</key>
-				<string>YES</string>
-				<key>CLANG_WARN__DUPLICATE_METHOD_MATCH</key>
-				<string>YES</string>
-				<key>CODE_SIGN_IDENTITY[sdk=iphoneos*]</key>
-				<string>iPhone Developer</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>NO</string>
-				<key>DEBUG_INFORMATION_FORMAT</key>
-				<string>dwarf-with-dsym</string>
-				<key>ENABLE_NS_ASSERTIONS</key>
-				<string>NO</string>
-				<key>ENABLE_STRICT_OBJC_MSGSEND</key>
-				<string>YES</string>
-				<key>GCC_C_LANGUAGE_STANDARD</key>
-				<string>gnu99</string>
-				<key>GCC_NO_COMMON_BLOCKS</key>
-				<string>YES</string>
-				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
-				<string>YES</string>
-				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
-				<string>YES_ERROR</string>
-				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
-				<string>YES_AGGRESSIVE</string>
-				<key>GCC_WARN_UNUSED_FUNCTION</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNUSED_VARIABLE</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>9.3</string>
-				<key>MTL_ENABLE_DEBUG_INFO</key>
-				<string>NO</string>
-				<key>SDKROOT</key>
-				<string>iphoneos</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>1,2</string>
-				<key>VALIDATE_PRODUCT</key>
-				<string>YES</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>F523FC6B1CDA39370064F45E</key>
-		<dict>
-			<key>buildConfigurations</key>
-			<array>
-				<string>F523FC6C1CDA39370064F45E</string>
-				<string>F523FC6D1CDA39370064F45E</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Release</string>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-		</dict>
-		<key>F523FC6C1CDA39370064F45E</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>4404CF771FE8A37343744C7A</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
-				<string>AppIcon</string>
-				<key>INFOPLIST_FILE</key>
-				<string>RKBluetoothLE-iOS_Example/Info.plist</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<string>$(inherited) @executable_path/Frameworks</string>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.rokyinfo.RKBluetoothLE-iOS-Example</string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>F523FC6D1CDA39370064F45E</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>8423ECE29C78654E656ADDB2</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
-				<string>AppIcon</string>
-				<key>INFOPLIST_FILE</key>
-				<string>RKBluetoothLE-iOS_Example/Info.plist</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<string>$(inherited) @executable_path/Frameworks</string>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.rokyinfo.RKBluetoothLE-iOS-Example</string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>F523FC6E1CDA39370064F45E</key>
-		<dict>
-			<key>buildConfigurations</key>
-			<array>
-				<string>F523FC6F1CDA39370064F45E</string>
-				<string>F523FC701CDA39370064F45E</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Release</string>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-		</dict>
-		<key>F523FC6F1CDA39370064F45E</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>A1E9642190DBD26F34EA2C51</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>BUNDLE_LOADER</key>
-				<string>$(TEST_HOST)</string>
-				<key>INFOPLIST_FILE</key>
-				<string>RKBluetoothLE-iOS_ExampleTests/Info.plist</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<string>$(inherited) @executable_path/Frameworks @loader_path/Frameworks</string>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.rokyinfo.RKBluetoothLE-iOS-ExampleTests</string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-				<key>TEST_HOST</key>
-				<string>$(BUILT_PRODUCTS_DIR)/RKBluetoothLE-iOS_Example.app/RKBluetoothLE-iOS_Example</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>F523FC701CDA39370064F45E</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>AA9B2F670023B0D2683B24F5</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>BUNDLE_LOADER</key>
-				<string>$(TEST_HOST)</string>
-				<key>INFOPLIST_FILE</key>
-				<string>RKBluetoothLE-iOS_ExampleTests/Info.plist</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<string>$(inherited) @executable_path/Frameworks @loader_path/Frameworks</string>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.rokyinfo.RKBluetoothLE-iOS-ExampleTests</string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-				<key>TEST_HOST</key>
-				<string>$(BUILT_PRODUCTS_DIR)/RKBluetoothLE-iOS_Example.app/RKBluetoothLE-iOS_Example</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-	</dict>
-	<key>rootObject</key>
-	<string>F523FC411CDA39370064F45E</string>
-</dict>
-</plist>
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C1CBC5793289168298CA99CA /* Pods_RKBluetoothLE_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2100BF4C8F50648958AFB16 /* Pods_RKBluetoothLE_iOS_Example.framework */; };
+		ECFF9D49BEAFBA4870BA6696 /* Pods_RKBluetoothLE_iOS_ExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 992C2BEBE1E7820B386CDF66 /* Pods_RKBluetoothLE_iOS_ExampleTests.framework */; };
+		F523FC4E1CDA39370064F45E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FC4D1CDA39370064F45E /* main.m */; };
+		F523FC511CDA39370064F45E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FC501CDA39370064F45E /* AppDelegate.m */; };
+		F523FC541CDA39370064F45E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FC531CDA39370064F45E /* ViewController.m */; };
+		F523FC571CDA39370064F45E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F523FC551CDA39370064F45E /* Main.storyboard */; };
+		F523FC591CDA39370064F45E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F523FC581CDA39370064F45E /* Assets.xcassets */; };
+		F523FC5C1CDA39370064F45E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F523FC5A1CDA39370064F45E /* LaunchScreen.storyboard */; };
+		F523FC671CDA39370064F45E /* RKBluetoothLE_iOS_ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F523FC661CDA39370064F45E /* RKBluetoothLE_iOS_ExampleTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F523FC631CDA39370064F45E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F523FC411CDA39370064F45E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F523FC481CDA39370064F45E;
+			remoteInfo = "RKBluetoothLE-iOS_Example";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4404CF771FE8A37343744C7A /* Pods-RKBluetoothLE-iOS_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKBluetoothLE-iOS_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		8423ECE29C78654E656ADDB2 /* Pods-RKBluetoothLE-iOS_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKBluetoothLE-iOS_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example.release.xcconfig"; sourceTree = "<group>"; };
+		992C2BEBE1E7820B386CDF66 /* Pods_RKBluetoothLE_iOS_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RKBluetoothLE_iOS_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1E9642190DBD26F34EA2C51 /* Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AA9B2F670023B0D2683B24F5 /* Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		B2100BF4C8F50648958AFB16 /* Pods_RKBluetoothLE_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RKBluetoothLE_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F523FC491CDA39370064F45E /* RKBluetoothLE-iOS_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RKBluetoothLE-iOS_Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F523FC4D1CDA39370064F45E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F523FC4F1CDA39370064F45E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F523FC501CDA39370064F45E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F523FC521CDA39370064F45E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		F523FC531CDA39370064F45E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F523FC561CDA39370064F45E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F523FC581CDA39370064F45E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F523FC5B1CDA39370064F45E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F523FC5D1CDA39370064F45E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F523FC621CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RKBluetoothLE-iOS_ExampleTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F523FC661CDA39370064F45E /* RKBluetoothLE_iOS_ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RKBluetoothLE_iOS_ExampleTests.m; sourceTree = "<group>"; };
+		F523FC681CDA39370064F45E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F523FC461CDA39370064F45E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1CBC5793289168298CA99CA /* Pods_RKBluetoothLE_iOS_Example.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F523FC5F1CDA39370064F45E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECFF9D49BEAFBA4870BA6696 /* Pods_RKBluetoothLE_iOS_ExampleTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		67C0BC2E4CBF37D9A89BDD31 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B2100BF4C8F50648958AFB16 /* Pods_RKBluetoothLE_iOS_Example.framework */,
+				992C2BEBE1E7820B386CDF66 /* Pods_RKBluetoothLE_iOS_ExampleTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9C59D55B4C422E2D32E98C23 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4404CF771FE8A37343744C7A /* Pods-RKBluetoothLE-iOS_Example.debug.xcconfig */,
+				8423ECE29C78654E656ADDB2 /* Pods-RKBluetoothLE-iOS_Example.release.xcconfig */,
+				A1E9642190DBD26F34EA2C51 /* Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig */,
+				AA9B2F670023B0D2683B24F5 /* Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		F523FC401CDA39370064F45E = {
+			isa = PBXGroup;
+			children = (
+				F523FC4B1CDA39370064F45E /* RKBluetoothLE-iOS_Example */,
+				F523FC651CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests */,
+				F523FC4A1CDA39370064F45E /* Products */,
+				9C59D55B4C422E2D32E98C23 /* Pods */,
+				67C0BC2E4CBF37D9A89BDD31 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F523FC4A1CDA39370064F45E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F523FC491CDA39370064F45E /* RKBluetoothLE-iOS_Example.app */,
+				F523FC621CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F523FC4B1CDA39370064F45E /* RKBluetoothLE-iOS_Example */ = {
+			isa = PBXGroup;
+			children = (
+				F523FC4F1CDA39370064F45E /* AppDelegate.h */,
+				F523FC501CDA39370064F45E /* AppDelegate.m */,
+				F523FC521CDA39370064F45E /* ViewController.h */,
+				F523FC531CDA39370064F45E /* ViewController.m */,
+				F523FC551CDA39370064F45E /* Main.storyboard */,
+				F523FC581CDA39370064F45E /* Assets.xcassets */,
+				F523FC5A1CDA39370064F45E /* LaunchScreen.storyboard */,
+				F523FC5D1CDA39370064F45E /* Info.plist */,
+				F523FC4C1CDA39370064F45E /* Supporting Files */,
+			);
+			path = "RKBluetoothLE-iOS_Example";
+			sourceTree = "<group>";
+		};
+		F523FC4C1CDA39370064F45E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F523FC4D1CDA39370064F45E /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F523FC651CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				F523FC661CDA39370064F45E /* RKBluetoothLE_iOS_ExampleTests.m */,
+				F523FC681CDA39370064F45E /* Info.plist */,
+			);
+			path = "RKBluetoothLE-iOS_ExampleTests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F523FC481CDA39370064F45E /* RKBluetoothLE-iOS_Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F523FC6B1CDA39370064F45E /* Build configuration list for PBXNativeTarget "RKBluetoothLE-iOS_Example" */;
+			buildPhases = (
+				E530386F9D769B062E160DFB /* 📦 Check Pods Manifest.lock */,
+				4603A05AB59F975AF13FAB2B /* Check Pods Manifest.lock */,
+				F523FC451CDA39370064F45E /* Sources */,
+				F523FC461CDA39370064F45E /* Frameworks */,
+				F523FC471CDA39370064F45E /* Resources */,
+				4D71F98B6D82DE94F330CDCB /* 📦 Embed Pods Frameworks */,
+				38A1A5185A036D0427ADE5D4 /* 📦 Copy Pods Resources */,
+				1C93204877656D2CA3F59777 /* Embed Pods Frameworks */,
+				68CA294B53132E1C8C805C83 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "RKBluetoothLE-iOS_Example";
+			productName = "RKBluetoothLE-iOS_Example";
+			productReference = F523FC491CDA39370064F45E /* RKBluetoothLE-iOS_Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F523FC611CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F523FC6E1CDA39370064F45E /* Build configuration list for PBXNativeTarget "RKBluetoothLE-iOS_ExampleTests" */;
+			buildPhases = (
+				6EC4DEDFF459C8C590B56652 /* 📦 Check Pods Manifest.lock */,
+				923C47FCDC2FDB851B2A57B7 /* Check Pods Manifest.lock */,
+				F523FC5E1CDA39370064F45E /* Sources */,
+				F523FC5F1CDA39370064F45E /* Frameworks */,
+				F523FC601CDA39370064F45E /* Resources */,
+				7CBB8D90E1880CF8847E9290 /* 📦 Embed Pods Frameworks */,
+				B08CE37EB67A20F4220C38EF /* 📦 Copy Pods Resources */,
+				988E8430F3464032069C256F /* Embed Pods Frameworks */,
+				E7B1B6200C0F72ACF673871C /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F523FC641CDA39370064F45E /* PBXTargetDependency */,
+			);
+			name = "RKBluetoothLE-iOS_ExampleTests";
+			productName = "RKBluetoothLE-iOS_ExampleTests";
+			productReference = F523FC621CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F523FC411CDA39370064F45E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Rokyinfo;
+				TargetAttributes = {
+					F523FC481CDA39370064F45E = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					F523FC611CDA39370064F45E = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = F523FC481CDA39370064F45E;
+					};
+				};
+			};
+			buildConfigurationList = F523FC441CDA39370064F45E /* Build configuration list for PBXProject "RKBluetoothLE-iOS_Example" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F523FC401CDA39370064F45E;
+			productRefGroup = F523FC4A1CDA39370064F45E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F523FC481CDA39370064F45E /* RKBluetoothLE-iOS_Example */,
+				F523FC611CDA39370064F45E /* RKBluetoothLE-iOS_ExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F523FC471CDA39370064F45E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F523FC5C1CDA39370064F45E /* LaunchScreen.storyboard in Resources */,
+				F523FC591CDA39370064F45E /* Assets.xcassets in Resources */,
+				F523FC571CDA39370064F45E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F523FC601CDA39370064F45E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1C93204877656D2CA3F59777 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		38A1A5185A036D0427ADE5D4 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4603A05AB59F975AF13FAB2B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4D71F98B6D82DE94F330CDCB /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		68CA294B53132E1C8C805C83 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_Example/Pods-RKBluetoothLE-iOS_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6EC4DEDFF459C8C590B56652 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		7CBB8D90E1880CF8847E9290 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		923C47FCDC2FDB851B2A57B7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		988E8430F3464032069C256F /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B08CE37EB67A20F4220C38EF /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E530386F9D769B062E160DFB /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E7B1B6200C0F72ACF673871C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKBluetoothLE-iOS_ExampleTests/Pods-RKBluetoothLE-iOS_ExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F523FC451CDA39370064F45E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F523FC541CDA39370064F45E /* ViewController.m in Sources */,
+				F523FC511CDA39370064F45E /* AppDelegate.m in Sources */,
+				F523FC4E1CDA39370064F45E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F523FC5E1CDA39370064F45E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F523FC671CDA39370064F45E /* RKBluetoothLE_iOS_ExampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F523FC641CDA39370064F45E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F523FC481CDA39370064F45E /* RKBluetoothLE-iOS_Example */;
+			targetProxy = F523FC631CDA39370064F45E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F523FC551CDA39370064F45E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F523FC561CDA39370064F45E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F523FC5A1CDA39370064F45E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F523FC5B1CDA39370064F45E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F523FC691CDA39370064F45E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F523FC6A1CDA39370064F45E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F523FC6C1CDA39370064F45E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4404CF771FE8A37343744C7A /* Pods-RKBluetoothLE-iOS_Example.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "RKBluetoothLE-iOS_Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rokyinfo.RKBluetoothLE-iOS-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F523FC6D1CDA39370064F45E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8423ECE29C78654E656ADDB2 /* Pods-RKBluetoothLE-iOS_Example.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "RKBluetoothLE-iOS_Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rokyinfo.RKBluetoothLE-iOS-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		F523FC6F1CDA39370064F45E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A1E9642190DBD26F34EA2C51 /* Pods-RKBluetoothLE-iOS_ExampleTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "RKBluetoothLE-iOS_ExampleTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rokyinfo.RKBluetoothLE-iOS-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RKBluetoothLE-iOS_Example.app/RKBluetoothLE-iOS_Example";
+			};
+			name = Debug;
+		};
+		F523FC701CDA39370064F45E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA9B2F670023B0D2683B24F5 /* Pods-RKBluetoothLE-iOS_ExampleTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "RKBluetoothLE-iOS_ExampleTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rokyinfo.RKBluetoothLE-iOS-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RKBluetoothLE-iOS_Example.app/RKBluetoothLE-iOS_Example";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F523FC441CDA39370064F45E /* Build configuration list for PBXProject "RKBluetoothLE-iOS_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F523FC691CDA39370064F45E /* Debug */,
+				F523FC6A1CDA39370064F45E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F523FC6B1CDA39370064F45E /* Build configuration list for PBXNativeTarget "RKBluetoothLE-iOS_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F523FC6C1CDA39370064F45E /* Debug */,
+				F523FC6D1CDA39370064F45E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F523FC6E1CDA39370064F45E /* Build configuration list for PBXNativeTarget "RKBluetoothLE-iOS_ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F523FC6F1CDA39370064F45E /* Debug */,
+				F523FC701CDA39370064F45E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F523FC411CDA39370064F45E /* Project object */;
+}
