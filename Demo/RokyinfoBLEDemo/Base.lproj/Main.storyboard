@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -24,16 +25,28 @@
                                     <action selector="onClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1T4-8N-CRE"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tbz-hU-TXD">
+                                <rect key="frame" x="25" y="45" width="530" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BYv-UH-agu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="FUp-ye-0up"/>
+                            <constraint firstItem="Tbz-hU-TXD" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="25" id="Tgg-dQ-Gyz"/>
+                            <constraint firstItem="Tbz-hU-TXD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="25" id="en4-c0-b7t"/>
                             <constraint firstItem="BYv-UH-agu" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="k1H-QM-fbA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Tbz-hU-TXD" secondAttribute="trailing" constant="25" id="n5f-lc-qix"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mUITextField" destination="Tbz-hU-TXD" id="bvb-Hm-0Y3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="574" y="340"/>
         </scene>
     </scenes>
 </document>

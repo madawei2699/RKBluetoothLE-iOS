@@ -90,7 +90,7 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
             return YES;
         } else if ([characteristic isEqualToString:SPIRIT_FAULTDATA]) {
             return YES;
-        } else if ([characteristic isEqualToString:SPIRIT_PARAM_RST]){
+        } else if ([characteristic isEqualToString:SPIRIT_WRT_PARAM]){
             return YES;
         } else if ([characteristic isEqualToString:SPIRIT_KEYFUNC]){
             return YES;
@@ -444,6 +444,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
         if ([characteristic isEqualToString:SPIRIT_FAULTDATA] && channel == RKBLEResponseNotify) {
+            
             if (value.length >= 6) {
                 return YES;
             } else {
@@ -486,7 +487,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
-        if ([characteristic isEqualToString:SPIRIT_PARAM_RST] && channel == RKBLEResponseNotify) {
+        if ([characteristic isEqualToString:SPIRIT_WRT_PARAM] && channel == RKBLEResponseNotify) {
             return YES;
         } else {
             return NO;
@@ -514,8 +515,6 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  */
 -(RACSignal*)getECUParameter:(NSString*)target{
     
-    
-    
     BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
                                                                              service:SERVICE_SPIRIT_SYNC_DATA
                                                                       characteristic:SPIRIT_WRT_PARAM]
@@ -525,7 +524,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
-        if ([characteristic isEqualToString:SPIRIT_PARAM_RST] && channel == RKBLEResponseNotify) {
+        if ([characteristic isEqualToString:SPIRIT_WRT_PARAM] && channel == RKBLEResponseNotify) {
             return YES;
         } else {
             return NO;

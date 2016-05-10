@@ -19,6 +19,8 @@
     RK410APIService* mRK410APIService ;
 }
 
+@property(weak,nonatomic)IBOutlet UITextField *mUITextField;
+
 @end
 
 @implementation ViewController
@@ -28,8 +30,9 @@
     mRK410APIService = [[RkBluetoothClient shareClient] createRk410ApiService];
     [mRK410APIService setPostAuthCodeBlock:^(NSString *peripheralName){
         CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
-        return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf+mfktSpyNJ5w=="];
+        return [mCocoaSecurityDecoder base64:@"uEFmx5HRQ23oH1vy5yKIxw=="];
     }];
+    self.mUITextField.text = @"0xff0000";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -210,7 +213,7 @@
 //    [mRK410APIService activateUpgrade:@"B00G20B6T3" withFirmware:mFirmware];
     
     
-//    [[mRK410APIService getECUParameter:@"B00G10B6F3"]
+//    [[mRK410APIService getECUParameter:@"T0011B00E0"]
 //          subscribeNext:^(ECUParameter *response) {
 //     
 //              NSLog(@"----------------:%@",[response description]);
@@ -226,7 +229,20 @@
 //    Q1NsmKbbaf+mfktSpyNJ5w==
 //    B00G10B6F3
     
-    [[mRK410APIService setECUParameter:@"B00G10B6F3" parameter:[ECUParameter createDefault]]
+//    uEFmx5HRQ23oH1vy5yKIxw==
+//    B00GFT30J4
+    
+//    icFqEzLDMAxWBGj/+2QB9w==
+//    T0011B00E0
+    
+    
+    ECUParameter *mECUParameter = [ECUParameter createDefault];
+    
+    unsigned long red = strtoul([self.mUITextField.text UTF8String],0,16);
+//    int value ;
+//    [[[[CocoaSecurityDecoder alloc] init] hex:self.mUITextField.text] getBytes: &value length:3];
+    mECUParameter.colorfulLight = red;
+    [[mRK410APIService setECUParameter:@"B00GFT30J4" parameter:mECUParameter]
      subscribeNext:^(ConfigResult *response) {
          
          NSLog(@"----------------:%d",[response success]);

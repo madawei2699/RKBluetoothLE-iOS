@@ -34,10 +34,11 @@
         self.screenCode,
         self.remoteControllerSupport,
         self.backlightEffect,
-        colorfulLightValue[0],
-        colorfulLightValue[1],
-        colorfulLightValue[2],
-        self.autoCloseLight};
+        colorfulLightValue[2]/255.0f * 10.0f,
+        colorfulLightValue[1]/255.0f * 10.0f,
+        colorfulLightValue[0]/255.0f * 10.0f,
+        self.autoCloseLight
+    };
     
     super.org = [[NSData alloc] initWithBytes:data length:sizeof(data)];
     
@@ -130,7 +131,11 @@
     if (data.length >= 16) {
         Byte colorfulLightValue[3];
         [data getBytes:colorfulLightValue range:NSMakeRange(13, 3)];
-        Byte finalColorfulLightValue[] = {0,colorfulLightValue[0],colorfulLightValue[1],colorfulLightValue[2]};
+        Byte finalColorfulLightValue[] = {
+            0,
+            colorfulLightValue[2]/10.0f * 255.0f,
+            colorfulLightValue[1]/10.0f * 255.0f,
+            colorfulLightValue[0]/10.0f * 255.0f};
         self.colorfulLight = [ByteConvert bytesToUint: finalColorfulLightValue];
     }
     
@@ -167,7 +172,7 @@
     mECUParameter.childLock               = 1;
     mECUParameter.screenCode              = 0;
     mECUParameter.remoteControllerSupport = 1;
-    mECUParameter.backlightEffect         = 0;
+    mECUParameter.backlightEffect         = 1;
     mECUParameter.colorfulLight           = 0;
     mECUParameter.autoCloseLight          = 0;
     return mECUParameter;
