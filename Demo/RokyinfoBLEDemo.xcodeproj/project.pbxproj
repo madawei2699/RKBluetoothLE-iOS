@@ -20,6 +20,9 @@
 		18C93E4C1C8EDAD000BDD086 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4B1C8EDAD000BDD086 /* Assets.xcassets */; };
 		18C93E4F1C8EDAD000BDD086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4D1C8EDAD000BDD086 /* LaunchScreen.storyboard */; };
 		18C93E5A1C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E591C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m */; };
+		18DC0B8D1CE050F100C37A84 /* ECUParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC0B8C1CE050F100C37A84 /* ECUParameter.m */; };
+		18DC0B901CE065C100C37A84 /* BaseParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC0B8F1CE065C100C37A84 /* BaseParameter.m */; };
+		18DC0BC51CE07F4B00C37A84 /* ConfigResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC0BC41CE07F4B00C37A84 /* ConfigResult.m */; };
 		4D48CCBB2D3CC23E0FEEC4DB /* Pods_RokyinfoBLEDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */; };
 		D0653310128AAD48F860DE7C /* Pods_RokyinfoBLEDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */; };
 		F523FBE81CDA36880064F45E /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = F523FBB81CDA36880064F45E /* .gitkeep */; };
@@ -78,6 +81,12 @@
 		18C93E551C8EDAD000BDD086 /* RokyinfoBLEDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RokyinfoBLEDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C93E591C8EDAD000BDD086 /* RokyinfoBLEDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RokyinfoBLEDemoTests.m; sourceTree = "<group>"; };
 		18C93E5B1C8EDAD000BDD086 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18DC0B8B1CE050F100C37A84 /* ECUParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECUParameter.h; sourceTree = "<group>"; };
+		18DC0B8C1CE050F100C37A84 /* ECUParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECUParameter.m; sourceTree = "<group>"; };
+		18DC0B8E1CE065C100C37A84 /* BaseParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseParameter.h; sourceTree = "<group>"; };
+		18DC0B8F1CE065C100C37A84 /* BaseParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseParameter.m; sourceTree = "<group>"; };
+		18DC0BC31CE07F4B00C37A84 /* ConfigResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigResult.h; sourceTree = "<group>"; };
+		18DC0BC41CE07F4B00C37A84 /* ConfigResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigResult.m; sourceTree = "<group>"; };
 		395F984CD11EABC71FE93967 /* Pods-RokyinfoBLEDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62A5A06ED4B8B8CDE4B45FF2 /* Pods-RokyinfoBLEDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -331,6 +340,12 @@
 				183F14451CDAE29D00878F3D /* VehicleStatus.m */,
 				183F14481CDAE95300878F3D /* Fault.h */,
 				183F14491CDAE95300878F3D /* Fault.m */,
+				18DC0B8B1CE050F100C37A84 /* ECUParameter.h */,
+				18DC0B8C1CE050F100C37A84 /* ECUParameter.m */,
+				18DC0B8E1CE065C100C37A84 /* BaseParameter.h */,
+				18DC0B8F1CE065C100C37A84 /* BaseParameter.m */,
+				18DC0BC31CE07F4B00C37A84 /* ConfigResult.h */,
+				18DC0BC41CE07F4B00C37A84 /* ConfigResult.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -539,6 +554,7 @@
 			files = (
 				F523FBF51CDA36880064F45E /* RkBluetoothClient.m in Sources */,
 				F523FBF41CDA36880064F45E /* RK410APIService.m in Sources */,
+				18DC0B901CE065C100C37A84 /* BaseParameter.m in Sources */,
 				F523FBF11CDA36880064F45E /* crc8_16.c in Sources */,
 				F523FBF91CDA36880064F45E /* RequestQueue.m in Sources */,
 				F523FBF21CDA36880064F45E /* Firmware.m in Sources */,
@@ -550,12 +566,14 @@
 				183F144A1CDAE95300878F3D /* Fault.m in Sources */,
 				F523FBFC1CDA36880064F45E /* RKBLEUtil.m in Sources */,
 				F523FBFA1CDA36880064F45E /* Response.m in Sources */,
+				18DC0B8D1CE050F100C37A84 /* ECUParameter.m in Sources */,
 				F523FBEF1CDA36880064F45E /* ExecutorDelivery.m in Sources */,
 				F523FBEA1CDA36880064F45E /* BLERequest.m in Sources */,
 				183F14461CDAE29D00878F3D /* VehicleStatus.m in Sources */,
 				F523FBF01CDA36880064F45E /* ByteConvert.m in Sources */,
 				F523FBEB1CDA36880064F45E /* BLEResponse.m in Sources */,
 				F523FBEC1CDA36880064F45E /* BLEStack.m in Sources */,
+				18DC0BC51CE07F4B00C37A84 /* ConfigResult.m in Sources */,
 				18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */,
 				F523FBF81CDA36880064F45E /* UpgradeManager.m in Sources */,
 				18C93E411C8EDAD000BDD086 /* main.m in Sources */,

@@ -16,16 +16,12 @@
     "ios": "8.0"
   },
   "source_files": "RKBluetoothLE-iOS/Classes/**/*",
-  "frameworks": [
-    "Foundation",
-    "CoreBluetooth"
-  ],
   "dependencies": {
     "ReactiveCocoa": [
-
+      "~> 4.1.0"
     ],
     "CocoaSecurity": [
-
+      "~> 1.2.4"
     ]
   }
 }

@@ -10,7 +10,7 @@
 
 
 /** The default socket timeout in seconds */
-static const  float DEFAULT_TIMEOUT_S  = 3.0f;
+static const  float DEFAULT_TIMEOUT_S  = 5.0f;
 
 
 static const  float DEFAULT_DELAY_TIME = 0.100f;

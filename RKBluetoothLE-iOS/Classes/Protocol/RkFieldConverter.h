@@ -12,7 +12,7 @@
 @protocol RkFieldConverter <NSObject>
 
 @optional
--(NSData*)entity2bytes:(id)entity;
+-(NSData*)entity2bytes;
 
 @required
 -(id)bytes2entity:(NSData*)data;

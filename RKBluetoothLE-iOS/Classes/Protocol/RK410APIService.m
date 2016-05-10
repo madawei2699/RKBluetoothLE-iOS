@@ -467,6 +467,85 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     
 }
 
+/**
+ *  设置中控参数
+ *
+ *  @param target
+ *  @param ECUParameter
+ *
+ *  @return ConfigResult
+ */
+-(RACSignal*)setECUParameter:(NSString*)target parameter:(ECUParameter*)_ECUParameter{
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:SPIRIT_WRT_PARAM]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:[_ECUParameter entity2bytes]];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:SPIRIT_PARAM_RST] && channel == RKBLEResponseNotify) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        
+        return [[[ConfigResult alloc] init] bytes2entity:data];
+        
+    };
+    
+    request.RKBLEpriority = HIGH;
+    
+    return  [self performRequest:request];
+    
+}
+
+/**
+ *  获取中控参数
+ *
+ *  @param target
+ *
+ *  @return ECUParameter
+ */
+-(RACSignal*)getECUParameter:(NSString*)target{
+    
+    
+    
+    BLERequest *request = [[BLERequest alloc] initWithTarget:[RKBLEUtil createTarget:target
+                                                                             service:SERVICE_SPIRIT_SYNC_DATA
+                                                                      characteristic:SPIRIT_WRT_PARAM]
+                                                      method:RKBLEMethodWrite
+                                                  writeValue:[[ECUParameter alloc] createQueryCommand]];
+    
+    request.dataParseProtocol = mBLEDataParseProtocolImpl;
+    request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
+        
+        if ([characteristic isEqualToString:SPIRIT_PARAM_RST] && channel == RKBLEResponseNotify) {
+            return YES;
+        } else {
+            return NO;
+        }
+        
+    };
+    request.parseBLEResponseData = (id) ^(NSData *data){
+        
+        return [[[ECUParameter alloc] init] bytes2entity:data];
+        
+    };
+    
+    request.RKBLEpriority = HIGH;
+    
+    return  [self performRequest:request];
+    
+}
+
+
+
 #pragma mark -
 #pragma mark 固件升级
 
