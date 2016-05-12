@@ -30,7 +30,7 @@
     mRK410APIService = [[RkBluetoothClient shareClient] createRk410ApiService];
     [mRK410APIService setPostAuthCodeBlock:^(NSString *peripheralName){
         CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
-        return [mCocoaSecurityDecoder base64:@"uEFmx5HRQ23oH1vy5yKIxw=="];
+        return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf+mfktSpyNJ5w=="];
     }];
     self.mUITextField.text = @"0xff0000";
 }
@@ -242,7 +242,7 @@
 //    int value ;
 //    [[[[CocoaSecurityDecoder alloc] init] hex:self.mUITextField.text] getBytes: &value length:3];
     mECUParameter.colorfulLight = red;
-    [[mRK410APIService setECUParameter:@"B00GFT30J4" parameter:mECUParameter]
+    [[mRK410APIService setECUParameter:@"B00G10B6F3" parameter:mECUParameter]
      subscribeNext:^(ConfigResult *response) {
          
          NSLog(@"----------------:%d",[response success]);

@@ -73,7 +73,15 @@ static  BOOL  LOG_ENABLED = YES;
 
 -(void)addMarker:(NSString*)mark{
     if (LOG_ENABLED) {
-        NSLog(@"BLERequest life cycle:[%d] tag:%@",[[NSThread currentThread] isMainThread],mark);
+        NSString *threadMSG = [[NSThread currentThread] description];
+//        <NSThread: 0x15697f30>{number = 2, name = RKBLEDispatcher}
+    
+        NSString *matchedString1 = [threadMSG componentsSeparatedByString:@"{number = "][1];
+        NSString *number = [matchedString1 componentsSeparatedByString:@","][0];
+        NSString *name = [[matchedString1 componentsSeparatedByString:@","][1] substringFromIndex:8];
+        name = [name substringToIndex:name.length - 1];
+        
+        NSLog(@"BLERequest life cycle:[%4d] tag:%@",number.intValue,mark);
     }
 }
 

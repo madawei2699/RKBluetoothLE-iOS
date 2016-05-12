@@ -56,18 +56,19 @@ static dispatch_queue_t  queue;
     
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     
+    __block NSError *curError;
+    __block RequestUpgradeResponse *curResponse;
+    
     RACSignal *mRACSignal = [mRK410APIService requestUpgrade:target withFirmware:mFirmware];
     [[mRACSignal
       deliverOnMainThread]
-     subscribeNext:^(NSData *response) {
-         
-         NSLog(@"--------requestUpgrade--------:%@",response);
+     subscribeNext:^(RequestUpgradeResponse *response) {
+         curResponse = response;
          dispatch_semaphore_signal(sem);
          
      }
      error:^(NSError *error) {
-         
-         NSLog(@"--------requestUpgrade--------:%@",error);
+         curError = error;
          dispatch_semaphore_signal(sem);
          
      }];
@@ -103,7 +104,7 @@ static dispatch_queue_t  queue;
         
         [[[mRK410APIService requestStartPackage:target withPackage:mRKPackage]
           deliverOnMainThread]
-         subscribeNext:^(NSData *response) {
+         subscribeNext:^(RequestPackageResponse *response) {
              
              NSLog(@"--------requestStartPackage--------:%@",response);
              dispatch_semaphore_signal(sem);

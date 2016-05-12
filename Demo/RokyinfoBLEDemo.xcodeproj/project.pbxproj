@@ -11,6 +11,11 @@
 		183F144A1CDAE95300878F3D /* Fault.m in Sources */ = {isa = PBXBuildFile; fileRef = 183F14491CDAE95300878F3D /* Fault.m */; };
 		187630501CD9DC6C005C3270 /* testfile.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1876304F1CD9DC6C005C3270 /* testfile.strings */; };
 		187C72A11CD9EEE500503B02 /* File.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 187C72A01CD9EEE500503B02 /* File.rtf */; };
+		188190C71CE46DFF00E48CE3 /* RequestUpgradeResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190C61CE46DFF00E48CE3 /* RequestUpgradeResponse.m */; };
+		188190CA1CE4756600E48CE3 /* RequestPackageResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190C91CE4756600E48CE3 /* RequestPackageResponse.m */; };
+		188190CD1CE4766300E48CE3 /* BaseUpgradeResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190CC1CE4766300E48CE3 /* BaseUpgradeResponse.m */; };
+		188190D01CE47FB500E48CE3 /* FinishPackageResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190CF1CE47FB500E48CE3 /* FinishPackageResponse.m */; };
+		188190D31CE480BF00E48CE3 /* MD5CheckResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190D21CE480BF00E48CE3 /* MD5CheckResponse.m */; };
 		18B4404D1C992DEB00B15823 /* BLEDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */; };
 		18B4404E1C992DEB00B15823 /* BLEDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */; };
 		18C93E411C8EDAD000BDD086 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E401C8EDAD000BDD086 /* main.m */; };
@@ -66,6 +71,17 @@
 		183F14491CDAE95300878F3D /* Fault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fault.m; sourceTree = "<group>"; };
 		1876304F1CD9DC6C005C3270 /* testfile.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = testfile.strings; sourceTree = "<group>"; };
 		187C72A01CD9EEE500503B02 /* File.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = File.rtf; sourceTree = "<group>"; };
+		188190C51CE46DFF00E48CE3 /* RequestUpgradeResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestUpgradeResponse.h; sourceTree = "<group>"; };
+		188190C61CE46DFF00E48CE3 /* RequestUpgradeResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestUpgradeResponse.m; sourceTree = "<group>"; };
+		188190C81CE4756600E48CE3 /* RequestPackageResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestPackageResponse.h; sourceTree = "<group>"; };
+		188190C91CE4756600E48CE3 /* RequestPackageResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestPackageResponse.m; sourceTree = "<group>"; };
+		188190CB1CE4766300E48CE3 /* BaseUpgradeResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseUpgradeResponse.h; sourceTree = "<group>"; };
+		188190CC1CE4766300E48CE3 /* BaseUpgradeResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseUpgradeResponse.m; sourceTree = "<group>"; };
+		188190CE1CE47FB500E48CE3 /* FinishPackageResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinishPackageResponse.h; sourceTree = "<group>"; };
+		188190CF1CE47FB500E48CE3 /* FinishPackageResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinishPackageResponse.m; sourceTree = "<group>"; };
+		188190D11CE480BF00E48CE3 /* MD5CheckResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD5CheckResponse.h; sourceTree = "<group>"; };
+		188190D21CE480BF00E48CE3 /* MD5CheckResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MD5CheckResponse.m; sourceTree = "<group>"; };
+		188190D41CE488B800E48CE3 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		18B4404B1C992DEB00B15823 /* BLEDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataProtocol.h; sourceTree = "<group>"; };
 		18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEDataProtocol.m; sourceTree = "<group>"; };
 		18C93E3C1C8EDAD000BDD086 /* RokyinfoBLEDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RokyinfoBLEDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,6 +248,7 @@
 		EBF2083E05A9869DDAD65A1C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				188190D41CE488B800E48CE3 /* libicucore.tbd */,
 				FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */,
 				516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */,
 			);
@@ -346,6 +363,16 @@
 				18DC0B8F1CE065C100C37A84 /* BaseParameter.m */,
 				18DC0BC31CE07F4B00C37A84 /* ConfigResult.h */,
 				18DC0BC41CE07F4B00C37A84 /* ConfigResult.m */,
+				188190CB1CE4766300E48CE3 /* BaseUpgradeResponse.h */,
+				188190CC1CE4766300E48CE3 /* BaseUpgradeResponse.m */,
+				188190C51CE46DFF00E48CE3 /* RequestUpgradeResponse.h */,
+				188190C61CE46DFF00E48CE3 /* RequestUpgradeResponse.m */,
+				188190C81CE4756600E48CE3 /* RequestPackageResponse.h */,
+				188190C91CE4756600E48CE3 /* RequestPackageResponse.m */,
+				188190CE1CE47FB500E48CE3 /* FinishPackageResponse.h */,
+				188190CF1CE47FB500E48CE3 /* FinishPackageResponse.m */,
+				188190D11CE480BF00E48CE3 /* MD5CheckResponse.h */,
+				188190D21CE480BF00E48CE3 /* MD5CheckResponse.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -554,6 +581,8 @@
 			files = (
 				F523FBF51CDA36880064F45E /* RkBluetoothClient.m in Sources */,
 				F523FBF41CDA36880064F45E /* RK410APIService.m in Sources */,
+				188190CD1CE4766300E48CE3 /* BaseUpgradeResponse.m in Sources */,
+				188190CA1CE4756600E48CE3 /* RequestPackageResponse.m in Sources */,
 				18DC0B901CE065C100C37A84 /* BaseParameter.m in Sources */,
 				F523FBF11CDA36880064F45E /* crc8_16.c in Sources */,
 				F523FBF91CDA36880064F45E /* RequestQueue.m in Sources */,
@@ -568,11 +597,14 @@
 				F523FBFA1CDA36880064F45E /* Response.m in Sources */,
 				18DC0B8D1CE050F100C37A84 /* ECUParameter.m in Sources */,
 				F523FBEF1CDA36880064F45E /* ExecutorDelivery.m in Sources */,
+				188190D31CE480BF00E48CE3 /* MD5CheckResponse.m in Sources */,
 				F523FBEA1CDA36880064F45E /* BLERequest.m in Sources */,
 				183F14461CDAE29D00878F3D /* VehicleStatus.m in Sources */,
 				F523FBF01CDA36880064F45E /* ByteConvert.m in Sources */,
 				F523FBEB1CDA36880064F45E /* BLEResponse.m in Sources */,
 				F523FBEC1CDA36880064F45E /* BLEStack.m in Sources */,
+				188190D01CE47FB500E48CE3 /* FinishPackageResponse.m in Sources */,
+				188190C71CE46DFF00E48CE3 /* RequestUpgradeResponse.m in Sources */,
 				18DC0BC51CE07F4B00C37A84 /* ConfigResult.m in Sources */,
 				18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */,
 				F523FBF81CDA36880064F45E /* UpgradeManager.m in Sources */,

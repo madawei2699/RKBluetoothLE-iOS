@@ -92,6 +92,8 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
             return YES;
         } else if ([characteristic isEqualToString:SPIRIT_WRT_PARAM]){
             return YES;
+        } else if ([characteristic isEqualToString:SPIRIT_PARAM_RST]){
+            return YES;
         } else if ([characteristic isEqualToString:SPIRIT_KEYFUNC]){
             return YES;
         } else if ([characteristic isEqualToString:FIRMWARE_UPGRADE]){
@@ -487,7 +489,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
-        if ([characteristic isEqualToString:SPIRIT_WRT_PARAM] && channel == RKBLEResponseNotify) {
+        if (([characteristic isEqualToString:SPIRIT_WRT_PARAM] || [characteristic isEqualToString:SPIRIT_PARAM_RST])&& channel == RKBLEResponseNotify) {
             return YES;
         } else {
             return NO;
@@ -524,7 +526,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.dataParseProtocol = mBLEDataParseProtocolImpl;
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
-        if ([characteristic isEqualToString:SPIRIT_WRT_PARAM] && channel == RKBLEResponseNotify) {
+        if (([characteristic isEqualToString:SPIRIT_WRT_PARAM] || [characteristic isEqualToString:SPIRIT_PARAM_RST])&& channel == RKBLEResponseNotify) {
             return YES;
         } else {
             return NO;
@@ -568,14 +570,14 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *
  *  @param target
  *
- *  @return
+ *  @return RequestUpgradeResponse
  */
 -(RACSignal*)requestUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware{
     
     Byte year = (Byte)[_Firmware.version substringWithRange:NSMakeRange(0, 2)].intValue;
     Byte week = (Byte)[_Firmware.version substringWithRange:NSMakeRange(2, 2)].intValue;
     Byte buildCount = (Byte)([_Firmware.version componentsSeparatedByString:@"."][1]).intValue;;
-   
+    
     NSMutableData *writeValue =  [[NSMutableData alloc] init];
     Byte command[1] = {0x08};
     //指令
@@ -604,24 +606,24 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
         if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
-            return YES;
+            
+            if (value.length >= 8 && [[[RequestUpgradeResponse alloc] init] isHit:value]) {
+                return YES;
+            } else {
+                return NO;
+            }
+            
         } else {
             return NO;
         }
         
     };
     request.parseBLEResponseData = (id) ^(NSData *data){
-        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
-        //        unsigned char state;
-        //        [data getBytes:&state range:NSMakeRange(0, 1)];
-        //        if (state == 0) {
-        //            mKeyEventResponse.success = YES;
-        //        } else {
-        //            mKeyEventResponse.success = NO;
-        //        }
-        return data;
+        
+        return [[[RequestUpgradeResponse alloc] init] bytes2entity:data];
+        
     };
-    
+    [request setRetryPolicy:[[DefaultRetryPolicy alloc] initWithTimeout:15.0f delayTime:0.100f maxRetries:0]];
     request.RKBLEpriority = NORMAL;
     
     return  [self performRequest:request];
@@ -633,10 +635,10 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *  @param target
  *  @param _RKPackage
  *
- *  @return
+ *  @return RequestPackageResponse
  */
 -(RACSignal*)requestStartPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage{
-
+    
     NSMutableData *writeValue =  [[NSMutableData alloc] init];
     Byte command[1] = {0x01};
     //指令
@@ -659,24 +661,21 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
         if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
-            return YES;
+            if (value.length >= 3 && [[[RequestPackageResponse alloc] init] isHit:value]) {
+                return YES;
+            } else {
+                return NO;
+            }
         } else {
             return NO;
         }
         
     };
     request.parseBLEResponseData = (id) ^(NSData *data){
-        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
-        //        unsigned char state;
-        //        [data getBytes:&state range:NSMakeRange(0, 1)];
-        //        if (state == 0) {
-        //            mKeyEventResponse.success = YES;
-        //        } else {
-        //            mKeyEventResponse.success = NO;
-        //        }
-        return data;
+        
+        return [[[RequestPackageResponse alloc] init] bytes2entity:data];
     };
-    
+    [request setRetryPolicy:[[DefaultRetryPolicy alloc] initWithTimeout:15.0f delayTime:0.100f maxRetries:0]];
     request.RKBLEpriority = NORMAL;
     
     return  [self performRequest:request];
@@ -712,24 +711,24 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
         if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
-            return YES;
+            
+            if (value.length >= 3 && [[[FinishPackageResponse alloc] init] isHit:value]) {
+                return YES;
+            } else {
+                return NO;
+            }
+
         } else {
             return NO;
         }
         
     };
     request.parseBLEResponseData = (id) ^(NSData *data){
-        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
-        //        unsigned char state;
-        //        [data getBytes:&state range:NSMakeRange(0, 1)];
-        //        if (state == 0) {
-        //            mKeyEventResponse.success = YES;
-        //        } else {
-        //            mKeyEventResponse.success = NO;
-        //        }
-        return data;
+        
+        return  [[[FinishPackageResponse alloc] init] bytes2entity:data];
+        
     };
-    
+    [request setRetryPolicy:[[DefaultRetryPolicy alloc] initWithTimeout:15.0f delayTime:0.100f maxRetries:0]];
     request.RKBLEpriority = NORMAL;
     
     return  [self performRequest:request];
@@ -762,24 +761,22 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
     request.effectiveResponse = ^(NSString* characteristic,RKBLEResponseChannel channel,NSData* value){
         
         if ([characteristic isEqualToString:FIRMWARE_UPGRADE] && channel == RKBLEResponseNotify) {
-            return YES;
+            if (value.length >= 3 && [[[MD5CheckResponse alloc] init] isHit:value]) {
+                return YES;
+            } else {
+                return NO;
+            }
         } else {
             return NO;
         }
         
     };
     request.parseBLEResponseData = (id) ^(NSData *data){
-        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
-        //        unsigned char state;
-        //        [data getBytes:&state range:NSMakeRange(0, 1)];
-        //        if (state == 0) {
-        //            mKeyEventResponse.success = YES;
-        //        } else {
-        //            mKeyEventResponse.success = NO;
-        //        }
-        return data;
+        
+        return [[[MD5CheckResponse alloc] init] bytes2entity:data];
+        
     };
-    
+    [request setRetryPolicy:[[DefaultRetryPolicy alloc] initWithTimeout:15.0f delayTime:0.100f maxRetries:0]];
     request.RKBLEpriority = NORMAL;
     
     return  [self performRequest:request];
@@ -812,14 +809,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
         
     };
     request.parseBLEResponseData = (id) ^(NSData *data){
-        //        KeyEventResponse *mKeyEventResponse = [[KeyEventResponse alloc] init];
-        //        unsigned char state;
-        //        [data getBytes:&state range:NSMakeRange(0, 1)];
-        //        if (state == 0) {
-        //            mKeyEventResponse.success = YES;
-        //        } else {
-        //            mKeyEventResponse.success = NO;
-        //        }
+        
         return data;
     };
     

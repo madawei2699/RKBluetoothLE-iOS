@@ -17,10 +17,11 @@
     if (data.length >= 1) {
         unsigned char success;
         [data getBytes:&success range:NSMakeRange(0, 1)];
-        self.success = success;
+        self.success = !success;
     }
     
     return self;
+    
 }
 
 @end

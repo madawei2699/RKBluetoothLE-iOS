@@ -18,6 +18,10 @@
 #import "Fault.h"
 #import "ECUParameter.h"
 #import "ConfigResult.h"
+#import "RequestUpgradeResponse.h"
+#import "RequestPackageResponse.h"
+#import "FinishPackageResponse.h"
+#import "MD5CheckResponse.h"
 
 //鉴权码生成器
 typedef id (^PostAuthCode)(NSString *peripheralName);
@@ -119,7 +123,7 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *  @param target
  *  @param _Firmware 固件信息
  *
- *  @return
+ *  @return RequestUpgradeResponse
  */
 -(RACSignal*)requestUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware;
 
@@ -130,7 +134,7 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
  *  @param target
  *  @param _RKPackage
  *
- *  @return
+ *  @return RequestPackageResponse
  */
 -(RACSignal*)requestStartPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage;
 
