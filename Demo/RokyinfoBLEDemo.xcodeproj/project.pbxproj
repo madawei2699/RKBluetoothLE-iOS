@@ -28,6 +28,9 @@
 		18DC0B8D1CE050F100C37A84 /* ECUParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC0B8C1CE050F100C37A84 /* ECUParameter.m */; };
 		18DC0B901CE065C100C37A84 /* BaseParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC0B8F1CE065C100C37A84 /* BaseParameter.m */; };
 		18DC0BC51CE07F4B00C37A84 /* ConfigResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DC0BC41CE07F4B00C37A84 /* ConfigResult.m */; };
+		18FA208A1CE57D8E0002E9C2 /* BleLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FA20891CE57D8E0002E9C2 /* BleLog.m */; };
+		18FA208D1CE5A91D0002E9C2 /* MainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FA208C1CE5A91D0002E9C2 /* MainTableViewController.m */; };
+		18FA20901CE5AC200002E9C2 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FA208F1CE5AC200002E9C2 /* UpgradeViewController.m */; };
 		4D48CCBB2D3CC23E0FEEC4DB /* Pods_RokyinfoBLEDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */; };
 		D0653310128AAD48F860DE7C /* Pods_RokyinfoBLEDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */; };
 		F523FBE81CDA36880064F45E /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = F523FBB81CDA36880064F45E /* .gitkeep */; };
@@ -103,6 +106,12 @@
 		18DC0B8F1CE065C100C37A84 /* BaseParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseParameter.m; sourceTree = "<group>"; };
 		18DC0BC31CE07F4B00C37A84 /* ConfigResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigResult.h; sourceTree = "<group>"; };
 		18DC0BC41CE07F4B00C37A84 /* ConfigResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigResult.m; sourceTree = "<group>"; };
+		18FA20881CE57D8E0002E9C2 /* BleLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BleLog.h; sourceTree = "<group>"; };
+		18FA20891CE57D8E0002E9C2 /* BleLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BleLog.m; sourceTree = "<group>"; };
+		18FA208B1CE5A91D0002E9C2 /* MainTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
+		18FA208C1CE5A91D0002E9C2 /* MainTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
+		18FA208E1CE5AC200002E9C2 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeViewController.h; sourceTree = "<group>"; };
+		18FA208F1CE5AC200002E9C2 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeViewController.m; sourceTree = "<group>"; };
 		395F984CD11EABC71FE93967 /* Pods-RokyinfoBLEDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RokyinfoBLEDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62A5A06ED4B8B8CDE4B45FF2 /* Pods-RokyinfoBLEDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RokyinfoBLEDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -213,6 +222,10 @@
 				18C93E3F1C8EDAD000BDD086 /* Supporting Files */,
 				1876304F1CD9DC6C005C3270 /* testfile.strings */,
 				187C72A01CD9EEE500503B02 /* File.rtf */,
+				18FA208B1CE5A91D0002E9C2 /* MainTableViewController.h */,
+				18FA208C1CE5A91D0002E9C2 /* MainTableViewController.m */,
+				18FA208E1CE5AC200002E9C2 /* UpgradeViewController.h */,
+				18FA208F1CE5AC200002E9C2 /* UpgradeViewController.m */,
 			);
 			path = RokyinfoBLEDemo;
 			sourceTree = "<group>";
@@ -303,6 +316,8 @@
 				F523FBE51CDA36880064F45E /* RKBlockingQueue.h */,
 				F523FBE61CDA36880064F45E /* RKBlockingQueue.m */,
 				F523FBE71CDA36880064F45E /* Runnable.h */,
+				18FA20881CE57D8E0002E9C2 /* BleLog.h */,
+				18FA20891CE57D8E0002E9C2 /* BleLog.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -384,12 +399,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18C93E5E1C8EDAD000BDD086 /* Build configuration list for PBXNativeTarget "RokyinfoBLEDemo" */;
 			buildPhases = (
-				22CA8E68DCAD8E5CC2E6FAD6 /* Check Pods Manifest.lock */,
+				22CA8E68DCAD8E5CC2E6FAD6 /* 📦 Check Pods Manifest.lock */,
 				18C93E381C8EDAD000BDD086 /* Sources */,
 				18C93E391C8EDAD000BDD086 /* Frameworks */,
 				18C93E3A1C8EDAD000BDD086 /* Resources */,
-				807E07C85C09F64079E92AF3 /* Embed Pods Frameworks */,
-				52E19B6936B327C43758DBDF /* Copy Pods Resources */,
+				807E07C85C09F64079E92AF3 /* 📦 Embed Pods Frameworks */,
+				52E19B6936B327C43758DBDF /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -404,12 +419,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18C93E611C8EDAD000BDD086 /* Build configuration list for PBXNativeTarget "RokyinfoBLEDemoTests" */;
 			buildPhases = (
-				03B444609A5E820731663D34 /* Check Pods Manifest.lock */,
+				03B444609A5E820731663D34 /* 📦 Check Pods Manifest.lock */,
 				18C93E511C8EDAD000BDD086 /* Sources */,
 				18C93E521C8EDAD000BDD086 /* Frameworks */,
 				18C93E531C8EDAD000BDD086 /* Resources */,
-				519E9DE374174513412448C8 /* Embed Pods Frameworks */,
-				99779309490CE5BBD139BC1E /* Copy Pods Resources */,
+				519E9DE374174513412448C8 /* 📦 Embed Pods Frameworks */,
+				99779309490CE5BBD139BC1E /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -482,14 +497,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		03B444609A5E820731663D34 /* Check Pods Manifest.lock */ = {
+		03B444609A5E820731663D34 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,14 +512,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		22CA8E68DCAD8E5CC2E6FAD6 /* Check Pods Manifest.lock */ = {
+		22CA8E68DCAD8E5CC2E6FAD6 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,14 +527,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		519E9DE374174513412448C8 /* Embed Pods Frameworks */ = {
+		519E9DE374174513412448C8 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -527,14 +542,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemoTests/Pods-RokyinfoBLEDemoTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		52E19B6936B327C43758DBDF /* Copy Pods Resources */ = {
+		52E19B6936B327C43758DBDF /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -542,14 +557,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		807E07C85C09F64079E92AF3 /* Embed Pods Frameworks */ = {
+		807E07C85C09F64079E92AF3 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -557,14 +572,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RokyinfoBLEDemo/Pods-RokyinfoBLEDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		99779309490CE5BBD139BC1E /* Copy Pods Resources */ = {
+		99779309490CE5BBD139BC1E /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -585,11 +600,14 @@
 				188190CA1CE4756600E48CE3 /* RequestPackageResponse.m in Sources */,
 				18DC0B901CE065C100C37A84 /* BaseParameter.m in Sources */,
 				F523FBF11CDA36880064F45E /* crc8_16.c in Sources */,
+				18FA208A1CE57D8E0002E9C2 /* BleLog.m in Sources */,
 				F523FBF91CDA36880064F45E /* RequestQueue.m in Sources */,
+				18FA208D1CE5A91D0002E9C2 /* MainTableViewController.m in Sources */,
 				F523FBF21CDA36880064F45E /* Firmware.m in Sources */,
 				F523FBF61CDA36880064F45E /* RKFrame.m in Sources */,
 				F523FBEE1CDA36880064F45E /* DefaultRetryPolicy.m in Sources */,
 				18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */,
+				18FA20901CE5AC200002E9C2 /* UpgradeViewController.m in Sources */,
 				F523FBF71CDA36880064F45E /* RKPackage.m in Sources */,
 				F523FBFB1CDA36880064F45E /* RKBLEDispatcher.m in Sources */,
 				183F144A1CDAE95300878F3D /* Fault.m in Sources */,

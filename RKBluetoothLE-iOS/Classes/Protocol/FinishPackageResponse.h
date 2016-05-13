@@ -12,6 +12,10 @@
 @interface FinishPackageResponse : BaseUpgradeResponse
 
 //原因
-@property (assign, nonatomic) Byte reason;
+@property (assign, nonatomic) Byte  reason;
+
+@property (nonatomic,assign ) short packageIndex;
+
+@property (nonatomic,assign ) int   packageCount;
 
 @end

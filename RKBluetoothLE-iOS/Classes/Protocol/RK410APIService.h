@@ -108,16 +108,6 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
 -(RACSignal*)getECUParameter:(NSString*)target;
 
 /**
- *  启动升级
- *
- *  @param target
- *  @param _Firmware 固件信息
- *
- *  @return
- */
--(RACSignal*)activateUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware;
-
-/**
  *  请求升级
  *
  *  @param target

@@ -11,7 +11,7 @@
 #import "DefaultBLEDataParseProtocol.h"
 #import "DefaultRetryPolicy.h"
 
-static  BOOL  LOG_ENABLED = YES;
+static BOOL LOG_ENABLED = NO;
 
 @interface BLERequest(){
     

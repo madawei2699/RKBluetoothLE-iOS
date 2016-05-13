@@ -12,8 +12,19 @@
 #import "Firmware.h"
 
 
+
+
 @interface UpgradeManager : NSObject
 
--(RACSignal*)upgradeTarget:(NSString*)target  withAPIService:(RK410APIService*) mRK410APIService andFirmware:(Firmware*)mFirmware;
+-(instancetype)initWithAPIService:(RK410APIService*) mRK410APIService;
+
+/**
+ *  升级
+ *
+ *  @param mFirmware
+ *
+ *  @return 
+ */
+-(RACSignal*)upgradeFirmware:(Firmware*)mFirmware;
 
 @end

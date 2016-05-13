@@ -12,8 +12,12 @@
 
 @interface RequestUpgradeResponse : BaseUpgradeResponse
 
+//0：不升级
+//1：全新升级
+//2：继续升级
+
 //已下载文件
-@property (assign, nonatomic) Byte downloadedLength;
+@property (assign, nonatomic) int downloadedLength;
 
 
 @end

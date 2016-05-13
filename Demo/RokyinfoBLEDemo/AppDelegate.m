@@ -7,6 +7,17 @@
 //
 
 #import "AppDelegate.h"
+#import "CocoaSecurity.h"
+#import "IQKeyboardManager.h"
+
+//    Q1NsmKbbaf+mfktSpyNJ5w==
+//    B00G10B6F3
+
+//    uEFmx5HRQ23oH1vy5yKIxw==
+//    B00GFT30J4
+
+//    icFqEzLDMAxWBGj/+2QB9w==
+//    T0011B00E0
 
 @interface AppDelegate ()
 
@@ -17,6 +28,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [IQKeyboardManager sharedManager].enable = YES;
+    
+    self.mRkBluetoothClient = [RkBluetoothClient shareClient];
+    self.mRK410APIService = [self.mRkBluetoothClient createRk410ApiService];
+    [self.mRK410APIService setPostAuthCodeBlock:^(NSString *peripheralName){
+        CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
+        return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf+mfktSpyNJ5w=="];
+    }];
     return YES;
 }
 

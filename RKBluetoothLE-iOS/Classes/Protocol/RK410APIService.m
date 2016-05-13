@@ -551,21 +551,6 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
 #pragma mark 固件升级
 
 /**
- *  启动升级
- *
- *  @param target
- *  @param _Firmware 固件信息
- *
- *  @return
- */
--(RACSignal*)activateUpgrade:(NSString*)target withFirmware:(Firmware*)_Firmware{
-    if (mUpgradeManager == nil) {
-        mUpgradeManager = [[UpgradeManager alloc] init];
-    }
-    return [mUpgradeManager upgradeTarget:target withAPIService:self andFirmware:_Firmware];
-}
-
-/**
  *  请求升级
  *
  *  @param target
@@ -688,7 +673,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *  @param target
  *  @param _RKPackage
  *
- *  @return
+ *  @return FinishPackageResponse
  */
 -(RACSignal*)requestEndPackage:(NSString*)target withPackage:(RKPackage*)_RKPackage{
     
@@ -740,7 +725,7 @@ typedef NS_ENUM(NSInteger, KeyEventType) {
  *  @param target
  *  @param _RKPackage
  *
- *  @return
+ *  @return MD5CheckResponse
  */
 -(RACSignal*)checkFileMD5:(NSString*)target withFirmware:(Firmware*)_Firmware{
     

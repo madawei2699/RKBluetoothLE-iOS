@@ -7,10 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RkBluetoothClient.h"
+
+#define RK410APIServiceImpl ((AppDelegate*)[[UIApplication sharedApplication] delegate]).mRK410APIService
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property (strong, nonatomic) RkBluetoothClient *mRkBluetoothClient;
+
+@property (strong, nonatomic) RK410APIService   *mRK410APIService;
 
 @end
 

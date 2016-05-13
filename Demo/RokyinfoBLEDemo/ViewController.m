@@ -226,14 +226,7 @@
 //          }];
     
 
-//    Q1NsmKbbaf+mfktSpyNJ5w==
-//    B00G10B6F3
-    
-//    uEFmx5HRQ23oH1vy5yKIxw==
-//    B00GFT30J4
-    
-//    icFqEzLDMAxWBGj/+2QB9w==
-//    T0011B00E0
+
     
     
     ECUParameter *mECUParameter = [ECUParameter createDefault];
