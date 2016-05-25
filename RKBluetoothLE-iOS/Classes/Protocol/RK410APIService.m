@@ -15,6 +15,10 @@
 #import "DefaultRetryPolicy.h"
 
 
+NSString * const RKBLEAuthResultNotification = @"RKBLEAuthResultNotification";
+NSString * const RKBLEAuthResultStatus       = @"RKBLEAuthResultStatus";
+NSString * const RKBLEAuthResultError        = @"RKBLEAuthResultError";
+
 //---------------------------服务------------------------------------------
 // 车精灵服务
 static NSString* const SERVICE_SPIRIT_SYNC_DATA = @"9900";
@@ -186,7 +190,40 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
  */
 - (BOOL)authSuccess:(NSData*)value{
     
-    return YES;
+    BOOL authOK = NO;
+    NSString *errorMsg = @"";
+    //发出鉴权成功广播
+    if (value.length > 0) {
+        Byte state;
+        [value getBytes:&state length:1];
+        switch (state) {
+            case 0x00:
+                authOK = true;
+                break;
+            case 0x01:
+                errorMsg = @"鉴权码错误";
+                break;
+            case 0x02:
+                errorMsg = @"鉴权码过期";
+                break;
+            case 0x03:
+                errorMsg = @"需要新的鉴权码";
+                break;
+            case 0x04:
+                errorMsg = @"钥匙列表已满";
+                break;
+        }
+    }
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:RKBLEAuthResultNotification
+     object:nil
+     userInfo: @{RKBLEAuthResultStatus:@(authOK),RKBLEAuthResultError:[NSError errorWithDomain:BLEStackErrorDomain
+                                                                                          code:BLEStackErrorAuth
+                                                                                      userInfo:@{ NSLocalizedDescriptionKey: errorMsg }]}
+     ];
+    
+    return authOK;
     
 }
 
@@ -267,6 +304,16 @@ static NSString* const SPIRIT_SET_PARAM         = @"9801";
         
     }];
     
+}
+
+/**
+ *  鉴权结果信号
+ *  RKBLEAuthResultStatus ：yes: 成功 no:失败
+ *  RKBLEAuthResultError ：鉴权失败的错误对象
+ *  @return NSNotification
+ */
+-(RACSignal*) authResultSignal{
+    return [[NSNotificationCenter defaultCenter] rac_addObserverForName:RKBLEAuthResultNotification object:nil];
 }
 
 #pragma mark -

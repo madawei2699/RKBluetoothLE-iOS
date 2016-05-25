@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "RK410APIService.h"
-#import "Firmware.h"
-
-
-
+#import "UpgradeProgress.h"
 
 @interface UpgradeManager : NSObject
 

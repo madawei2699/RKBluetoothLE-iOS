@@ -12,8 +12,6 @@ static BOOL LOG_ENABLED = NO;
 @implementation BleLog
 
 
-
-
 +(void)addMarker:(NSString*)mark{
     
     if(LOG_ENABLED){

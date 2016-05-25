@@ -9,6 +9,7 @@ target 'RokyinfoBLEDemo' do
     pod 'ReactiveCocoa'
     pod 'CocoaSecurity'
     pod 'IQKeyboardManager'
+    pod 'NSLogger'
 end
 
 target 'RokyinfoBLEDemoTests' do
@@ -17,5 +18,6 @@ target 'RokyinfoBLEDemoTests' do
 #    pod 'CocoaLumberjack'
     pod 'ReactiveCocoa'
     pod 'CocoaSecurity'
+    pod 'NSLogger'
     
 end

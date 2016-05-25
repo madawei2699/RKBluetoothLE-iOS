@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "CocoaSecurity.h"
 #import "IQKeyboardManager.h"
+#import <NSLogger/NSLogger.h>
 
 //    Q1NsmKbbaf+mfktSpyNJ5w==
 //    B00G10B6F3
@@ -19,7 +20,20 @@
 //    icFqEzLDMAxWBGj/+2QB9w==
 //    T0011B00E0
 
-@interface AppDelegate ()
+//    M8Cjz3SFrA3R0LAzBB9xGA==
+//    B00GDV5DZ3
+
+//    yo4ZfMHGFumRnMsKL0OsRg==
+//    B00GFQA6S3
+
+//    M8Cjz3SFrA2XBefwzj/1Ug==
+//    B00GDV5DZ3
+
+@interface AppDelegate (){
+
+    RACDisposable *authResultSignalDisposable;
+
+}
 
 @end
 
@@ -36,6 +50,21 @@
         CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
         return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf+mfktSpyNJ5w=="];
     }];
+    
+    authResultSignalDisposable = [[[self.mRK410APIService authResultSignal] deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(NSNotification *response) {
+         //鉴权成功
+         if(response.userInfo[RKBLEAuthResultStatus]){
+             NSLog(@"鉴权成功");
+             //更新本地标志位，标示下一次鉴权使用FF鉴权
+             
+         } else {
+             //鉴权失败
+             NSLog(@"鉴权失败");
+            //更新本地标志位，标示下一次鉴权使用鉴权码鉴权
+         }
+     }];
+    
     return YES;
 }
 
@@ -59,6 +88,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [authResultSignalDisposable dispose];
 }
 
 @end

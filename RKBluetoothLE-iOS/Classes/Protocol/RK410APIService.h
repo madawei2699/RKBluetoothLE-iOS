@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "RequestQueue.h"
-
+#import "BLEStack.h"
 #import "RemoteControlResult.h"
 #import "Firmware.h"
 #import "RKPackage.h"
@@ -23,6 +23,9 @@
 #import "FinishPackageResponse.h"
 #import "MD5CheckResponse.h"
 
+extern NSString * const RKBLEAuthResultStatus;
+extern NSString * const RKBLEAuthResultError;
+
 //鉴权码生成器
 typedef id (^PostAuthCode)(NSString *peripheralName);
 
@@ -31,6 +34,14 @@ typedef id (^PostAuthCode)(NSString *peripheralName);
 @property(nonatomic,copy)PostAuthCode postAuthCodeBlock;
 
 -(id)initWithRequestQueue:(RequestQueue *)mRequestQueue;
+
+/**
+ *  鉴权结果信号
+ *  RKBLEAuthResultStatus ：yes: 成功 no:失败
+ *  RKBLEAuthResultError ：鉴权失败的错误对象
+ *  @return NSNotification
+ */
+-(RACSignal*) authResultSignal;
 
 /**
  *  锁车

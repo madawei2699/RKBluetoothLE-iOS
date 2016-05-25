@@ -16,11 +16,14 @@
 		188190CD1CE4766300E48CE3 /* BaseUpgradeResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190CC1CE4766300E48CE3 /* BaseUpgradeResponse.m */; };
 		188190D01CE47FB500E48CE3 /* FinishPackageResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190CF1CE47FB500E48CE3 /* FinishPackageResponse.m */; };
 		188190D31CE480BF00E48CE3 /* MD5CheckResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 188190D21CE480BF00E48CE3 /* MD5CheckResponse.m */; };
+		188946521CEEAFB5002719C3 /* SC6530_RK4101_stone.bin in Resources */ = {isa = PBXBuildFile; fileRef = 188946511CEEAFB5002719C3 /* SC6530_RK4101_stone.bin */; };
+		18972CBD1CF5300C00F89EAE /* sound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 18972CBC1CF5300C00F89EAE /* sound.caf */; };
+		18972CBF1CF531DD00F89EAE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18972CBE1CF531DD00F89EAE /* AVFoundation.framework */; };
+		18A1E92B1CF2EC7700358147 /* UpgradeProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A1E92A1CF2EC7700358147 /* UpgradeProgress.m */; };
 		18B4404D1C992DEB00B15823 /* BLEDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */; };
 		18B4404E1C992DEB00B15823 /* BLEDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */; };
 		18C93E411C8EDAD000BDD086 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E401C8EDAD000BDD086 /* main.m */; };
 		18C93E441C8EDAD000BDD086 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E431C8EDAD000BDD086 /* AppDelegate.m */; };
-		18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C93E461C8EDAD000BDD086 /* ViewController.m */; };
 		18C93E4A1C8EDAD000BDD086 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E481C8EDAD000BDD086 /* Main.storyboard */; };
 		18C93E4C1C8EDAD000BDD086 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4B1C8EDAD000BDD086 /* Assets.xcassets */; };
 		18C93E4F1C8EDAD000BDD086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18C93E4D1C8EDAD000BDD086 /* LaunchScreen.storyboard */; };
@@ -85,14 +88,17 @@
 		188190D11CE480BF00E48CE3 /* MD5CheckResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD5CheckResponse.h; sourceTree = "<group>"; };
 		188190D21CE480BF00E48CE3 /* MD5CheckResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MD5CheckResponse.m; sourceTree = "<group>"; };
 		188190D41CE488B800E48CE3 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		188946511CEEAFB5002719C3 /* SC6530_RK4101_stone.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = SC6530_RK4101_stone.bin; sourceTree = "<group>"; };
+		18972CBC1CF5300C00F89EAE /* sound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound.caf; sourceTree = "<group>"; };
+		18972CBE1CF531DD00F89EAE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		18A1E9291CF2EC7700358147 /* UpgradeProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeProgress.h; sourceTree = "<group>"; };
+		18A1E92A1CF2EC7700358147 /* UpgradeProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeProgress.m; sourceTree = "<group>"; };
 		18B4404B1C992DEB00B15823 /* BLEDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEDataProtocol.h; sourceTree = "<group>"; };
 		18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEDataProtocol.m; sourceTree = "<group>"; };
 		18C93E3C1C8EDAD000BDD086 /* RokyinfoBLEDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RokyinfoBLEDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18C93E401C8EDAD000BDD086 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		18C93E421C8EDAD000BDD086 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		18C93E431C8EDAD000BDD086 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		18C93E451C8EDAD000BDD086 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		18C93E461C8EDAD000BDD086 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		18C93E491C8EDAD000BDD086 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		18C93E4B1C8EDAD000BDD086 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18C93E4E1C8EDAD000BDD086 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -170,6 +176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18972CBF1CF531DD00F89EAE /* AVFoundation.framework in Frameworks */,
 				4D48CCBB2D3CC23E0FEEC4DB /* Pods_RokyinfoBLEDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,14 +220,14 @@
 				18B4404C1C992DEB00B15823 /* BLEDataProtocol.m */,
 				18C93E421C8EDAD000BDD086 /* AppDelegate.h */,
 				18C93E431C8EDAD000BDD086 /* AppDelegate.m */,
-				18C93E451C8EDAD000BDD086 /* ViewController.h */,
-				18C93E461C8EDAD000BDD086 /* ViewController.m */,
 				18C93E481C8EDAD000BDD086 /* Main.storyboard */,
 				18C93E4B1C8EDAD000BDD086 /* Assets.xcassets */,
 				18C93E4D1C8EDAD000BDD086 /* LaunchScreen.storyboard */,
 				18C93E501C8EDAD000BDD086 /* Info.plist */,
 				18C93E3F1C8EDAD000BDD086 /* Supporting Files */,
+				18972CBC1CF5300C00F89EAE /* sound.caf */,
 				1876304F1CD9DC6C005C3270 /* testfile.strings */,
+				188946511CEEAFB5002719C3 /* SC6530_RK4101_stone.bin */,
 				187C72A01CD9EEE500503B02 /* File.rtf */,
 				18FA208B1CE5A91D0002E9C2 /* MainTableViewController.h */,
 				18FA208C1CE5A91D0002E9C2 /* MainTableViewController.m */,
@@ -261,6 +268,7 @@
 		EBF2083E05A9869DDAD65A1C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18972CBE1CF531DD00F89EAE /* AVFoundation.framework */,
 				188190D41CE488B800E48CE3 /* libicucore.tbd */,
 				FFF98A275E40044DB1448183 /* Pods_RokyinfoBLEDemo.framework */,
 				516EB001CF1C21F26D284D82 /* Pods_RokyinfoBLEDemoTests.framework */,
@@ -359,6 +367,8 @@
 				F523FBD81CDA36880064F45E /* RKPackage.m */,
 				F523FBD91CDA36880064F45E /* UpgradeManager.h */,
 				F523FBDA1CDA36880064F45E /* UpgradeManager.m */,
+				18A1E9291CF2EC7700358147 /* UpgradeProgress.h */,
+				18A1E92A1CF2EC7700358147 /* UpgradeProgress.m */,
 			);
 			name = Upgrade;
 			sourceTree = "<group>";
@@ -480,6 +490,8 @@
 			files = (
 				187C72A11CD9EEE500503B02 /* File.rtf in Resources */,
 				187630501CD9DC6C005C3270 /* testfile.strings in Resources */,
+				18972CBD1CF5300C00F89EAE /* sound.caf in Resources */,
+				188946521CEEAFB5002719C3 /* SC6530_RK4101_stone.bin in Resources */,
 				18C93E4F1C8EDAD000BDD086 /* LaunchScreen.storyboard in Resources */,
 				F523FBE81CDA36880064F45E /* .gitkeep in Resources */,
 				18C93E4C1C8EDAD000BDD086 /* Assets.xcassets in Resources */,
@@ -606,7 +618,7 @@
 				F523FBF21CDA36880064F45E /* Firmware.m in Sources */,
 				F523FBF61CDA36880064F45E /* RKFrame.m in Sources */,
 				F523FBEE1CDA36880064F45E /* DefaultRetryPolicy.m in Sources */,
-				18C93E471C8EDAD000BDD086 /* ViewController.m in Sources */,
+				18A1E92B1CF2EC7700358147 /* UpgradeProgress.m in Sources */,
 				18FA20901CE5AC200002E9C2 /* UpgradeViewController.m in Sources */,
 				F523FBF71CDA36880064F45E /* RKPackage.m in Sources */,
 				F523FBFB1CDA36880064F45E /* RKBLEDispatcher.m in Sources */,
