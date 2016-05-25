@@ -52,13 +52,12 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
 
 -(RACSignal*)upgradeFirmware:(Firmware*)__mFirmware{
     
-    if (self.mRACSignal && self.mFirmware && [self.mFirmware.md5 isEqualToString:__mFirmware.md5] ) {
+    if (self.mRACSignal && self.mFirmware && [self.mFirmware isEqual:__mFirmware]) {
         return self.mRACSignal;
     } else {
         
-        while (self.mRACSignal) {
+        if (self.mRACSignal) {
             [discontinueSubject sendNext:nil];
-            
         }
         self.mFirmware = __mFirmware;
     }
@@ -71,13 +70,12 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
         
         return [RACDisposable disposableWithBlock:^{
             
-            @strongify(self)
             self.mFirmware = nil;
             self.mRACSignal = nil;
             
         }];
         
-    }] subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityDefault name:@"com.rokyinfo.UpgradeManager"]] replayLazily] takeUntil:discontinueSubject];
+    }] subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityDefault name:@"com.rokyinfo.UpgradeManager"]]takeUntil:discontinueSubject] replayLazily] ;
     
     return self.mRACSignal;
     
