@@ -15,18 +15,30 @@
 #import "MD5CheckResponse.h"
 
 typedef NS_ENUM(NSInteger, UpgradeProgressStep) {
-    
+
     UpgradeRequestUpgrade = 0,
     UpgradeRequestPackage = 1,
     UpgradeSendFrame      = 2,
     UpgradeFinishPackage  = 3,
     UpgradeCheckMD5       = 4,
     UpgradeReboot         = 5,
-    
+
+};
+
+typedef NS_ENUM(NSInteger, UpgradeRunningStatus) {
+
+    UpgradeDefault        = -1,
+    UpgradeRunning        = 0,
+    UpgradeInterrupt      = 1,
+    UpgradeError          = 2,
+    UpgradeDone           = 3,
+
 };
 
 @interface UpgradeProgress : NSObject
 
+//当前运行状态
+@property (nonatomic,assign) UpgradeRunningStatus   runningStatus;
 //当前步骤
 @property (nonatomic,assign) UpgradeProgressStep    step;
 //剩余时间
@@ -35,6 +47,8 @@ typedef NS_ENUM(NSInteger, UpgradeProgressStep) {
 @property (nonatomic,assign) float                  percentage;
 
 @property (nonatomic,strong) Firmware               *curFirmware;
+
+@property (nonatomic,strong) NSError                *error;
 
 @property (nonatomic,strong) RequestUpgradeResponse *curRequestUpgradeResponse;
 

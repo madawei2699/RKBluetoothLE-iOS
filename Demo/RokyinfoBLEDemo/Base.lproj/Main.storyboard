@@ -76,7 +76,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1za-a8-4gc">
-                                <rect key="frame" x="270" y="545" width="60" height="30"/>
+                                <rect key="frame" x="25" y="545" width="60" height="30"/>
                                 <state key="normal" title="启动升级"/>
                                 <connections>
                                     <action selector="onStartUpgrade:" destination="DKR-fi-CX4" eventType="touchUpInside" id="H9m-a9-pvk"/>
@@ -130,6 +130,19 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BGe-5V-SYW">
+                                <rect key="frame" x="515" y="545" width="60" height="30"/>
+                                <state key="normal" title="结束升级"/>
+                                <connections>
+                                    <action selector="finish:" destination="DKR-fi-CX4" eventType="touchUpInside" id="M5K-Dp-sRD"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FIR-8S-5Tc">
+                                <rect key="frame" x="10" y="514" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -138,6 +151,7 @@
                             <constraint firstItem="S60-f8-Kd2" firstAttribute="leading" secondItem="nZm-yJ-eBX" secondAttribute="trailing" constant="20" id="AUH-EI-nge"/>
                             <constraint firstItem="jFf-sa-4gZ" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="20" id="Az9-Jd-uCN"/>
                             <constraint firstAttribute="trailing" secondItem="qGS-nz-20A" secondAttribute="trailing" constant="20" id="CcO-cp-y1f"/>
+                            <constraint firstItem="1za-a8-4gc" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="25" id="DNj-39-yUA"/>
                             <constraint firstAttribute="trailing" secondItem="fq1-6l-iMG" secondAttribute="trailing" constant="20" id="FR2-BD-HZH"/>
                             <constraint firstItem="UZN-sH-MYg" firstAttribute="top" secondItem="tQB-5m-R7e" secondAttribute="bottom" constant="20" id="FYq-kA-WFD"/>
                             <constraint firstItem="c0N-4p-XNW" firstAttribute="top" secondItem="UZN-sH-MYg" secondAttribute="bottom" constant="20" id="Fjj-Vy-6XG"/>
@@ -146,18 +160,29 @@
                             <constraint firstItem="S60-f8-Kd2" firstAttribute="top" secondItem="fq1-6l-iMG" secondAttribute="bottom" constant="20" id="MWn-lB-XUl"/>
                             <constraint firstItem="qGS-nz-20A" firstAttribute="top" secondItem="jFf-sa-4gZ" secondAttribute="bottom" constant="20" id="MYO-Mn-rxO"/>
                             <constraint firstItem="tQB-5m-R7e" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="20" id="PTL-D2-beR"/>
+                            <constraint firstItem="oTw-qj-aCN" firstAttribute="top" secondItem="BGe-5V-SYW" secondAttribute="bottom" constant="25" id="Qbe-lp-abC"/>
                             <constraint firstItem="fq1-6l-iMG" firstAttribute="top" secondItem="c0N-4p-XNW" secondAttribute="bottom" constant="20" id="SxB-ef-8f3"/>
                             <constraint firstItem="1za-a8-4gc" firstAttribute="centerX" secondItem="mJU-H7-AFS" secondAttribute="centerX" id="Szm-BB-LPi"/>
                             <constraint firstItem="oTw-qj-aCN" firstAttribute="top" secondItem="1za-a8-4gc" secondAttribute="bottom" constant="25" id="Uws-8X-xQA"/>
                             <constraint firstItem="c0N-4p-XNW" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="20" id="bik-tj-L8H"/>
                             <constraint firstAttribute="trailing" secondItem="UZN-sH-MYg" secondAttribute="trailing" constant="20" id="cuH-pg-VVU"/>
+                            <constraint firstItem="1za-a8-4gc" firstAttribute="top" secondItem="FIR-8S-5Tc" secondAttribute="bottom" constant="10" id="hvv-yV-SL1"/>
                             <constraint firstItem="UZN-sH-MYg" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="20" id="lbP-Vh-28L"/>
                             <constraint firstItem="uZj-eT-2Kx" firstAttribute="top" secondItem="c0N-4p-XNW" secondAttribute="bottom" constant="30" id="mkN-rN-Cvi"/>
                             <constraint firstItem="qGS-nz-20A" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="20" id="nOz-gU-giu"/>
+                            <constraint firstItem="FIR-8S-5Tc" firstAttribute="leading" secondItem="mJU-H7-AFS" secondAttribute="leading" constant="10" id="nbx-O0-JAJ"/>
+                            <constraint firstItem="BGe-5V-SYW" firstAttribute="leading" secondItem="1za-a8-4gc" secondAttribute="trailing" constant="25" id="niH-j3-wtS"/>
                             <constraint firstAttribute="trailing" secondItem="S60-f8-Kd2" secondAttribute="trailing" constant="20" id="p7T-fr-c8P"/>
                             <constraint firstItem="jFf-sa-4gZ" firstAttribute="top" secondItem="uZj-eT-2Kx" secondAttribute="bottom" constant="20" id="pAF-rI-RzL"/>
                             <constraint firstAttribute="trailing" secondItem="tQB-5m-R7e" secondAttribute="trailing" constant="20" id="qMf-k1-Kgc"/>
+                            <constraint firstAttribute="trailing" secondItem="BGe-5V-SYW" secondAttribute="trailing" constant="25" id="tys-Si-dnT"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Szm-BB-LPi"/>
+                                <exclude reference="niH-j3-wtS"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="固件升级" id="nCJ-jQ-BVY"/>
                     <connections>
@@ -165,6 +190,7 @@
                         <outlet property="isForceUpgradeMode" destination="fq1-6l-iMG" id="6YL-xT-ipx"/>
                         <outlet property="message" destination="qGS-nz-20A" id="3Zq-nZ-dDj"/>
                         <outlet property="percentage" destination="S60-f8-Kd2" id="efS-Jg-Kpl"/>
+                        <outlet property="remainingTime" destination="FIR-8S-5Tc" id="v9u-FS-vhG"/>
                         <outlet property="singlePackageSize" destination="c0N-4p-XNW" id="p7n-yL-HmD"/>
                         <outlet property="succressCountLab" destination="nZm-yJ-eBX" id="bIg-1b-fVD"/>
                         <outlet property="time" destination="jFf-sa-4gZ" id="62T-3P-d5q"/>

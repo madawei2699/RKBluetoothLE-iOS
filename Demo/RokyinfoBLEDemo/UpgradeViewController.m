@@ -10,16 +10,14 @@
 #import "AppDelegate.h"
 #import "UpgradeManager.h"
 #import "CocoaSecurity.h"
-#import <NSLogger/NSLogger.h>
+//#import <NSLogger/NSLogger.h>
 #import <AudioToolbox/AudioToolbox.h>
 
 static SystemSoundID shake_sound_male_id = 0;
 
-#define BUILD_FILE_MODEL 1
+//#define BUILD_FILE_MODEL 1
 
 @interface UpgradeViewController (){
-    
-    UpgradeManager *mUpgradeManager;
     
     BOOL isSuccess;
     
@@ -41,6 +39,7 @@ static SystemSoundID shake_sound_male_id = 0;
 @property (weak,nonatomic) IBOutlet UILabel     *message;
 @property (weak,nonatomic) IBOutlet UILabel     *percentage;
 @property (weak,nonatomic) IBOutlet UILabel     *time;
+@property (weak,nonatomic) IBOutlet UILabel     *remainingTime;
 
 @property (weak,nonatomic) IBOutlet UILabel     *succressCountLab;
 
@@ -51,14 +50,13 @@ static SystemSoundID shake_sound_male_id = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    mUpgradeManager = [[UpgradeManager alloc] initWithAPIService:RK410APIServiceImpl];
     self.fileSize.text = [NSString stringWithFormat:@"%d",(int)(5)];
     isSuccess = NO;
     self.time.text = [NSString stringWithFormat:@"用时：%d 秒",0] ;
     self.succressCountLab.text = [NSString stringWithFormat:@"成功：%d",successCount];
     self.percentage.text  = [NSString stringWithFormat:@"%.4f",0.0f];
     
-    [self playSound];
+//    [self registerSound];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,7 +65,6 @@ static SystemSoundID shake_sound_male_id = 0;
 }
 
 -(IBAction)onStartUpgrade:(id)sender{
-    AudioServicesPlaySystemSound(shake_sound_male_id);
     
     if(self.fileSize.text.length == 0 || self.version.text.length == 0 || self.singlePackageSize.text.length == 0){
         [[[UIAlertView alloc] initWithTitle:@"提示" message:@"请输入参数" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil, nil] show];
@@ -140,224 +137,226 @@ static SystemSoundID shake_sound_male_id = 0;
     self.message.textColor = [UIColor blackColor];
     self.message.text = @"开始升级，请求升级";
 
-    upgradeManagerRACDisposable = [[[mUpgradeManager upgradeFirmware:mFirmware] deliverOn:[RACScheduler mainThreadScheduler]]
+    if (upgradeManagerRACDisposable) {
+        [upgradeManagerRACDisposable dispose];
+    }
+    upgradeManagerRACDisposable = [[[UpgradeManagerInstance upgradeFirmware:mFirmware] deliverOn:[RACScheduler mainThreadScheduler]]
      subscribeNext:^(UpgradeProgress  *response) {
          
-         self.message.textColor = [UIColor blackColor];
-         
-         self.percentage.text  = [NSString stringWithFormat:@"%.4f",response.percentage];
-         
-         switch (response.step) {
-             case UpgradeRequestUpgrade:
-             {
-                 NSString *tips = @"";
-                 switch (response.curRequestUpgradeResponse.result) {
-                     case 0:
-                         tips = @"不升级";
-                         self.message.textColor = [UIColor redColor];
-                         break;
-                     case 1:
-                         tips = @"全新升级";
-                         break;
-                     case 2:
-                         tips = @"继续升级";
-                         break;
-                         
-                     default:
-                         break;
+         if (response.runningStatus == UpgradeRunning || response.runningStatus == UpgradeInterrupt ||response.runningStatus == UpgradeDone) {
+             
+             self.message.textColor = [UIColor blackColor];
+             self.percentage.text  = [NSString stringWithFormat:@"%.2f",response.percentage];
+             self.remainingTime.text = [NSString stringWithFormat:@"%d小时%d分%d秒",(int)(response.remainingTime/3600.0f),(int)(response.remainingTime%3600/60.0f),(int)(response.remainingTime%3600)%60];
+             switch (response.step) {
+                 case UpgradeRequestUpgrade:
+                 {
+                     NSString *tips = @"";
+                     switch (response.curRequestUpgradeResponse.result) {
+                         case 0:
+                             tips = @"不升级";
+                             self.message.textColor = [UIColor redColor];
+                             break;
+                         case 1:
+                             tips = @"全新升级";
+                             break;
+                         case 2:
+                             tips = @"继续升级";
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     self.message.text = [NSString stringWithFormat:@"%@%@",@"收到请求升级响应:",tips];
+                     
+                     self.isForceUpgradeMode.on = NO;
                  }
-                 self.message.text = [NSString stringWithFormat:@"%@%@",@"收到请求升级响应:",tips];
-                 
-                 self.isForceUpgradeMode.on = NO;
+                     break;
+                 case UpgradeRequestPackage:
+                 {
+                     NSString *tips1 = @"";
+                     NSString *tips2 = @"";
+                     switch (response.curRequestPackageResponse.result) {
+                         case 0:
+                             tips1 = @"错误";
+                             self.message.textColor = [UIColor redColor];
+                             break;
+                         case 1:
+                             tips1 = @"正常";
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     
+                     switch (response.curRequestPackageResponse.reason) {
+                         case 0:
+                             tips2 = @"正常";
+                             break;
+                         case 1:
+                             tips2 = @"CRC错误";
+                             
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     self.message.text = [NSString stringWithFormat:@"%@ index:%d count:%d:%@:%@\n开始发送本包数据..." ,@"收到请求传输包响应",response.curRequestPackageResponse.packageIndex+1,response.curRequestPackageResponse.packageCount,tips1,tips2];
+                 }
+                     break;
+                 case UpgradeSendFrame:
+                     
+                     break;
+                 case UpgradeFinishPackage:
+                 {
+                     NSString *tips1 = @"";
+                     NSString *tips2 = @"";
+                     switch (response.curFinishPackageResponse.result) {
+                             
+                         case 0:
+                             tips1 = @"错误";
+                             self.message.textColor = [UIColor redColor];
+                             break;
+                         case 1:
+                             tips1 = @"正常";
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     
+                     switch (response.curFinishPackageResponse.reason) {
+                         case 0:
+                             tips2 = @"无错误";
+                             break;
+                         case 1:
+                             tips2 = @"包CRC错误";
+                             break;
+                         case 2:
+                             tips2 = @"写FLASH错误";
+                             break;
+                         case 3:
+                             tips2 = @"接收数据和包数据不符";
+                             break;
+                         case 4:
+                             tips2 = @"packet id不符";
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     self.message.text = [NSString stringWithFormat:@"%@ index:%d count:%d:%@:%@" ,@"收到请求传输包响应",response.curFinishPackageResponse.packageIndex+1,response.curFinishPackageResponse.packageCount,tips1,tips2];
+                 }
+                     break;
+                 case UpgradeCheckMD5:
+                 {
+                     NSString *tips1 = @"";
+                     NSString *tips2 = @"";
+                     switch (response.curMD5CheckResponse.result) {
+                             
+                         case 0:
+                             tips1 = @"不更新";
+                             self.message.textColor = [UIColor redColor];
+                             break;
+                         case 1:
+                             tips1 = @"同意更新";
+                             self.message.textColor = [UIColor greenColor];
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     
+                     switch (response.curMD5CheckResponse.reason) {
+                         case 0:
+                             tips2 = @"无问题";
+                             break;
+                         case 1:
+                             tips2 = @"MD5验证失败";
+                             
+                             break;
+                             
+                         default:
+                             break;
+                     }
+                     
+                     self.message.text = [NSString stringWithFormat:@"%@%@%@",@"MD5校验结果:",tips1,tips2];
+                 }
+                     break;
+                 case UpgradeReboot:
+                     
+                     break;
+                     
+                 default:
+                     break;
              }
-                 break;
-             case UpgradeRequestPackage:
-             {
-                 NSString *tips1 = @"";
-                 NSString *tips2 = @"";
-                 switch (response.curRequestPackageResponse.result) {
-                     case 0:
-                         tips1 = @"错误";
-                         self.message.textColor = [UIColor redColor];
-                         break;
-                     case 1:
-                         tips1 = @"正常";
-                         break;
-                         
-                     default:
-                         break;
-                 }
+             
+             if (response.runningStatus == UpgradeDone) {
+                 successCount++;
                  
-                 switch (response.curRequestPackageResponse.reason) {
-                     case 0:
-                         tips2 = @"正常";
-                         break;
-                     case 1:
-                         tips2 = @"CRC错误";
-                         
-                         break;
-                         
-                     default:
-                         break;
-                 }
-                 self.message.text = [NSString stringWithFormat:@"%@ index:%d count:%d:%@:%@\n开始发送本包数据..." ,@"收到请求传输包响应",response.curRequestPackageResponse.packageIndex+1,response.curRequestPackageResponse.packageCount,tips1,tips2];
+                 self.succressCountLab.text = [NSString stringWithFormat:@"成功：%d",successCount];
+                 
+                 [mRACDisposable dispose];
+//                 LoggerApp(1, @"传输成功 文件大小:%@kb 总耗时:%@", self.fileSize.text,[NSString stringWithFormat:@"%d 秒",abs((int)[wholeStartTime timeIntervalSinceNow])]);
+                 isSuccess = YES;
+                 self.isForceUpgradeMode.on = YES;
+                 //         [self onStartUpgrade:nil];
+                 
+//                 LoggerModel(1,@"成功%d 失败%d",successCount,errorCount);
+
              }
-                 break;
-             case UpgradeSendFrame:
-                 
-                 break;
-             case UpgradeFinishPackage:
-             {
-                 NSString *tips1 = @"";
-                 NSString *tips2 = @"";
-                 switch (response.curFinishPackageResponse.result) {
-                         
-                     case 0:
-                         tips1 = @"错误";
-                         self.message.textColor = [UIColor redColor];
-                         break;
-                     case 1:
-                         tips1 = @"正常";
-                         break;
-                         
-                     default:
-                         break;
-                 }
-                 
-                 switch (response.curFinishPackageResponse.reason) {
-                     case 0:
-                         tips2 = @"无错误";
-                         break;
-                     case 1:
-                         tips2 = @"包CRC错误";
-                         break;
-                     case 2:
-                         tips2 = @"写FLASH错误";
-                         break;
-                     case 3:
-                         tips2 = @"接收数据和包数据不符";
-                         break;
-                     case 4:
-                         tips2 = @"packet id不符";
-                         break;
-                         
-                     default:
-                         break;
-                 }
-                 self.message.text = [NSString stringWithFormat:@"%@ index:%d count:%d:%@:%@" ,@"收到请求传输包响应",response.curFinishPackageResponse.packageIndex+1,response.curFinishPackageResponse.packageCount,tips1,tips2];
-             }
-                 break;
-             case UpgradeCheckMD5:
-             {
-                 NSString *tips1 = @"";
-                 NSString *tips2 = @"";
-                 switch (response.curMD5CheckResponse.result) {
-                         
-                     case 0:
-                         tips1 = @"不更新";
-                         self.message.textColor = [UIColor redColor];
-                         break;
-                     case 1:
-                         tips1 = @"同意更新";
-                         self.message.textColor = [UIColor greenColor];
-                         break;
-                         
-                     default:
-                         break;
-                 }
-                 
-                 switch (response.curMD5CheckResponse.reason) {
-                     case 0:
-                         tips2 = @"无问题";
-                         break;
-                     case 1:
-                         tips2 = @"MD5验证失败";
-                         
-                         break;
-                         
-                     default:
-                         break;
-                 }
-                 
-                 self.message.text = [NSString stringWithFormat:@"%@%@%@",@"MD5校验结果:",tips1,tips2];
-             }
-                 break;
-             case UpgradeReboot:
-                 
-                 break;
-                 
-             default:
-                 break;
+
+         } else if(response.runningStatus == UpgradeError){
+             
+             NSError *error = response.error;
+             
+             errorCount++;
+             
+             self.message.textColor = [UIColor redColor];
+             self.message.text = [error localizedDescription];
+             
+             [mRACDisposable dispose];
+//             LoggerApp(1, @"传输失败 文件大小:%@kb 错误代码:%d,原因:%@", self.fileSize.text ,[error code],self.message.text);
+             isSuccess = NO;
+             //         [self onStartUpgrade:nil];
+             
+             //         playSound = [[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] subscribeNext:^(id x) {
+             //
+             //             AudioServicesPlaySystemSound(shake_sound_male_id);   //播放注册的声音，（此句代码，可以在本类中的任意位置调用，不限于本方法中）
+             //
+             //         } ];
+             
+             
+             
+             
+//             LoggerModel(1,@"成功%d 失败%d",successCount,errorCount);
          }
          
-     }
-     error:^(NSError *error) {
-         
-         errorCount++;
-         
-         self.message.textColor = [UIColor redColor];
-         self.message.text = [error localizedDescription];
-         
-         [mRACDisposable dispose];
-         LoggerApp(1, @"传输失败 文件大小:%@kb 错误代码:%d,原因:%@", self.fileSize.text ,[error code],self.message.text);
-         isSuccess = NO;
-         //         [self onStartUpgrade:nil];
-         
-         
-         AudioServicesPlaySystemSound(shake_sound_male_id);   //播放注册的声音，（此句代码，可以在本类中的任意位置调用，不限于本方法中）
-         AudioServicesPlaySystemSound(shake_sound_male_id);   //播放注册的声音，（此句代码，可以在本类中的任意位置调用，不限于本方法中）
-         AudioServicesPlaySystemSound(shake_sound_male_id);   //播放注册的声音，（此句代码，可以在本类中的任意位置调用，不限于本方法中）
-         
-         LoggerModel(1,@"成功%d 失败%d",successCount,errorCount);
-         
-     }
-     completed:^(){
-         
-         successCount++;
-         
-         self.succressCountLab.text = [NSString stringWithFormat:@"成功：%d",successCount];
-         
-         [mRACDisposable dispose];
-         LoggerApp(1, @"传输成功 文件大小:%@kb 总耗时:%@", self.fileSize.text,[NSString stringWithFormat:@"%d 秒",abs((int)[wholeStartTime timeIntervalSinceNow])]);
-         isSuccess = YES;
-//         self.isForceUpgradeMode.on = YES;
-//         [self onStartUpgrade:nil];
-         
-         LoggerModel(1,@"成功%d 失败%d",successCount,errorCount);
          
      }];
     
-    [[[mUpgradeManager upgradeFirmware:mFirmware] deliverOn:[RACScheduler mainThreadScheduler]] subscribeNext:^(UpgradeProgress  *response) {
-//                                                        LoggerModel(1,@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        self.time.text = @"$$$" ;
-    }
-                                                                                                        error:^(NSError *error) {
-                                                                                                            LoggerModel(1,@"$$$$$$$");
-                                                                                                        }];
-    
-    [[[mUpgradeManager upgradeFirmware:mFirmware] deliverOn:[RACScheduler mainThreadScheduler]] subscribeNext:^(UpgradeProgress  *response) {
-        LoggerModel(1,@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    }
-                                                                                                        error:^(NSError *error) {
-                                                                                                            LoggerModel(1,@"$$$$$$$");
-                                                                                                        }];
-    
 }
 
--(void) playSound
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [upgradeManagerRACDisposable dispose];
+    [mRACDisposable dispose];
+    [playSound dispose];
+}
+
+-(void) registerSound
 
 {
     NSString *path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"caf"];
     if (path) {
         //注册声音到系统
         AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path],&shake_sound_male_id);
-        //        AudioServicesPlaySystemSound(shake_sound_male_id);
-        //        AudioServicesPlaySystemSound(shake_sound_male_id);//如果无法再下面播放，可以尝试在此播放
     }
-    
-    
-    
-    //    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);   //让手机震动
+}
+
+-(IBAction)finish:(id)sender{
+
+    [UpgradeManagerInstance cancelUpgrade];
 }
 
 /*
@@ -371,9 +370,7 @@ static SystemSoundID shake_sound_male_id = 0;
  */
 
 -(void)dealloc{
-    
-    [mRACDisposable dispose];
-    [playSound dispose];
+    NSLog(@"UpgradeViewController:dealloc");
 }
 
 @end

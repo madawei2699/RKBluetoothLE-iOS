@@ -24,4 +24,10 @@
  */
 -(RACSignal*)upgradeFirmware:(Firmware*)mFirmware;
 
+
+/**
+ *  取消升级
+ */
+-(void)cancelUpgrade;
+
 @end

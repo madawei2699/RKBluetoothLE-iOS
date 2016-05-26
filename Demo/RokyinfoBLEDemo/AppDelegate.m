@@ -46,6 +46,7 @@
     
     self.mRkBluetoothClient = [RkBluetoothClient shareClient];
     self.mRK410APIService = [self.mRkBluetoothClient createRk410ApiService];
+    self.mUpgradeManager = [[UpgradeManager alloc] initWithAPIService:self.mRK410APIService];
     [self.mRK410APIService setPostAuthCodeBlock:^(NSString *peripheralName){
         CocoaSecurityDecoder *mCocoaSecurityDecoder = [[CocoaSecurityDecoder alloc] init];
         return [mCocoaSecurityDecoder base64:@"Q1NsmKbbaf+mfktSpyNJ5w=="];

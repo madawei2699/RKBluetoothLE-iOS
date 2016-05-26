@@ -12,7 +12,7 @@
 #import "BleLog.h"
 
 
-NSString * const UpgradeManagerErrorDomain         = @"UpgradeManagerErrorDomain";
+NSString * const UpgradeManagerErrorDomain        = @"UpgradeManagerErrorDomain";
 
 const NSInteger UpgradeManagerErrorRequestUpgrade = 1;
 const NSInteger UpgradeManagerErrorRequestPackage = 2;
@@ -21,16 +21,18 @@ const NSInteger UpgradeManagerErrorFinishPackage  = 4;
 const NSInteger UpgradeManagerErrorCheckMD5       = 5;
 
 
-
 @interface UpgradeManager(){
     
-    RACSubject *discontinueSubject;
+    volatile BOOL mCanceled;
+    volatile BOOL isRunning;
+    
+    dispatch_queue_t concurrentQueue;
     
 }
 
 @property(strong,nonatomic) RK410APIService* mRK410APIService;
 
-@property(strong,nonatomic) RACSignal *mRACSignal;
+@property(strong,nonatomic) RACBehaviorSubject *upgradeProgressSubject;
 
 @property(strong,nonatomic) Firmware *mFirmware;
 
@@ -42,9 +44,11 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
     
     self = [super init];
     if (self) {
-        
+        concurrentQueue = dispatch_queue_create("com.rokyinfo.UpgradeQueue", DISPATCH_QUEUE_SERIAL);
         _mRK410APIService = mRK410APIService;
-        discontinueSubject = [RACSubject subject];
+        UpgradeProgress *mUpgradeProgress = [[UpgradeProgress alloc] init];
+        mUpgradeProgress.runningStatus = UpgradeDefault;
+        _upgradeProgressSubject = [RACBehaviorSubject behaviorSubjectWithDefaultValue:mUpgradeProgress];
         
     }
     return self;
@@ -52,47 +56,62 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
 
 -(RACSignal*)upgradeFirmware:(Firmware*)__mFirmware{
     
-    if (self.mRACSignal && self.mFirmware && [self.mFirmware isEqual:__mFirmware]) {
-        return self.mRACSignal;
-    } else {
+    //没有运行或者更换了升级的固件信息则启动升级
+    if (!isRunning || ![self.mFirmware isEqual:__mFirmware]) {
         
-        if (self.mRACSignal) {
-            [discontinueSubject sendNext:nil];
+        if (isRunning) {
+            mCanceled = YES;
         }
         self.mFirmware = __mFirmware;
+        
+        dispatch_async(concurrentQueue, ^{
+            [[NSThread currentThread] setName:@"com.rokyinfo.UpgradeManager"];
+            
+            mCanceled = NO;
+            isRunning = YES;
+            [self upgradeOnBackground];
+            isRunning = NO;
+            
+        });
+        
     }
     
     @weakify(self)
-    self.mRACSignal = [[[[RACSignal createSignal:^RACDisposable *(id subscriber) {
-        
-        @strongify(self)
-        [self upgradeOnBackground:subscriber];
-        
-        return [RACDisposable disposableWithBlock:^{
-            
-            self.mFirmware = nil;
-            self.mRACSignal = nil;
-            
-        }];
-        
-    }] subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityDefault name:@"com.rokyinfo.UpgradeManager"]]takeUntil:discontinueSubject] replayLazily] ;
-    
-    return self.mRACSignal;
+    return [RACSignal
+            defer:^{
+                @strongify(self)
+                return self.upgradeProgressSubject;
+            }
+            ];
     
 }
 
--(void)upgradeOnBackground:(id<RACSubscriber>) subscriber{
+-(void)cancelUpgrade{
+    
+    mCanceled = YES;
+    
+}
+
+-(void)upgradeOnBackground{
     
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     
     __block NSError *curError = nil;
     __block RequestUpgradeResponse *curResponse = nil;
-    //请求升级
-    [BleLog addMarker:@"requestUpgrade"];
+    
     UpgradeProgress *mUpgradeProgress = [[UpgradeProgress alloc] init];
     mUpgradeProgress.curFirmware = self.mFirmware;
+    mUpgradeProgress.runningStatus =  UpgradeRunning;
     
-    [[self.mRK410APIService requestUpgrade:self.mFirmware.ueSn withFirmware:self.mFirmware]
+    if (mCanceled) {
+        mUpgradeProgress.runningStatus = UpgradeInterrupt;
+        [self.upgradeProgressSubject sendNext:mUpgradeProgress];
+        
+        return;
+    }
+    //请求升级
+    [BleLog addMarker:@"requestUpgrade"];
+    [[self.mRK410APIService requestUpgrade:mUpgradeProgress.curFirmware.ueSn withFirmware:mUpgradeProgress.curFirmware]
      subscribeNext:^(RequestUpgradeResponse *response) {
          
          curResponse = response;
@@ -120,7 +139,9 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
     if (curError) {
         
         [BleLog addMarker:@"requestUpgrade:error"];
-        [subscriber sendError:curError];
+        mUpgradeProgress.runningStatus = UpgradeError;
+        mUpgradeProgress.error = curError;
+        [self.upgradeProgressSubject sendNext:mUpgradeProgress];
         
         return;
         
@@ -128,12 +149,12 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
         
         mUpgradeProgress.step = UpgradeRequestUpgrade;
         mUpgradeProgress.curRequestUpgradeResponse = curResponse;
-        [subscriber sendNext:mUpgradeProgress];
+        [self.upgradeProgressSubject sendNext:mUpgradeProgress];
         
     }
     
     //处理拆分package
-    int byteSinglePackageSize = 1024  * self.mFirmware.singlePackageSize;
+    int byteSinglePackageSize = 1024  * mUpgradeProgress.curFirmware.singlePackageSize;
     
     int curUploadLength = 0;
     //继续升级
@@ -141,7 +162,7 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
         curUploadLength = curResponse.downloadedLength;
     }
     
-    NSData *data = [self.mFirmware.data subdataWithRange:NSMakeRange(curUploadLength, self.mFirmware.data.length - curUploadLength)];
+    NSData *data = [mUpgradeProgress.curFirmware.data subdataWithRange:NSMakeRange(curUploadLength, mUpgradeProgress.curFirmware.data.length - curUploadLength)];
     
     int packageCount = (int)(data.length/byteSinglePackageSize + ((data.length % byteSinglePackageSize) == 0 ? 0 : 1));
     
@@ -162,15 +183,21 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
         mRKPackage.uploadLength = curUploadLength;
         
         Byte crcPushMsg[mRKPackage.packageSize];
-        [self.mFirmware.data  getBytes:crcPushMsg range:NSMakeRange(mRKPackage.uploadLength, mRKPackage.packageSize)];
+        [mUpgradeProgress.curFirmware.data  getBytes:crcPushMsg range:NSMakeRange(mRKPackage.uploadLength, mRKPackage.packageSize)];
         mRKPackage.crc = Get_Crc16(crcPushMsg,mRKPackage.packageSize);
         
         curError = nil;
         __block RequestPackageResponse *curRequestPackageResponse = nil;
         
+        if (mCanceled) {
+            mUpgradeProgress.runningStatus = UpgradeInterrupt;
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
+            
+            return;
+        }
         //请求发包
         [BleLog addMarker:[NSString stringWithFormat:@"requestStartPackage count:%d ,index:%d", packageCount,packageIndex]];
-        [[self.mRK410APIService requestStartPackage:self.mFirmware.ueSn withPackage:mRKPackage]
+        [[self.mRK410APIService requestStartPackage:mUpgradeProgress.curFirmware.ueSn withPackage:mRKPackage]
          subscribeNext:^(RequestPackageResponse *response) {
              
              curRequestPackageResponse = response;
@@ -200,8 +227,9 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
         if (curError) {
             
             [BleLog addMarker:[NSString stringWithFormat:@"requestStartPackage count:%d ,index:%d error", packageCount,packageIndex]];
-            
-            [subscriber sendError:curError];
+            mUpgradeProgress.runningStatus = UpgradeError;
+            mUpgradeProgress.error = curError;
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
             
             return;
             
@@ -212,33 +240,39 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
             
             mUpgradeProgress.step = UpgradeRequestPackage;
             mUpgradeProgress.curRequestPackageResponse = curRequestPackageResponse;
-            [subscriber sendNext:mUpgradeProgress];
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
             
         }
         
         //处理拆分frame
-        int frameCount = mRKPackage.packageSize/self.mFirmware.singleFrameSize + ((mRKPackage.packageSize % self.mFirmware.singleFrameSize) == 0 ? 0 : 1);
+        int frameCount = mRKPackage.packageSize/mUpgradeProgress.curFirmware.singleFrameSize + ((mRKPackage.packageSize % mUpgradeProgress.curFirmware.singleFrameSize) == 0 ? 0 : 1);
         for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
             
             RKFrame *mRKFrame = [[RKFrame alloc] init];
             
-            if ((mRKPackage.packageSize % self.mFirmware.singleFrameSize) == 0) {
-                mRKFrame.frameSize = self.mFirmware.singleFrameSize;
+            if ((mRKPackage.packageSize % mUpgradeProgress.curFirmware.singleFrameSize) == 0) {
+                mRKFrame.frameSize = mUpgradeProgress.curFirmware.singleFrameSize;
             } else {
                 if (frameIndex < (frameCount - 1)) {
-                    mRKFrame.frameSize = self.mFirmware.singleFrameSize;
+                    mRKFrame.frameSize = mUpgradeProgress.curFirmware.singleFrameSize;
                 } else {
-                    mRKFrame.frameSize = mRKPackage.packageSize % self.mFirmware.singleFrameSize;
+                    mRKFrame.frameSize = mRKPackage.packageSize % mUpgradeProgress.curFirmware.singleFrameSize;
                 }
             }
             
-            mRKFrame.data = [self.mFirmware.data subdataWithRange:NSMakeRange(mRKPackage.uploadLength + frameIndex * self.mFirmware.singleFrameSize, mRKFrame.frameSize)];
+            mRKFrame.data = [mUpgradeProgress.curFirmware.data subdataWithRange:NSMakeRange(mRKPackage.uploadLength + frameIndex * mUpgradeProgress.curFirmware.singleFrameSize, mRKFrame.frameSize)];
             
             curError = nil;
             
+            if (mCanceled) {
+                mUpgradeProgress.runningStatus = UpgradeInterrupt;
+                [self.upgradeProgressSubject sendNext:mUpgradeProgress];
+                
+                return;
+            }
             //发送数据
             [BleLog addMarker:[NSString stringWithFormat:@"sendData count:%d ,index:%d", frameCount,frameIndex]];
-            [[self.mRK410APIService sendData:self.mFirmware.ueSn withFrame:mRKFrame]
+            [[self.mRK410APIService sendData:mUpgradeProgress.curFirmware.ueSn withFrame:mRKFrame]
              subscribeNext:^(NSData *response) {
                  
                  dispatch_semaphore_signal(sem);
@@ -255,21 +289,36 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
             
             if (curError) {
                 [BleLog addMarker:[NSString stringWithFormat:@"sendData count:%d ,index:%d error", frameCount,frameIndex]];
-                [subscriber sendError:curError];
+                mUpgradeProgress.runningStatus = UpgradeError;
+                mUpgradeProgress.error = curError;
+                [self.upgradeProgressSubject sendNext:mUpgradeProgress];
                 
                 return;
             }
             
+            long remainingLength =  mUpgradeProgress.curFirmware.data.length - (mRKPackage.uploadLength + frameIndex * mUpgradeProgress.curFirmware.singleFrameSize + mRKFrame.frameSize);
+            
+            double remainingTime = remainingLength/((float)mUpgradeProgress.curFirmware.singleFrameSize) * 0.1;
+            
+            mUpgradeProgress.remainingTime = (long)remainingTime;
+            
             mUpgradeProgress.step = UpgradeSendFrame;
-            mUpgradeProgress.percentage = (mRKPackage.uploadLength + frameIndex * self.mFirmware.singleFrameSize + mRKFrame.frameSize)/((double)self.mFirmware.data.length)*100;
-            [subscriber sendNext:mUpgradeProgress];
+            mUpgradeProgress.percentage = (mRKPackage.uploadLength + frameIndex * mUpgradeProgress.curFirmware.singleFrameSize + mRKFrame.frameSize)/((double)mUpgradeProgress.curFirmware.data.length)*100;
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
         }
-        
-        [BleLog addMarker:[NSString stringWithFormat:@"requestEndPackage count:%d ,index:%d", packageCount,packageIndex]];
         
         curError = nil;
         __block FinishPackageResponse *mFinishPackageResponse = nil;
-        [[self.mRK410APIService requestEndPackage:self.mFirmware.ueSn withPackage:mRKPackage]
+        
+        if (mCanceled) {
+            mUpgradeProgress.runningStatus = UpgradeInterrupt;
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
+            
+            return;
+        }
+        //请求校验本包
+        [BleLog addMarker:[NSString stringWithFormat:@"requestEndPackage count:%d ,index:%d", packageCount,packageIndex]];
+        [[self.mRK410APIService requestEndPackage:mUpgradeProgress.curFirmware.ueSn withPackage:mRKPackage]
          subscribeNext:^(FinishPackageResponse *response) {
              
              mFinishPackageResponse = response;
@@ -297,8 +346,9 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
         if (curError) {
             
             [BleLog addMarker:[NSString stringWithFormat:@"requestEndPackage count:%d ,index:%d error", packageCount,packageIndex]];
-            
-            [subscriber sendError:curError];
+            mUpgradeProgress.runningStatus = UpgradeError;
+            mUpgradeProgress.error = curError;
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
             
             return;
             
@@ -309,7 +359,7 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
             
             mUpgradeProgress.step = UpgradeFinishPackage;
             mUpgradeProgress.curFinishPackageResponse = mFinishPackageResponse;
-            [subscriber sendNext:mUpgradeProgress];
+            [self.upgradeProgressSubject sendNext:mUpgradeProgress];
             
         }
         
@@ -318,9 +368,15 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
     
     curError = nil;
     __block MD5CheckResponse *mMD5CheckResponse = nil;
-    [BleLog addMarker:@"checkFileMD5"];
     
-    [[self.mRK410APIService checkFileMD5:self.mFirmware.ueSn withFirmware:self.mFirmware]
+    if (mCanceled) {
+        mUpgradeProgress.runningStatus = UpgradeInterrupt;
+        [self.upgradeProgressSubject sendNext:mUpgradeProgress];
+        
+        return;
+    }
+    [BleLog addMarker:@"checkFileMD5"];
+    [[self.mRK410APIService checkFileMD5:mUpgradeProgress.curFirmware.ueSn withFirmware:mUpgradeProgress.curFirmware]
      subscribeNext:^(MD5CheckResponse *response) {
          
          mMD5CheckResponse = response;
@@ -347,20 +403,22 @@ const NSInteger UpgradeManagerErrorCheckMD5       = 5;
     if (curError) {
         
         [BleLog addMarker:@"checkFileMD5:error"];
-        [subscriber sendError:curError];
+        mUpgradeProgress.runningStatus = UpgradeError;
+        mUpgradeProgress.error = curError;
+        [self.upgradeProgressSubject sendNext:mUpgradeProgress];
         
         return;
         
     } else {
         
+        mUpgradeProgress.runningStatus = UpgradeDone;
         mUpgradeProgress.step = UpgradeCheckMD5;
         mUpgradeProgress.curMD5CheckResponse = mMD5CheckResponse;
         mUpgradeProgress.percentage = 100;
-        [subscriber sendNext:mUpgradeProgress];
-        [subscriber sendCompleted];
+        [self.upgradeProgressSubject sendNext:mUpgradeProgress];
         
+        return;
     }
-    
     
 }
 
